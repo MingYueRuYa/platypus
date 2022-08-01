@@ -15,4 +15,8 @@ const char* function_name = "find_wnd_title";
 const char* wnd_exit_name = "wnd_exit";
 const char* exit_name = "exit";
 
+// pipe info
+const wchar_t *pipe_name = L"\\\\.\\pipe\\platypus@pipe";
+const int kBUFF_SIZE = 1024;
+
 #endif  // PLAYPUS_CONST_H

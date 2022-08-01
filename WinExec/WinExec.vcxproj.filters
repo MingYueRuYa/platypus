@@ -36,6 +36,9 @@
     <ClInclude Include="..\common\Client.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\pipe_client.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +51,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\common\Client.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\pipe_client.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

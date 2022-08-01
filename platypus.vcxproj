@@ -236,6 +236,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\pipe_server.h" />
     <ClInclude Include="common\Server.h" />
     <ClInclude Include="platypus\base_tab_bar_draw_helper.h" />
     <ClInclude Include="platypus\common.h" />
@@ -267,6 +268,7 @@
     <ClInclude Include="platypus\weak_call_back.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="common\pipe_server.cpp" />
     <ClCompile Include="common\Server.cpp" />
     <ClCompile Include="platypus\button_widget.cpp" />
     <ClCompile Include="platypus\common.cpp" />

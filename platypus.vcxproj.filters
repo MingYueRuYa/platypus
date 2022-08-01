@@ -95,6 +95,9 @@
     <ClInclude Include="common\Server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="common\pipe_server.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platypus\button_widget.cpp">
@@ -155,6 +158,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common\Server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\pipe_server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
