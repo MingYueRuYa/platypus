@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>platypusClass</class>
+ <widget class="QWidget" name="platypusClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1090</width>
+    <height>621</height>
+   </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>Platypus</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../res/platypus.qrc">
+    <normaloff>:/platypus/64.ico</normaloff>:/platypus/64.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#platypusClass{background-color: rgb(64, 65, 70);}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="TabWidgetProxy" name="tabWidgetProxy" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TabWidgetProxy</class>
+   <extends>QWidget</extends>
+   <header>tab_widget_proxy.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../res/platypus.qrc"/>
+ </resources>
+ <connections/>
+</ui>

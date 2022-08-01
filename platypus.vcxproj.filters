@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="platypus.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="platypus\res\256.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="platypus\res\64.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="platypus\utili.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\weak_call_back.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\base_tab_bar_draw_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\common_ui_define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\debughelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\draw_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\NcFrameLessHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\noncopyable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\qt_ext_button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\qt_ext_tab_bar_define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\qt_ext_tabbar_style.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\registerhelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\round_shadow_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\singleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\systemscale.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platypus\tab_bar_draw_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="platypus\button_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\debughelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\draw_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\gitwndhelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\gitwndwrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\NcFrameLessHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\platypus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\qt_ext_button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\qt_ext_tab_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\qt_ext_tabbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\qt_ext_tabbar_style.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\registerhelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\round_shadow_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\systemscale.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\tab_bar_draw_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\tab_widget_proxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\tabbutton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="platypus\button_widget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\common_ui_enums.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\gitwndhelper.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\gitwndwrap.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\platypus.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\qt_ext_tab_widget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\qt_ext_tabbar.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\tab_bar_signal.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\tab_widget_proxy.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\tab_widget_signal.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="platypus\tabbutton.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="platypus\ui\button_widget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="platypus\ui\mainwindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="platypus\ui\platypus.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="platypus\res\platypus.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+</Project>

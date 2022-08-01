@@ -1,0 +1,185 @@
+/*游戏界面标题栏按钮 %1 button圆角 */
+
+QWidget#widget_caption{
+border-image: url(:/1kplatypus/image/default_100_precent/caption_bg.png);
+}
+
+QWidget#platypusClass{
+border:1px solid #303031;
+}
+
+QStackedWidget {
+background-color: rgb(60, 60, 64);
+}
+
+/*关闭按钮*/
+QPushButton#btn_close{  
+border-image: url(:/1kplatypus/image/default_100_precent/close.png);
+border:none;
+}  
+
+QPushButton#btn_close:hover{  
+border-image: url(:/1kplatypus/image/default_100_precent/close_hover.png);
+border:none;
+}  
+
+QPushButton#btn_close:pressed{  
+border-image: url(:/1kplatypus/image/default_100_precent/close_pressed.png);
+border:none;
+} 
+
+/*最小化按钮*/
+QPushButton#btn_min{ 
+border-image: url(:/1kplatypus/image/default_100_precent/min.png);
+border:none;
+}  
+
+QPushButton#btn_min:hover{  
+border-image: url(:/1kplatypus/image/default_100_precent/min_hover.png);
+border:none;
+}  
+
+QPushButton#btn_min:pressed{  
+border-image: url(:/1kplatypus/image/default_100_precent/min_pressed.png);
+border:none;
+} 
+
+/*最大化按钮 */
+QPushButton#btn_max{ 
+border-image: url(:/1kplatypus/image/default_100_precent/max.png);
+border:none;
+}  
+
+QPushButton#btn_max:hover{  
+border-image: url(:/1kplatypus/image/default_100_precent/max_hover.png);
+border:none;
+}  
+
+QPushButton#btn_max:pressed{  
+border-image: url(:/1kplatypus/image/default_100_precent/max_pressed.png);
+border:none;
+}
+
+QPushButton#btn_restore{ 
+border-image: url(:/1kplatypus/image/default_100_precent/restore.png);
+border:none;
+}  
+
+QPushButton#btn_restore:hover{  
+border-image: url(:/1kplatypus/image/default_100_precent/restore_hover.png);
+border:none;
+}  
+
+QPushButton#btn_restore:pressed{  
+border-image: url(:/1kplatypus/image/default_100_precent/restore_pressed.png);
+border:none;
+} 
+
+QPushButton#btn_refresh {
+border-image: url(:/1kplatypus/image/default_100_precent/refresh.png);
+border-width:0px;
+}
+
+QPushButton#btn_refresh:hover {
+border-image: url(:/1kplatypus/image/default_100_precent/refresh_hover.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_refresh:pressed {
+border-image: url(:/1kplatypus/image/default_100_precent/refresh_pressed.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_refresh:disabled {
+border-image: url(:/1kplatypus/image/default_100_precent/refresh_disable.png);
+border-radius:%1px;
+}
+
+QToolButton#btn_gohome {
+border-radius:%1px;
+font-size:9pt;
+font-family:Microsoft YaHei;
+background:transparent;
+color:#AAAAAA;
+background-color:rgba(255,255,255,0.01);
+padding-left:5px;
+padding-right:5px;
+}
+
+QToolButton#btn_gohome:hover {
+border-radius:%1px;
+background-color:rgba(255,255,255,0.1);
+padding-left:5px;
+padding-right:5px;
+color:#FFFFFF;
+}
+
+QToolButton#btn_gohome:pressed {
+border-radius:%1px;
+background:rgba(255,255,255,13);
+color:rgba(204, 204, 204, 1);
+border-radius:4px;
+border:none;
+}
+
+
+QPushButton#btn_goback {
+border-image: url(:/1kplatypus/image/default_100_precent/go_back.png);
+border-width:0px;
+}
+
+QPushButton#btn_goback:hover {
+border-image: url(:/1kplatypus/image/default_100_precent/go_back_hover.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_goback:pressed {
+border-image: url(:/1kplatypus/image/default_100_precent/go_back_pressed.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_goback:disabled {
+border-image: url(:/1kplatypus/image/default_100_precent/go_back_disable.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_goforward {
+border-image: url(:/1kplatypus/image/default_100_precent/go_forward.png);
+border-width:0px;
+}
+
+QPushButton#btn_goforward:hover {
+border-image: url(:/1kplatypus/image/default_100_precent/go_forward_hover.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_goforward:pressed {
+border-image: url(:/1kplatypus/image/default_100_precent/go_forward_pressed.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_goforward:disabled {
+border-image: url(:/1kplatypus/image/default_100_precent/go_forward_disable.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_add {
+border-image: url(:/1kplatypus/image/default_100_precent/btn_add.png);
+border-width:0px;
+}
+
+QPushButton#btn_add:hover {
+border-image: url(:/1kplatypus/image/default_100_precent/btn_add_hover.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_add:pressed {
+border-image: url(:/1kplatypus/image/default_100_precent/btn_add_pressed.png);
+border-radius:%1px;
+}
+
+QPushButton#btn_add:disabled {
+border-image: url(:/1kplatypus/image/default_100_precent/btn_add_disable.png);
+border-radius:%1px;
+}
+

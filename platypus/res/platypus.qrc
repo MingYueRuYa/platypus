@@ -1,0 +1,61 @@
+<RCC>
+    <qresource prefix="/platypus">
+        <file>256.ico</file>
+        <file>64.ico</file>
+    </qresource>
+    <qresource prefix="/1kplatypus">
+        <file>image/default_100_precent/tab.png</file>
+        <file>image/default_100_precent/tab_check.png</file>
+        <file>image/default_100_precent/tab_close.png</file>
+        <file>image/default_100_precent/tab_close_hover.png</file>
+        <file>image/default_100_precent/tab_close_pressed.png</file>
+        <file>image/default_100_precent/tab_hover.png</file>
+        <file>style/default_100_precent/style.qss</file>
+        <file>image/default_100_precent/caption_bg.png</file>
+        <file>image/default_100_precent/close.png</file>
+        <file>image/default_100_precent/close_hover.png</file>
+        <file>image/default_100_precent/close_pressed.png</file>
+        <file>image/default_100_precent/max.png</file>
+        <file>image/default_100_precent/max_hover.png</file>
+        <file>image/default_100_precent/max_pressed.png</file>
+        <file>image/default_100_precent/min.png</file>
+        <file>image/default_100_precent/min_hover.png</file>
+        <file>image/default_100_precent/min_pressed.png</file>
+        <file>image/default_100_precent/restore.png</file>
+        <file>image/default_100_precent/restore_hover.png</file>
+        <file>image/default_100_precent/restore_pressed.png</file>
+        <file>image/default_100_precent/btn_add.png</file>
+        <file>image/default_100_precent/btn_add_disabled.png</file>
+        <file>image/default_100_precent/btn_add_hover.png</file>
+        <file>image/default_100_precent/btn_add_pressed.png</file>
+        <file>image/default_100_precent/git.png</file>
+        <file>image/default_100_precent/git_32x32.png</file>
+    </qresource>
+    <qresource prefix="/2kplatypus">
+        <file>image/default_200_precent/tab.png</file>
+        <file>image/default_200_precent/tab_check.png</file>
+        <file>image/default_200_precent/tab_close.png</file>
+        <file>image/default_200_precent/tab_close_hover.png</file>
+        <file>image/default_200_precent/tab_close_pressed.png</file>
+        <file>image/default_200_precent/tab_hover.png</file>
+        <file>style/default_200_precent/style.qss</file>
+        <file>image/default_200_precent/caption_bg.png</file>
+        <file>image/default_200_precent/close.png</file>
+        <file>image/default_200_precent/close_hover.png</file>
+        <file>image/default_200_precent/close_pressed.png</file>
+        <file>image/default_200_precent/max.png</file>
+        <file>image/default_200_precent/max_hover.png</file>
+        <file>image/default_200_precent/max_pressed.png</file>
+        <file>image/default_200_precent/min.png</file>
+        <file>image/default_200_precent/min_hover.png</file>
+        <file>image/default_200_precent/min_pressed.png</file>
+        <file>image/default_200_precent/restore.png</file>
+        <file>image/default_200_precent/restore_hover.png</file>
+        <file>image/default_200_precent/restore_pressed.png</file>
+        <file>image/default_200_precent/btn_add.png</file>
+        <file>image/default_200_precent/btn_add_disabled.png</file>
+        <file>image/default_200_precent/btn_add_hover.png</file>
+        <file>image/default_200_precent/btn_add_pressed.png</file>
+        <file>image/default_200_precent/git.png</file>
+    </qresource>
+</RCC>
