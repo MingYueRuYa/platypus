@@ -1,6 +1,7 @@
 ﻿#include "pipe_server.h"
 
 #include <iostream>
+#include <sstream>
 
 #define BUF_SIZE 1024
 
@@ -11,7 +12,7 @@ PipeServer::~PipeServer() {
 }
 
 bool PipeServer::Start(const wstring &pipe_name) {
-  pipe_name_ = wstring(L"\\\\.\\pipe\\") + pipe_name;
+  pipe_name_ = pipe_name;
   //创建命名管道,命名为MyPipe,消息只能从客户端流向服务器,读写数据采用阻塞模式,字节流形式,超时值置为0表示采用默认的50毫秒
   pipe_ = ::CreateNamedPipeW(
       pipe_name_.c_str(), PIPE_ACCESS_INBOUND, PIPE_READMODE_BYTE | PIPE_WAIT,
@@ -31,7 +32,9 @@ void PipeServer::Stop() {
   HANDLE pipe = ::CreateFileW(pipe_name_.c_str(), GENERIC_WRITE, 0, nullptr,
                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
   if (pipe == INVALID_HANDLE_VALUE) {
-    // TODO something
+    std::ostringstream oss;
+    oss << "create pipe error, last error code:" << GetLastError();
+    OutputDebugStringA(oss.str().c_str());
     return;
   } else {
     ::WriteFile(pipe, buf_msg, BUF_SIZE, &num_rcv, nullptr);
@@ -45,11 +48,12 @@ bool PipeServer::Run() {
   while (1) {
     //等待命名管道客户端连接
     if (::ConnectNamedPipe(pipe_, nullptr)) {
-      std::cout << "A client connected...\n";
+      OutputDebugStringA("A client connected...\n");
       memset(buf_msg, 0, BUF_SIZE);
       //读取数据
       if (::ReadFile(pipe_, buf_msg, BUF_SIZE, &num_rcv, nullptr)) {
         OutputDebugStringW((wchar_t *)buf_msg);
+        DisconnectNamedPipe(pipe_);
         if (wstring((wchar_t *)buf_msg) == L"exit") {
           OutputDebugStringW(L"pipe ready to exit");
           break;

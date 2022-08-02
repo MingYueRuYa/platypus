@@ -9,6 +9,7 @@ using std::wstring;
 
 class PipeServer
 {
+public:
     PipeServer();
     ~PipeServer();
     bool Start(const wstring &pipe_name);

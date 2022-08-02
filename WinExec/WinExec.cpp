@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "WinExec.h"
 #include "Client.h"
+#include "pipe_client.h"
 
 #include <TlHelp32.h>
 #include <Windows.h>
@@ -270,6 +271,8 @@ bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
     // Client client;
     // client.init(platypus_shm_name, MAX_SHM_SIZE, platypus_evt_name);
     // client.send(function_name, (PVOID)pBuffer, size, Test);
+    PipeClient client;  
+    client.Write(pipe_name, (wchar_t *)pBuffer);
   }
   return true;
 }
