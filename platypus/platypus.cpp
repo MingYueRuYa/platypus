@@ -35,7 +35,7 @@ Platypus::Platypus(QWidget *parent)
   setupUI();
 
   // 打开的时候新建一个git window
-  QTimer::singleShot(200, this, SLOT(OnAddNewTab()));
+  // QTimer::singleShot(200, this, SLOT(OnAddNewTab()));
 }
 
 Platypus::~Platypus() {

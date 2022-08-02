@@ -180,5 +180,5 @@ GitWindowsWrap &GitWndHelper::GetWindowsWrap() {
 
 void GitWndHelper::init() {
 	mStopThread = false;
-	mPollingWndThread = std::thread(&GitWndHelper::EnumWindows, this);
+	// mPollingWndThread = std::thread(&GitWndHelper::EnumWindows, this);
 }
