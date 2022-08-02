@@ -279,11 +279,11 @@ bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
 
 bool WndExit(PBYTE pBuffer, UINT64 &size) {
   if (size != 0) {
-    wstring log_msg = wstring(L"process exited ,id:") + (wchar_t *)(pBuffer);
+    wstring log_msg = wstring(L"process exited ,json:") + (wchar_t *)(pBuffer);
     OutputDebugStringW(log_msg.c_str());
-    unsigned long process_id = std::stoul((wchar_t *)pBuffer);
-    g_MapProcessIDHWND.erase(process_id);
-    UnregisterDLL(process_id);
+    // unsigned long process_id = std::stoul((wchar_t *)pBuffer);
+    // g_MapProcessIDHWND.erase(process_id);
+    // UnregisterDLL(process_id);
   }
   return true;
 }
