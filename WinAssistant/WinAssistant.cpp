@@ -28,7 +28,8 @@ void Test(PBYTE pPayload, UINT64 size) {}
 
 void Send(const wchar_t *title, HWND hwnd) {
   string str_title = to_utf8_string(wstring(title));
-  json title_json = {{"title", str_title}, {"HWND", (long long)hwnd}};
+  json title_json = {
+      {"title", str_title}, {"HWND", (long long)hwnd}, {"action", "update"}};
   wstring wstr_title = to_wide_string(title_json.dump());
   if (title_cache != wstr_title) {
     title_cache = wstr_title;
@@ -41,7 +42,8 @@ void Send(const wchar_t *title, HWND hwnd) {
 
 void Quit(DWORD process_id, HWND hwnd) {
   json quit_json = {{"process_id", (unsigned long)process_id},
-                    {"HWND", (long long)hwnd}};
+                    {"HWND", (long long)hwnd},
+                    {"action", "exit"}};
   wstring buffer = to_wide_string(quit_json.dump());
   OutputDebugStringW(buffer.c_str());
   Client client;

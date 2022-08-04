@@ -58,6 +58,13 @@ bool Platypus::Stop(unsigned char* pPayload, unsigned long long &size)
     return true;
 }
 
+void Platypus::ReceiveMsg(const wchar_t* json_str)
+{
+    //1. add git wnd
+    //2. update title 
+    //3. git wnd exit
+}
+
 void Platypus::mouseReleaseEvent(QMouseEvent *e) {
   if (e->button() == Qt::LeftButton) {
     setGitFocus();

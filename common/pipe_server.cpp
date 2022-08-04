@@ -53,6 +53,7 @@ bool PipeServer::Run() {
       //读取数据
       if (::ReadFile(pipe_, buf_msg, BUF_SIZE, &num_rcv, nullptr)) {
         OutputDebugStringW((wchar_t *)buf_msg);
+        func_(buf_msg);
         DisconnectNamedPipe(pipe_);
         if (wstring((wchar_t *)buf_msg) == L"exit") {
           OutputDebugStringW(L"pipe ready to exit");
@@ -65,4 +66,9 @@ bool PipeServer::Run() {
     }
   }
   return false;
+}
+
+void PipeServer::BindFunc(_FUNC func)
+{
+    func_ = func;
 }

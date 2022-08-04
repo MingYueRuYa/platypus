@@ -274,24 +274,20 @@ bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
 }
 
 bool WndExit(PBYTE pBuffer, UINT64 &size) {
-  if (size != 0) {
-    wstring log_msg = wstring(L"process exited ,json:") + (wchar_t *)(pBuffer);
-    OutputDebugStringW(log_msg.c_str());
-    wstring wstr_buff = (wchar_t *)pBuffer;
-    std::string temp_str = to_utf8_string(wstr_buff);
-    auto jsonObj = json::parse(temp_str);
-    unsigned long process_id = jsonObj.value("process_id", 0);
-    g_MapProcessIDHWND.erase(process_id);
-    UnregisterDLL(process_id);
-
-    json exit_json = {
-      {"action", "exit"},
-      {"hwnd", jsonObj.value("HWND", 0)}
-    };
-  
-    PipeClient client;
-    client.Write(pipe_name, to_wide_string(exit_json.dump()).c_str());
+  if (0 == size) {
+    OutputDebugStringW(L"get buffer size is 0");
+    return false;
   }
+  wstring log_msg = wstring(L"process exited ,json:") + (wchar_t *)(pBuffer);
+  OutputDebugStringW(log_msg.c_str());
+  wstring wstr_buff = (wchar_t *)pBuffer;
+  std::string temp_str = to_utf8_string(wstr_buff);
+  auto jsonObj = json::parse(temp_str);
+  unsigned long process_id = jsonObj.value("process_id", 0);
+  g_MapProcessIDHWND.erase(process_id);
+  UnregisterDLL(process_id);
+  PipeClient client;
+  client.Write(pipe_name, to_wide_string(jsonObj.dump()).c_str());
   return true;
 }
 
