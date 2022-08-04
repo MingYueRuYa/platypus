@@ -9,6 +9,16 @@ std::string to_utf8_string(const std::wstring& wide_string) {
   return utf8_conv.to_bytes(wide_string);
 }
 
+std::string to_utf8_string(const wchar_t& wide_char) {
+  static std::wstring_convert<std::codecvt_utf8<wchar_t>> utf8_conv;
+  return utf8_conv.to_bytes(wide_char);
+}
+
+inline std::wstring to_wide_string(const char& input) {
+  std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+  return converter.from_bytes(input);
+}
+
 inline std::wstring to_wide_string(const std::string& input) {
   std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
   return converter.from_bytes(input);

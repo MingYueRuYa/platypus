@@ -18,13 +18,16 @@
 #include "debughelper.h"
 #include "draw_helper.h"
 #include "gitwndhelper.h"
+#include "json.hpp"
 #include "round_shadow_helper.h"
+#include "string_utils.hpp"
 #include "tab_bar_draw_helper.h"
 #include "ui_platypus.h"
 #include "weak_call_back.hpp"
 
 const int kLAYOUT_ITEM_WIDTH = 30;
 
+using nlohmann::json;
 using std::vector;
 using XIBAO::DebugHelper;
 
@@ -43,26 +46,30 @@ Platypus::~Platypus() {
   delete frame_less_helper_;
 }
 
-bool Platypus::FindWndTitle(unsigned char* pPayload, unsigned long long &size)
-{
-    OutputDebugStringW((wchar_t *)(pPayload));
-    return true;
+bool Platypus::FindWndTitle(unsigned char *pPayload, unsigned long long &size) {
+  OutputDebugStringW((wchar_t *)(pPayload));
+  return true;
 }
-bool Platypus::WndExit(unsigned char* pPayload, unsigned long long &size)
-{
-    return true;
+bool Platypus::WndExit(unsigned char *pPayload, unsigned long long &size) {
+  return true;
 }
 
-bool Platypus::Stop(unsigned char* pPayload, unsigned long long &size)
-{
-    return true;
+bool Platypus::Stop(unsigned char *pPayload, unsigned long long &size) {
+  return true;
 }
 
-void Platypus::ReceiveMsg(const wchar_t* json_str)
-{
-    //1. add git wnd
-    //2. update title 
-    //3. git wnd exit
+void Platypus::ReceiveMsg(const wchar_t *json_str) {
+  string json_msg = to_utf8_string(json_str);
+  json json_obj = json::parse(json_msg);
+  string action = json_obj.value("action", "");
+  HWND git_hwnd = (HWND)json_obj.value("HWND", 0);
+  OutDebug(action);
+  if (action == "exit") {
+    // 3. git wnd exit
+  } else if (action == "update") {
+    // 1. add git wnd
+    // 2. update title
+  }
 }
 
 void Platypus::mouseReleaseEvent(QMouseEvent *e) {
