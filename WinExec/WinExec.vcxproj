@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\Client.h" />
+    <ClInclude Include="..\common\json.hpp" />
     <ClInclude Include="..\common\pipe_client.h" />
     <ClInclude Include="..\common\Server.h" />
     <ClInclude Include="Resource.h" />

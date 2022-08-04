@@ -11,7 +11,7 @@ void Server::createShm(const std::string& mapName, size_t size) {
                            NULL,            // optional security attributes
                            PAGE_READWRITE,  // protection for mapping object
                            0,               // high-order 32 bits of object size
-                           size,            // low-order 32 bits of object size
+                           (DWORD)size,            // low-order 32 bits of object size
                            mapName.c_str());  // name of file-mapping object
 
   if (m_hMap == nullptr)  //创建失败
@@ -25,9 +25,11 @@ void Server::createShm(const std::string& mapName, size_t size) {
 void Server::stop() {
   const std::string& eventType = "exit";
   PVOID pdata = "exit";
-  UINT64 dataSize = strlen((char*)pdata) + 1;
+  size_t dataSize = strlen((char*)pdata) + 1;
   Header header;
   LPVOID pBuffer = ::MapViewOfFile(m_hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+  if (nullptr == pBuffer)
+    return;
   memset(pBuffer, 0, m_mapSize);
 
   //设置数据头
@@ -63,6 +65,8 @@ void Server::eventLoop(const std::string& eventName) {
   while (true) {
     WaitForSingleObject(hRcvEvent, INFINITE);  //收到信号，自动重置
     LPVOID pBuffer = ::MapViewOfFile(m_hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+    if (nullptr == pBuffer)
+      return;
     Header header;
     memmove_s(&header, sizeof(header), pBuffer, sizeof(header));
 

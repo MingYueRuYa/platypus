@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "WinExec.h"
-#include "Client.h"
-#include "../common/pipe_client.h"
+#include "pipe_client.h"
 
 #include <TlHelp32.h>
 #include <Windows.h>
@@ -13,8 +12,12 @@
 
 #include "../include/const.h"
 #include "../include/head.h"
+#include "Client.h"
 #include "Server.h"
 #include "WinAssistant.h"
+#include "json.hpp"
+#include "pipe_client.h"
+#include "string_utils.hpp"
 
 #define MAX_LOADSTRING 100
 
@@ -25,6 +28,7 @@
 #endif
 
 using std::wstring;
+using json = nlohmann::json;
 
 #define WM_SEND_PROCESS_ID WM_USER + 1000 + 1
 
@@ -181,11 +185,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
     case WM_COMMAND:
       wmId = LOWORD(wParam);
       wmEvent = HIWORD(wParam);
-      // ·ÖÎö²Ëµ¥Ñ¡Ôñ:
-      switch (wmId) {
-        default:
-          return DefWindowProc(hWnd, message, wParam, lParam);
-      }
       break;
     case WM_PAINT:
       hdc = BeginPaint(hWnd, &ps);
@@ -268,10 +267,7 @@ void Test(PBYTE pPayload, UINT64 size) {}
 bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
   if (0 != size) {
     OutputDebugStringW((wchar_t *)(pBuffer));
-    // Client client;
-    // client.init(platypus_shm_name, MAX_SHM_SIZE, platypus_evt_name);
-    // client.send(function_name, (PVOID)pBuffer, size, Test);
-    PipeClient client;  
+    PipeClient client;
     client.Write(pipe_name, (wchar_t *)pBuffer);
   }
   return true;
@@ -281,16 +277,25 @@ bool WndExit(PBYTE pBuffer, UINT64 &size) {
   if (size != 0) {
     wstring log_msg = wstring(L"process exited ,json:") + (wchar_t *)(pBuffer);
     OutputDebugStringW(log_msg.c_str());
-    // unsigned long process_id = std::stoul((wchar_t *)pBuffer);
-    // g_MapProcessIDHWND.erase(process_id);
-    // UnregisterDLL(process_id);
+    wstring wstr_buff = (wchar_t *)pBuffer;
+    std::string temp_str = to_utf8_string(wstr_buff);
+    auto jsonObj = json::parse(temp_str);
+    unsigned long process_id = jsonObj.value("process_id", 0);
+    g_MapProcessIDHWND.erase(process_id);
+    UnregisterDLL(process_id);
+
+    json exit_json = {
+      {"action", "exit"},
+      {"hwnd", jsonObj.value("HWND", 0)}
+    };
+  
+    PipeClient client;
+    client.Write(pipe_name, to_wide_string(exit_json.dump()).c_str());
   }
   return true;
 }
 
-bool Stop(PBYTE pBuffer, UINT64 &size) {
-  return false;
-}
+bool Stop(PBYTE pBuffer, UINT64 &size) { return false; }
 
 void StartServer() {
   g_Server = new Server();

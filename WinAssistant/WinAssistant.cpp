@@ -7,12 +7,15 @@
 #include "../include/const.h"
 #include "../include/head.h"
 #include "Client.h"
+#include "json.hpp"
+#include "string_utils.hpp"
 
 using std::string;
 using std::wstring;
+using json = nlohmann::json;
 
-#define HWND_TO_WSTR(wnd) (std::to_wstring((int)wnd))
-#define HWND_TO_PWCHAR(wnd) (std::to_wstring((int)wnd).c_str())
+#define HWND_TO_WSTR(wnd) (std::to_wstring((long long)wnd))
+#define HWND_TO_PWCHAR(wnd) (std::to_wstring((long long)wnd).c_str())
 
 #define PROCESS_ID_TO_WSTR(id) (std::to_wstring((unsigned long)id))
 #define PROCESS_ID_TO_PWCHAR(id) (std::to_wstring((unsigned long)id).c_str())
@@ -23,37 +26,38 @@ wstring title_cache;
 
 void Test(PBYTE pPayload, UINT64 size) {}
 
-void Send(const wchar_t *title, const wchar_t *hwnd) {
-  wchar_t buff[MAX_PATH] = {0};
-  _snwprintf_s(buff, MAX_PATH, L"{\"title\":\"%s\", \"HWND\":\"%s\"}", title, hwnd);
-  size_t size = wcslen(buff) * sizeof(wchar_t);
-  wstring temp_str = title;
-  if (title_cache != temp_str) {
-    title_cache = temp_str;
+void Send(const wchar_t *title, HWND hwnd) {
+  string str_title = to_utf8_string(wstring(title));
+  json title_json = {{"title", str_title}, {"HWND", (long long)hwnd}};
+  wstring wstr_title = to_wide_string(title_json.dump());
+  if (title_cache != wstr_title) {
+    title_cache = wstr_title;
     Client client;
     client.init(dll_shm_name, MAX_SHM_SIZE, dll_evt_name);
-    client.send(function_name, buff, size, Test);
+    client.send(function_name, (wchar_t *)wstr_title.c_str(),
+                wstr_title.size() * sizeof(wchar_t), Test);
   }
 }
 
-void Quit(const wchar_t *process_id, const wchar_t *hwnd) {
-  wchar_t buff[MAX_PATH] = {0};
-  _snwprintf_s(buff, MAX_PATH, L"{\"process_id\":\"%s\", \"HWND\":\"%s\"}", process_id, hwnd);
-  size_t size = wcslen(buff) * sizeof(wchar_t);
+void Quit(DWORD process_id, HWND hwnd) {
+  json quit_json = {{"process_id", (unsigned long)process_id},
+                    {"HWND", (long long)hwnd}};
+  wstring buffer = to_wide_string(quit_json.dump());
+  OutputDebugStringW(buffer.c_str());
   Client client;
   client.init(dll_shm_name, MAX_SHM_SIZE, dll_evt_name);
-  client.send(wnd_exit_name, (PVOID)buff, size, Test);
+  client.send(wnd_exit_name, (PVOID)buffer.c_str(),
+              buffer.size() * sizeof(wchar_t), Test);
 }
 
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   PCWPSTRUCT msg = (PCWPSTRUCT)lParam;
 
   static long bFirst = 1;
-  if (bFirst) {
-    InterlockedExchange(&bFirst, 0);
+  if (InterlockedExchange(&bFirst, 0)) {
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
-    Send(title, HWND_TO_PWCHAR(msg->hwnd));
+    Send(title, (msg->hwnd));
   }
 
   if (WM_SETTEXT == msg->message) {
@@ -61,14 +65,14 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     if (nullptr != title) {
       if (0 == wcslen(title)) {
         OutputDebugStringA("empty title");
-        Quit(PROCESS_ID_TO_PWCHAR(GetCurrentProcessId()), HWND_TO_PWCHAR(msg->hwnd));
+        Quit(GetCurrentProcessId(), msg->hwnd);
       } else {
-        Send(title, HWND_TO_PWCHAR(msg->hwnd));
+        Send(title, (msg->hwnd));
       }
     }
   } else if (WM_CLOSE == msg->message || WM_QUIT == msg->message) {
     OutputDebugStringA("quit wnd");
-    Quit(PROCESS_ID_TO_PWCHAR(GetCurrentProcessId()), HWND_TO_PWCHAR(msg->hwnd));
+    Quit(GetCurrentProcessId(), msg->hwnd);
   }
   return (CallNextHookEx(g_hHook, nCode, wParam, lParam));
 }

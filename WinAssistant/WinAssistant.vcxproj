@@ -71,23 +71,28 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../bin_win32/$(Configuration)/</OutDir>
     <IntDir>../bin_win32/$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../Common</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)_x64</TargetName>
     <OutDir>../bin_win32/$(Configuration)/</OutDir>
     <IntDir>../bin_win32/$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
+    <ReferencePath>$(VC_ReferencesPath_x64);;</ReferencePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../Common</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../bin_win32/$(Configuration)/</OutDir>
     <IntDir>../bin_win32/$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../Common</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)_x64</TargetName>
     <OutDir>../bin_win32/$(Configuration)/</OutDir>
     <IntDir>../bin_win32/$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../Common</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
