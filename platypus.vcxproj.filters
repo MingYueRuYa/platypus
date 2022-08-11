@@ -98,6 +98,9 @@
     <ClInclude Include="common\pipe_server.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="platypus\custom_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platypus\button_widget.cpp">
@@ -161,6 +164,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common\pipe_server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\custom_event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

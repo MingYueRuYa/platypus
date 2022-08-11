@@ -15,6 +15,7 @@
 
 #include "NcFrameLessHelper.h"
 #include "common.h"
+#include "custom_event.h"
 #include "debughelper.h"
 #include "draw_helper.h"
 #include "gitwndhelper.h"
@@ -31,14 +32,13 @@ using nlohmann::json;
 using std::vector;
 using XIBAO::DebugHelper;
 
+#define GIT_WND_EXIT
+
 Platypus::Platypus(QWidget *parent)
     : QWidget(parent), ui(new Ui::platypusClass) {
   ui->setupUi(this);
 
   setupUI();
-
-  // 打开的时候新建一个git window
-  // QTimer::singleShot(200, this, SLOT(OnAddNewTab()));
 }
 
 Platypus::~Platypus() {
@@ -65,10 +65,13 @@ void Platypus::ReceiveMsg(const wchar_t *json_str) {
   HWND git_hwnd = (HWND)json_obj.value("HWND", 0);
   OutDebug(action);
   if (action == "exit") {
-    // 3. git wnd exit
+    qApp->postEvent(this,
+                    new CustomEvent((QEvent::Type)CusEventType::GitWndExit,
+                                    QString::fromStdString(json_msg)));
   } else if (action == "update") {
     // 1. add git wnd
     // 2. update title
+    GitWndHelperInstance.Put(git_hwnd);
   }
 }
 
@@ -98,6 +101,17 @@ bool Platypus::nativeEvent(const QByteArray &eventType, void *message,
   }
 
   return QWidget::nativeEvent(eventType, message, result);
+}
+
+void Platypus::customEvent(QEvent *event) {
+  CustomEvent *custom = dynamic_cast<CustomEvent *>(event);
+  switch (custom->type()) {
+    case (int)CusEventType::GitWndExit:
+      ExitWnd(custom->GetData());
+      break;
+    default:
+      break;
+  }
 }
 
 void Platypus::setupUI() {
@@ -140,7 +154,7 @@ void Platypus::OnAddWnd() {
     }
 
     auto git_wraps = git_wnd_wraps.rbegin();
-    // Qt的控件必须在GUI线程中初始化
+    // Qt controls must be initialized in the GUI thread
     git_wraps->InitWidget();
     ui->tabWidgetProxy->addTab2(git_wraps->GetSmartWidget(),
                                 tr("this is first tab"));
@@ -149,18 +163,6 @@ void Platypus::OnAddWnd() {
 }
 
 void Platypus::OnAddNewTab() { startGitWnd(); }
-
-// void Platypus::setStyle() {
-//   QFile file(SystemScaleInstance.IsScale() ? k2KSTYLE.arg("style.qss")
-//                                            : k1KSTYLE.arg("style.qss"));
-//   if (file.open(QFile::ReadOnly)) {
-//     QString styleSheet = QLatin1String(file.readAll());
-//     // 1.4为圆角的最小值
-//     styleSheet = styleSheet.arg(4 * SystemScaleInstance.GetScalePrecision());
-//     qApp->setStyleSheet(styleSheet);
-//   }
-//   file.close();
-// }
 
 void Platypus::startGitWnd() {
   // 1.获取git的安装目录
@@ -207,6 +209,17 @@ void Platypus::setGitFocus() {
   // current_widget->setFocus();
   // GitWndHelperInstance.ShowWindow(current_widget);
   GitWndHelperInstance.SetFocus(current_widget);
+}
+
+void Platypus::ExitWnd(const QString &data) {
+  auto exit_json = json::parse(data.toStdString());
+  HWND git_hwnd = (HWND)exit_json.value("HWND", 0);
+  const GitWndWrap &hwndwrap = GitWndHelperInstance.Get(git_hwnd);
+  QWidget *widget = hwndwrap.GetSmartWidget();
+  int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
+  if (-1 == index) return;
+  ui->tabWidgetProxy->tabWidget()->removeTab(index);
+  GitWndHelperInstance.Close(widget);
 }
 
 void Platypus::OnTabInserted(int index) {

@@ -20,7 +20,6 @@ bool PipeServer::Start(const wstring &pipe_name) {
   if (pipe_ == INVALID_HANDLE_VALUE) {
     return false;
   } else {
-    std::cout << "Named pipe created successfully...\n";
     return true;
   }
 }
@@ -48,7 +47,6 @@ bool PipeServer::Run() {
   while (1) {
     //等待命名管道客户端连接
     if (::ConnectNamedPipe(pipe_, nullptr)) {
-      OutputDebugStringA("A client connected...\n");
       memset(buf_msg, 0, BUF_SIZE);
       //读取数据
       if (::ReadFile(pipe_, buf_msg, BUF_SIZE, &num_rcv, nullptr)) {

@@ -25,7 +25,7 @@ class Platypus : public QWidget {
   bool FindWndTitle(unsigned char *pPayload, unsigned long long &size);
   bool WndExit(unsigned char *pPayload, unsigned long long &size);
   bool Stop(unsigned char *pPayload, unsigned long long &size);
-  void ReceiveMsg(const wchar_t* msg);
+  void ReceiveMsg(const wchar_t *msg);
 
  protected:
   virtual void mouseReleaseEvent(QMouseEvent *event);
@@ -33,12 +33,14 @@ class Platypus : public QWidget {
   virtual void showEvent(QShowEvent *event);
   virtual bool nativeEvent(const QByteArray &eventType, void *message,
                            long *result);
+  virtual void customEvent(QEvent * event);
 
  private:
   void setupUI();
   bool filterTabBarEvent(QObject *obj, QEvent *event);
   void startGitWnd();
   void setGitFocus();
+  void ExitWnd(const QString &data);
 
  protected slots:
   void OnAddWnd();
