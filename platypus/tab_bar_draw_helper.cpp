@@ -59,6 +59,8 @@ void TabBarDrawHelper::paintTab(QPainter &painter, const QRect &draw_rect,
   }
   QRect real_rect = draw_rect;
   real_rect -= QMargins(45, 0, 30, 0);
+  QFont font("Microsoft YaHei UI", 10);
+  painter.setFont(font);
   painter.setPen(Qt::white);
   QString draw_text = painter.fontMetrics().elidedText(text, Qt::ElideRight,
                                                        real_rect.width(), 0);

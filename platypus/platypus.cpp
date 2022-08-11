@@ -243,6 +243,7 @@ void Platypus::updateTitle(const QString &data) {
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
   if (-1 == index) return;
   ui->tabWidgetProxy->tabWidget()->setTabText(index, QString::fromStdString(title));
+  ui->tabWidgetProxy->tabWidget()->setTabToolTip(index, QString::fromStdString(title));
 }
 
 void Platypus::OnTabInserted(int index) {
