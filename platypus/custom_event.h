@@ -7,7 +7,8 @@
 
 enum class CusEventType
 {
-  GitWndExit = QEvent::User + 1000
+  GitWndExit = QEvent::User + 1000,
+  GitWndUpdateTitle = QEvent::User + 1001
 };
 
 class CustomEvent : public QEvent

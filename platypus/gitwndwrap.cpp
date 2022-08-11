@@ -12,6 +12,11 @@ GitWndWrap::GitWndWrap(HWND gitHwnd) : mGitWnd(gitHwnd) {
   // mWidget = QWidget::createWindowContainer(window, nullptr);
 }
 
+GitWndWrap::GitWndWrap(HWND gitHwnd, const QString &title)
+    : mGitWnd(gitHwnd), _title(title) {
+  setStyle();
+}
+
 GitWndWrap::~GitWndWrap() { Close(); }
 
 GitWndWrap::GitWndWrap(GitWndWrap &&rhs) {
@@ -66,6 +71,11 @@ void GitWndWrap::InitWidget() {
   mWidget = QWidget::createWindowContainer(window, nullptr);
   static int i = 0;
   mWidget->setObjectName(QString::number(i++));
+}
+
+const QString &GitWndWrap::GetTitle() const
+{
+    return _title;
 }
 
 void GitWndWrap::copyValue(const GitWndWrap &rhs) {

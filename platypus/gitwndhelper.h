@@ -43,7 +43,7 @@ class GitWndHelper : SINGLETON_INHERIT(GitWndHelper) {
   ~GitWndHelper();
 
   void EnumWindows();
-  void Put(HWND hwnd);
+  bool Put(HWND hwnd, const QString &title);
   const GitWndWrap &Get(HWND hwnd) const;
   void Clear();
   void CloseAllWindows();

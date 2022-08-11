@@ -63,15 +63,18 @@ void Platypus::ReceiveMsg(const wchar_t *json_str) {
   json json_obj = json::parse(json_msg);
   string action = json_obj.value("action", "");
   HWND git_hwnd = (HWND)json_obj.value("HWND", 0);
-  OutDebug(action);
   if (action == "exit") {
     qApp->postEvent(this,
                     new CustomEvent((QEvent::Type)CusEventType::GitWndExit,
                                     QString::fromStdString(json_msg)));
   } else if (action == "update") {
-    // 1. add git wnd
-    // 2. update title
-    GitWndHelperInstance.Put(git_hwnd);
+    QString title = QString::fromStdString(json_obj.value("title", ""));
+    bool result = GitWndHelperInstance.Put(git_hwnd, title);
+    // we need to update title
+    if (!result)
+      qApp->postEvent(
+          this, new CustomEvent((QEvent::Type)CusEventType::GitWndUpdateTitle,
+                                QString::fromStdString(json_msg)));
   }
 }
 
@@ -107,7 +110,10 @@ void Platypus::customEvent(QEvent *event) {
   CustomEvent *custom = dynamic_cast<CustomEvent *>(event);
   switch (custom->type()) {
     case (int)CusEventType::GitWndExit:
-      ExitWnd(custom->GetData());
+      exitWnd(custom->GetData());
+      break;
+    case (int)CusEventType::GitWndUpdateTitle:
+      updateTitle(custom->GetData());
       break;
     default:
       break;
@@ -143,6 +149,11 @@ void Platypus::setupUI() {
           this, SLOT(OnMaxOrRestore()));
 
   ui->tabWidgetProxy->updateDrawHelp(new TabBarDrawHelper());
+
+  initSig();
+}
+
+void Platypus::initSig() {
 }
 
 void Platypus::OnAddWnd() {
@@ -157,7 +168,7 @@ void Platypus::OnAddWnd() {
     // Qt controls must be initialized in the GUI thread
     git_wraps->InitWidget();
     ui->tabWidgetProxy->addTab2(git_wraps->GetSmartWidget(),
-                                tr("this is first tab"));
+                                git_wraps->GetTitle());
     git_wraps->SetParent(this);
   } while (0);
 }
@@ -211,7 +222,7 @@ void Platypus::setGitFocus() {
   GitWndHelperInstance.SetFocus(current_widget);
 }
 
-void Platypus::ExitWnd(const QString &data) {
+void Platypus::exitWnd(const QString &data) {
   auto exit_json = json::parse(data.toStdString());
   HWND git_hwnd = (HWND)exit_json.value("HWND", 0);
   const GitWndWrap &hwndwrap = GitWndHelperInstance.Get(git_hwnd);
@@ -220,6 +231,18 @@ void Platypus::ExitWnd(const QString &data) {
   if (-1 == index) return;
   ui->tabWidgetProxy->tabWidget()->removeTab(index);
   GitWndHelperInstance.Close(widget);
+}
+
+void Platypus::updateTitle(const QString &data) {
+  string str_json_data = data.toStdString();
+  auto json_obj = json::parse(str_json_data);
+  HWND git_hwnd = (HWND)json_obj.value("HWND", 0);
+  string title = json_obj.value("title", "");
+  const GitWndWrap &hwndwrap = GitWndHelperInstance.Get(git_hwnd);
+  QWidget *widget = hwndwrap.GetSmartWidget();
+  int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
+  if (-1 == index) return;
+  ui->tabWidgetProxy->tabWidget()->setTabText(index, QString::fromStdString(title));
 }
 
 void Platypus::OnTabInserted(int index) {

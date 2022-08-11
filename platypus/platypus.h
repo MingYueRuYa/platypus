@@ -37,16 +37,18 @@ class Platypus : public QWidget {
 
  private:
   void setupUI();
+  void initSig();
   bool filterTabBarEvent(QObject *obj, QEvent *event);
   void startGitWnd();
   void setGitFocus();
-  void ExitWnd(const QString &data);
+  void exitWnd(const QString &data);
+  void updateTitle(const QString &data);
 
- protected slots:
+Q_SIGNALS:
+
+ protected Q_SLOTS:
   void OnAddWnd();
   void OnAddNewTab();
-
- protected slots:
   void OnTabInserted(int index);
   void OnCloseTab(int index);
   void OnAddBtnClicked();

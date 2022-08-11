@@ -17,6 +17,7 @@ class GitWndWrap : public QObject, public XIBAO::NonCopyable {
 
  public:
   explicit GitWndWrap(HWND gitHwnd);
+  explicit GitWndWrap(HWND gitHwnd, const QString &title);
   ~GitWndWrap();
   // 右值拷贝
   GitWndWrap(GitWndWrap &&rhs);
@@ -30,6 +31,7 @@ class GitWndWrap : public QObject, public XIBAO::NonCopyable {
   QWidget *GetSmartWidget() const;
   wstring GetWndText() const;
   void InitWidget();
+  const QString &GetTitle() const;
 
  private:
   void copyValue(const GitWndWrap &rhs);
@@ -38,6 +40,7 @@ class GitWndWrap : public QObject, public XIBAO::NonCopyable {
  private:
   HWND mGitWnd;
   // SmartWidget mSmartWidget;
+  QString _title;
 
   QWidget *mWidget;
 };

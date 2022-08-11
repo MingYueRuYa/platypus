@@ -76,7 +76,7 @@ BOOL CALLBACK EnumWindowsProc(_In_ HWND hwnd, _In_ LPARAM lParam) {
       wstring::npos == window_name.find(L"MINGW"))
     return true;
 
-  GitWndHelperInstance.Put(hwnd);
+  GitWndHelperInstance.Put(hwnd, "");
 
   return true;
 }
@@ -98,17 +98,18 @@ void GitWndHelper::EnumWindows() {
   }
 }
 
-void GitWndHelper::Put(HWND hwnd) {
+bool GitWndHelper::Put(HWND hwnd, const QString &title) {
   GitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
                           [hwnd](const GitWndWrap &wndWrap) {
                             return wndWrap.GetGitWnd() == hwnd;
                           });
   // 已经存在同样的窗口
   if (ite != mGitWindowWrap.end()) {
-    return;
+    return false;
   }
-  mGitWindowWrap.emplace_back(hwnd);
+  mGitWindowWrap.emplace_back(hwnd, title);
   mNotifyHelper.NotifyNewHandle();
+  return true;
 }
 
 const GitWndWrap &GitWndHelper::Get(HWND hwnd) const {
