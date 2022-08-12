@@ -22,9 +22,6 @@ class Platypus : public QWidget {
  public:
   Platypus(QWidget *parent = Q_NULLPTR);
   ~Platypus();
-  bool FindWndTitle(unsigned char *pPayload, unsigned long long &size);
-  bool WndExit(unsigned char *pPayload, unsigned long long &size);
-  bool Stop(unsigned char *pPayload, unsigned long long &size);
   void ReceiveMsg(const wchar_t *msg);
 
  protected:
@@ -60,6 +57,6 @@ Q_SIGNALS:
 
  private:
   Ui::platypusClass *ui;
-
   NcFramelessHelper *frame_less_helper_ = nullptr;
+  HWND win_exe_hwnd_ = 0;
 };

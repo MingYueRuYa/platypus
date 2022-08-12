@@ -94,12 +94,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     }
   }
 
-  //   std::for_each(std::begin(g_MapWndAssistant), std::end(g_MapWndAssistant),
-  //                 [](const MapAssistPair &pair) {
-  //                   pair.second->Unregister();
-  //                   delete pair.second;
-  //                 });
-
   g_Server->stop();
   g_ServerThread.join();
   delete g_Server;
@@ -162,6 +156,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   ShowWindow(hWnd, nCmdShow);
   UpdateWindow(hWnd);
 
+  json init_json = {{"HWND", (long long)g_HWND}, {"action", "init_hwnd"}};
+  wstring wstr = to_wide_string(init_json.dump());
+  PipeClient client;
+  client.Write(pipe_name, wstr.c_str());
+  OutputDebugStringW(wstr.c_str());
+
   return TRUE;
 }
 
@@ -195,10 +195,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       PostQuitMessage(0);
       break;
     case WM_NULL: {
-      //   if (1 == lParam)
-      //     RegisterDLL(wParam);
-      //   else if (0 == lParam)
-      //     UnregisterDLL(wParam);
     } break;
     case WM_SEND_PROCESS_ID: {
       PROCESS_ID process_id = (PROCESS_ID)(wParam);
@@ -211,7 +207,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           RegisterDLL(wnd, process_id);
         }
       }
-
     } break;
     default:
       return DefWindowProc(hWnd, message, wParam, lParam);

@@ -44,8 +44,7 @@ QWidget *GitWndWrap::GetSmartWidget() const { return widget_; }
 
 void GitWndWrap::InitWidget() {
   QWindow *window = QWindow::fromWinId((WId)git_wnd_);
-  if (nullptr == window)
-  {
+  if (nullptr == window) {
     OutDebug("error.init widget error window is nullptr.");
     return;
   }

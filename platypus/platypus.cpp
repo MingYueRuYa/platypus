@@ -42,37 +42,29 @@ Platypus::Platypus(QWidget *parent)
 Platypus::~Platypus() {
   delete ui;
   delete frame_less_helper_;
-}
-
-bool Platypus::FindWndTitle(unsigned char *pPayload, unsigned long long &size) {
-  OutDebug((wchar_t *)(pPayload));
-  return true;
-}
-bool Platypus::WndExit(unsigned char *pPayload, unsigned long long &size) {
-  return true;
-}
-
-bool Platypus::Stop(unsigned char *pPayload, unsigned long long &size) {
-  return true;
+  if (0 != win_exe_hwnd_) ::PostMessageA(win_exe_hwnd_, WM_CLOSE, 0, 0);
 }
 
 void Platypus::ReceiveMsg(const wchar_t *json_str) {
   string json_msg = to_utf8_string(json_str);
   json json_obj = json::parse(json_msg);
   string action = json_obj.value("action", "");
-  HWND git_hwnd = (HWND)json_obj.value("HWND", 0);
+  HWND hwnd = (HWND)json_obj.value("HWND", 0);
   if (action == "exit") {
     qApp->postEvent(this,
                     new CustomEvent((QEvent::Type)CusEventType::GitWndExit,
                                     QString::fromStdString(json_msg)));
   } else if (action == "update") {
     QString title = QString::fromStdString(json_obj.value("title", ""));
-    bool result = GitWndHelperInstance.Add(git_hwnd, title);
+    bool result = GitWndHelperInstance.Add(hwnd, title);
     // we need to update title
     if (!result)
       qApp->postEvent(
           this, new CustomEvent((QEvent::Type)CusEventType::GitWndUpdateTitle,
                                 QString::fromStdString(json_msg)));
+  } else if ("init_hwnd" == action)
+  {
+      win_exe_hwnd_ = hwnd;
   }
 }
 
@@ -185,21 +177,26 @@ void Platypus::startGitWnd() {
              L"-o AppName=\"Git Bash\" -i \"%s\" "
              L"--store-taskbar-properties -- /usr/bin/bash --login -i",
              git_path.c_str(), git_path.c_str());
-  STARTUPINFO StartInfo;
-  ZeroMemory(&StartInfo, sizeof(StartInfo));
-  StartInfo.wShowWindow = SW_HIDE;
-  StartInfo.dwFlags = STARTF_USESHOWWINDOW;
-  PROCESS_INFORMATION pi;
-  ZeroMemory(&pi, sizeof(pi));
-  BOOL result =
-      CreateProcess(mintty_full_path.toStdWString().c_str(), args, NULL, NULL,
-                    false, 0, NULL, NULL, &StartInfo, &pi);
-  if (!result) {
+
+  if (!Common::StartProcess(mintty_full_path, QString::fromStdWString(args),
+                            SW_HIDE)) {
     OutDebug("Create Process failed\n");
-    return;
   }
-  ::CloseHandle(pi.hProcess);
-  ::CloseHandle(pi.hThread);
+  //   STARTUPINFO StartInfo;
+  //   ZeroMemory(&StartInfo, sizeof(StartInfo));
+  //   StartInfo.wShowWindow = SW_HIDE;
+  //   StartInfo.dwFlags = STARTF_USESHOWWINDOW;
+  //   PROCESS_INFORMATION pi;
+  //   ZeroMemory(&pi, sizeof(pi));
+  //   BOOL result =
+  //       CreateProcessW(mintty_full_path.toStdWString().c_str(), args, NULL,
+  //       NULL,
+  //                      false, 0, NULL, NULL, &StartInfo, &pi);
+  //   if (!result) {
+  //     return;
+  //   }
+  //   ::CloseHandle(pi.hProcess);
+  //   ::CloseHandle(pi.hThread);
 }
 
 void Platypus::setGitFocus() {
