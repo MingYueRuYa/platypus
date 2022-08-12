@@ -32,8 +32,6 @@ using nlohmann::json;
 using std::vector;
 using XIBAO::DebugHelper;
 
-#define GIT_WND_EXIT
-
 Platypus::Platypus(QWidget *parent)
     : QWidget(parent), ui(new Ui::platypusClass) {
   ui->setupUi(this);
@@ -47,7 +45,7 @@ Platypus::~Platypus() {
 }
 
 bool Platypus::FindWndTitle(unsigned char *pPayload, unsigned long long &size) {
-  OutputDebugStringW((wchar_t *)(pPayload));
+  OutDebug((wchar_t *)(pPayload));
   return true;
 }
 bool Platypus::WndExit(unsigned char *pPayload, unsigned long long &size) {
@@ -153,30 +151,24 @@ void Platypus::setupUI() {
   initSig();
 }
 
-void Platypus::initSig() {
-}
+void Platypus::initSig() {}
 
-void Platypus::OnAddWnd() {
-  GitWindowsWrap &git_wnd_wraps = GitWndHelperInstance.GetWindowsWrap();
-
-  do {
-    if (git_wnd_wraps.empty()) {
-      break;
-    }
-
-    auto git_wraps = git_wnd_wraps.rbegin();
-    // Qt controls must be initialized in the GUI thread
-    git_wraps->InitWidget();
-    ui->tabWidgetProxy->addTab2(git_wraps->GetSmartWidget(),
-                                git_wraps->GetTitle());
-    git_wraps->SetParent(this);
-  } while (0);
+void Platypus::OnAddWnd(HWND git_wnd) {
+  // GitWindowsWrap &git_wnd_wraps = GitWndHelperInstance.GetWindowsWrap();
+  QString title = "";
+  QWidget *git_widget = nullptr;
+  bool result =
+      GitWndHelperInstance.InitGitWidget(git_wnd, this, title, &git_widget);
+  if (result)
+    ui->tabWidgetProxy->addTab2(git_widget, title);
+  else
+    OutDebug("add new git wnd error.");
 }
 
 void Platypus::OnAddNewTab() { startGitWnd(); }
 
 void Platypus::startGitWnd() {
-  // 1.获取git的安装目录
+  // 1.get git indestall dir
   static QString git_dir = Common::GetInstallGitPath();
 
   if (git_dir.isEmpty()) {
@@ -242,8 +234,10 @@ void Platypus::updateTitle(const QString &data) {
   QWidget *widget = hwndwrap.GetSmartWidget();
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
   if (-1 == index) return;
-  ui->tabWidgetProxy->tabWidget()->setTabText(index, QString::fromStdString(title));
-  ui->tabWidgetProxy->tabWidget()->setTabToolTip(index, QString::fromStdString(title));
+  ui->tabWidgetProxy->tabWidget()->setTabText(index,
+                                              QString::fromStdString(title));
+  ui->tabWidgetProxy->tabWidget()->setTabToolTip(index,
+                                                 QString::fromStdString(title));
 }
 
 void Platypus::OnTabInserted(int index) {

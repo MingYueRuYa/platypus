@@ -81,22 +81,7 @@ BOOL CALLBACK EnumWindowsProc(_In_ HWND hwnd, _In_ LPARAM lParam) {
   return true;
 }
 
-GitWndHelper::~GitWndHelper() {
-  mStopThread = true;
-
-  CloseAllWindows();
-
-  if (mPollingWndThread.joinable()) {
-    mPollingWndThread.join();
-  }
-}
-
-void GitWndHelper::EnumWindows() {
-  while (!mStopThread) {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    ::EnumWindows(EnumWindowsProc, 0);
-  }
-}
+GitWndHelper::~GitWndHelper() { CloseAllWindows(); }
 
 bool GitWndHelper::Put(HWND hwnd, const QString &title) {
   GitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
@@ -108,15 +93,15 @@ bool GitWndHelper::Put(HWND hwnd, const QString &title) {
     return false;
   }
   mGitWindowWrap.emplace_back(hwnd, title);
-  mNotifyHelper.NotifyNewHandle();
+  mNotifyHelper.NotifyNewHandle(hwnd);
   return true;
 }
 
 const GitWndWrap &GitWndHelper::Get(HWND hwnd) const {
   ConstGitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                          [hwnd](const GitWndWrap &wndWrap) {
-                            return wndWrap.GetGitWnd() == hwnd;
-                          });
+                               [hwnd](const GitWndWrap &wndWrap) {
+                                 return wndWrap.GetGitWnd() == hwnd;
+                               });
   const static GitWndWrap wrap(0);
   // 已经存在同样的窗口
   if (ite != mGitWindowWrap.end()) {
@@ -178,13 +163,33 @@ void GitWndHelper::ShowWindow(QWidget *widget) {
   ite->ShowWindow(true);
 }
 
-void GitWndHelper::ConnectNotify(QWidget *widget, const char *funName) {
-  mNotifyHelper.Connect(widget, funName);
+void GitWndHelper::ConnectNotify(QObject *obj, const char *funName) {
+  mNotifyHelper.Connect(obj, funName);
+}
+
+bool GitWndHelper::InitGitWidget(HWND git_wnd, QWidget *parent, QString &title,
+                                 QWidget **widget) {
+  GitWndWrap *git_wrap = nullptr;
+  bool result = find(git_wnd, &git_wrap);
+  if (!result) return false;
+  git_wrap->InitWidget();
+  git_wrap->SetParent(parent);
+  title = git_wrap->GetTitle();
+  *widget = git_wrap->GetSmartWidget();
+  return true;
 }
 
 GitWindowsWrap &GitWndHelper::GetWindowsWrap() { return mGitWindowWrap; }
 
-void GitWndHelper::init() {
-  mStopThread = false;
-  // mPollingWndThread = std::thread(&GitWndHelper::EnumWindows, this);
+void GitWndHelper::init() {}
+
+bool GitWndHelper::find(HWND git_hwnd, GitWndWrap **git_wrap) {
+  if (git_hwnd == INVALID_HANDLE_VALUE || 0 == git_hwnd) return false;
+  GitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
+                          [git_hwnd](const GitWndWrap &wndWrap) {
+                            return wndWrap.GetGitWnd() == git_hwnd;
+                          });
+  if (ite == mGitWindowWrap.end()) return false;
+  *git_wrap = &(*ite);
+  return true;
 }

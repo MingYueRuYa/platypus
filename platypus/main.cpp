@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
   std::thread g_ServerThread = std::thread(StartServer, &mainwindow);
 
   GitWndHelperInstance;
-  GitWndHelperInstance.ConnectNotify(&mainwindow, "OnAddWnd");
+  GitWndHelperInstance.ConnectNotify(&mainwindow, SLOT(OnAddWnd(HWND)));
   int ret_code = app.exec();
   GitWndHelperFinalize;
 

@@ -4,6 +4,8 @@
 
 #include "debughelper.h"
 
+GitWndWrap::GitWndWrap() {}
+
 GitWndWrap::GitWndWrap(HWND gitHwnd) : mGitWnd(gitHwnd) {
   setStyle();
 
@@ -73,10 +75,7 @@ void GitWndWrap::InitWidget() {
   mWidget->setObjectName(QString::number(i++));
 }
 
-const QString &GitWndWrap::GetTitle() const
-{
-    return _title;
-}
+const QString &GitWndWrap::GetTitle() const { return _title; }
 
 void GitWndWrap::copyValue(const GitWndWrap &rhs) {
   this->mGitWnd = rhs.mGitWnd;

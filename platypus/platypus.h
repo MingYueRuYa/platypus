@@ -47,7 +47,7 @@ class Platypus : public QWidget {
 Q_SIGNALS:
 
  protected Q_SLOTS:
-  void OnAddWnd();
+  void OnAddWnd(HWND git_wnd);
   void OnAddNewTab();
   void OnTabInserted(int index);
   void OnCloseTab(int index);

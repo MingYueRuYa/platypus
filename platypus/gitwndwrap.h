@@ -16,6 +16,7 @@ class GitWndWrap : public QObject, public XIBAO::NonCopyable {
   Q_OBJECT
 
  public:
+  explicit GitWndWrap();
   explicit GitWndWrap(HWND gitHwnd);
   explicit GitWndWrap(HWND gitHwnd, const QString &title);
   ~GitWndWrap();
@@ -38,11 +39,10 @@ class GitWndWrap : public QObject, public XIBAO::NonCopyable {
   void setStyle();
 
  private:
-  HWND mGitWnd;
+  HWND mGitWnd = 0;
   // SmartWidget mSmartWidget;
-  QString _title;
-
-  QWidget *mWidget;
+  QString _title = "";
+  QWidget *mWidget = nullptr;
 };
 
 #endif  // gitwindget_h
