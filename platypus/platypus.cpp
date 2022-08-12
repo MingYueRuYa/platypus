@@ -154,7 +154,6 @@ void Platypus::setupUI() {
 void Platypus::initSig() {}
 
 void Platypus::OnAddWnd(HWND git_wnd) {
-  // GitWindowsWrap &git_wnd_wraps = GitWndHelperInstance.GetWindowsWrap();
   QString title = "";
   QWidget *git_widget = nullptr;
   bool result =
@@ -217,12 +216,15 @@ void Platypus::setGitFocus() {
 void Platypus::exitWnd(const QString &data) {
   auto exit_json = json::parse(data.toStdString());
   HWND git_hwnd = (HWND)exit_json.value("HWND", 0);
-  const GitWndWrap &hwndwrap = GitWndHelperInstance.Get(git_hwnd);
-  QWidget *widget = hwndwrap.GetSmartWidget();
+  QWidget *widget = GitWndHelperInstance.GetWidget(git_hwnd);
+  if (nullptr == widget) {
+    OutDebug("Not find widget");
+    return;
+  }
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
   if (-1 == index) return;
   ui->tabWidgetProxy->tabWidget()->removeTab(index);
-  GitWndHelperInstance.Close(widget);
+  GitWndHelperInstance.Delete(widget);
 }
 
 void Platypus::updateTitle(const QString &data) {
@@ -230,8 +232,7 @@ void Platypus::updateTitle(const QString &data) {
   auto json_obj = json::parse(str_json_data);
   HWND git_hwnd = (HWND)json_obj.value("HWND", 0);
   string title = json_obj.value("title", "");
-  const GitWndWrap &hwndwrap = GitWndHelperInstance.Get(git_hwnd);
-  QWidget *widget = hwndwrap.GetSmartWidget();
+  QWidget *widget = GitWndHelperInstance.GetWidget(git_hwnd);
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
   if (-1 == index) return;
   ui->tabWidgetProxy->tabWidget()->setTabText(index,
@@ -255,7 +256,7 @@ void Platypus::OnTabInserted(int index) {
 void Platypus::OnCloseTab(int index) {
   QWidget *widget = ui->tabWidgetProxy->tabWidget()->widget(index);
   if (nullptr != widget) {
-    GitWndHelperInstance.Close(widget);
+    GitWndHelperInstance.Delete(widget);
   }
 }
 

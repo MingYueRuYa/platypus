@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "gitwndwrap.h"
-#include "noncopyable.h"
 #include "singleton.h"
 
 using std::thread;
@@ -24,7 +23,6 @@ using ConstGitWndIte = vector<GitWndWrap>::const_iterator;
 
 class NotifyHelper : public QObject {
   Q_OBJECT
-
   Q_DISABLE_COPY_MOVE(NotifyHelper);
 
  public:
@@ -48,16 +46,15 @@ class GitWndHelper : SINGLETON_INHERIT(GitWndHelper) {
   ~GitWndHelper();
 
   bool Put(HWND hwnd, const QString &title);
-  const GitWndWrap &Get(HWND hwnd) const;
+  void Delete(QWidget *widget);
   void Clear();
   void CloseAllWindows();
   void SetFocus(QWidget *widget);
-  void Close(QWidget *widget);
   void ShowWindow(QWidget *widget);
   void ConnectNotify(QObject *obj, const char *funName);
   bool InitGitWidget(HWND git_wnd, QWidget *parent, QString &title,
                      QWidget **widget);
-  GitWindowsWrap &GetWindowsWrap();
+  QWidget *GetWidget(HWND git_wnd);
 
  private:
   void init();
