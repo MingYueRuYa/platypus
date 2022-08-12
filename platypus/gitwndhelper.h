@@ -42,8 +42,8 @@ class GitWndHelper : SINGLETON_INHERIT(GitWndHelper) {
  public:
   ~GitWndHelper();
 
-  bool Put(HWND hwnd, const QString &title);
-  void Close(QWidget *widget);
+  bool Add(HWND hwnd, const QString &title);
+  void Delete(QWidget *widget);
   void Clear();
   void CloseAllWindows();
   void SetFocus(QWidget *widget);

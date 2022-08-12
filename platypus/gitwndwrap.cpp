@@ -6,16 +6,16 @@
 
 GitWndWrap::GitWndWrap() {}
 
-GitWndWrap::GitWndWrap(HWND gitHwnd) : mGitWnd(gitHwnd) {
+GitWndWrap::GitWndWrap(HWND gitHwnd) : git_wnd_(gitHwnd) {
   setStyle();
 
   // notice: 这里不允许在非GUI线程中创建widget
-  // QWindow *window = QWindow::fromWinId((WId)mGitWnd);
-  // mWidget = QWidget::createWindowContainer(window, nullptr);
+  // QWindow *window = QWindow::fromWinId((WId)git_wnd_);
+  // widget_ = QWidget::createWindowContainer(window, nullptr);
 }
 
 GitWndWrap::GitWndWrap(HWND gitHwnd, const QString &title)
-    : mGitWnd(gitHwnd), _title(title) {
+    : git_wnd_(gitHwnd), title_(title) {
   setStyle();
 }
 
@@ -24,72 +24,63 @@ GitWndWrap::~GitWndWrap() { Close(); }
 GitWndWrap::GitWndWrap(GitWndWrap &&rhs) {
   copyValue(rhs);
 
-  rhs.mGitWnd = 0;
-  rhs.mWidget = nullptr;
+  rhs.git_wnd_ = 0;
+  rhs.widget_ = nullptr;
 }
 
 GitWndWrap &GitWndWrap::operator=(GitWndWrap &&rhs) {
   if (this == &rhs) {
     return *this;
   }
-
   copyValue(rhs);
-
-  rhs.mGitWnd = 0;
-  rhs.mWidget = nullptr;
-
+  rhs.git_wnd_ = 0;
+  rhs.widget_ = nullptr;
   return *this;
 }
 
 void GitWndWrap::ShowWindow(bool isShow) {
-  ::ShowWindow(mGitWnd, isShow ? SW_SHOW : SW_HIDE);
+  ::ShowWindow(git_wnd_, isShow ? SW_SHOW : SW_HIDE);
 }
 
-void GitWndWrap::SetFocus() { ::SetFocus(mGitWnd); }
+void GitWndWrap::SetFocus() { ::SetFocus(git_wnd_); }
 
 void GitWndWrap::Close() {
-  if (0 != mGitWnd) {
-    ::PostMessage(mGitWnd, WM_CLOSE, 0, 0);
+  if (0 != git_wnd_) {
+    ::PostMessage(git_wnd_, WM_CLOSE, 0, 0);
   }
+  if (nullptr != widget_) widget_->deleteLater();
 }
 
 void GitWndWrap::SetParent(QWidget *parent) {
-  ::SetParent(mGitWnd, (HWND)parent->winId());
+  ::SetParent(git_wnd_, (HWND)parent->winId());
 }
 
-HWND GitWndWrap::GetGitWnd() const { return mGitWnd; }
+HWND GitWndWrap::GetGitWnd() const { return git_wnd_; }
 
-QWidget *GitWndWrap::GetSmartWidget() const { return mWidget; }
-
-wstring GitWndWrap::GetWndText() const {
-  wchar_t buff[1024] = {0};
-  GetWindowText(mGitWnd, buff, 1024);
-
-  return wstring(buff);
-}
+QWidget *GitWndWrap::GetSmartWidget() const { return widget_; }
 
 void GitWndWrap::InitWidget() {
-  QWindow *window = QWindow::fromWinId((WId)mGitWnd);
-  mWidget = QWidget::createWindowContainer(window, nullptr);
+  QWindow *window = QWindow::fromWinId((WId)git_wnd_);
+  widget_ = QWidget::createWindowContainer(window, nullptr);
   static int i = 0;
-  mWidget->setObjectName(QString::number(i++));
+  widget_->setObjectName(QString::number(i++));
 }
 
-const QString &GitWndWrap::GetTitle() const { return _title; }
+const QString &GitWndWrap::GetTitle() const { return title_; }
 
 void GitWndWrap::copyValue(const GitWndWrap &rhs) {
-  this->mGitWnd = rhs.mGitWnd;
-  this->mWidget = rhs.mWidget;
+  this->git_wnd_ = rhs.git_wnd_;
+  this->widget_ = rhs.widget_;
 }
 
 void GitWndWrap::setStyle() {
-  LONG styleValue = ::GetWindowLong(mGitWnd, GWL_STYLE);
+  LONG styleValue = ::GetWindowLong(git_wnd_, GWL_STYLE);
   styleValue &= ~WS_CAPTION;
   styleValue &= ~WS_VSCROLL;
   styleValue &= ~WS_THICKFRAME;
   styleValue &= ~WS_POPUP;
   styleValue &= WS_CHILD;
-  ::SetWindowLong(mGitWnd, GWL_STYLE, styleValue);
-  ::SetWindowLong(mGitWnd, GWL_EXSTYLE,
-                  ::GetWindowLong(mGitWnd, GWL_STYLE) | ~WS_EX_TOOLWINDOW);
+  ::SetWindowLong(git_wnd_, GWL_STYLE, styleValue);
+  ::SetWindowLong(git_wnd_, GWL_EXSTYLE,
+                  ::GetWindowLong(git_wnd_, GWL_STYLE) | ~WS_EX_TOOLWINDOW);
 }

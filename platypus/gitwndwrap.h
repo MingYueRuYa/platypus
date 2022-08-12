@@ -30,7 +30,6 @@ class GitWndWrap : public QObject, public XIBAO::NonCopyable {
   void SetParent(QWidget *parent);
   HWND GetGitWnd() const;
   QWidget *GetSmartWidget() const;
-  wstring GetWndText() const;
   void InitWidget();
   const QString &GetTitle() const;
 
@@ -39,10 +38,9 @@ class GitWndWrap : public QObject, public XIBAO::NonCopyable {
   void setStyle();
 
  private:
-  HWND mGitWnd = 0;
-  // SmartWidget mSmartWidget;
-  QString _title = "";
-  QWidget *mWidget = nullptr;
+  HWND git_wnd_ = 0;
+  QString title_ = "";
+  QWidget *widget_ = nullptr;
 };
 
 #endif  // gitwindget_h

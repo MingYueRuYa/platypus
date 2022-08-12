@@ -67,7 +67,7 @@ void Platypus::ReceiveMsg(const wchar_t *json_str) {
                                     QString::fromStdString(json_msg)));
   } else if (action == "update") {
     QString title = QString::fromStdString(json_obj.value("title", ""));
-    bool result = GitWndHelperInstance.Put(git_hwnd, title);
+    bool result = GitWndHelperInstance.Add(git_hwnd, title);
     // we need to update title
     if (!result)
       qApp->postEvent(
@@ -224,7 +224,7 @@ void Platypus::exitWnd(const QString &data) {
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
   if (-1 == index) return;
   ui->tabWidgetProxy->tabWidget()->removeTab(index);
-  GitWndHelperInstance.Close(widget);
+  GitWndHelperInstance.Delete(widget);
 }
 
 void Platypus::updateTitle(const QString &data) {
@@ -256,7 +256,7 @@ void Platypus::OnTabInserted(int index) {
 void Platypus::OnCloseTab(int index) {
   QWidget *widget = ui->tabWidgetProxy->tabWidget()->widget(index);
   if (nullptr != widget) {
-    GitWndHelperInstance.Close(widget);
+    GitWndHelperInstance.Delete(widget);
   }
 }
 

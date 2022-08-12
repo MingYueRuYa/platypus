@@ -14,7 +14,7 @@ using std::wstring;
 
 GitWndHelper::~GitWndHelper() { CloseAllWindows(); }
 
-bool GitWndHelper::Put(HWND hwnd, const QString &title) {
+bool GitWndHelper::Add(HWND hwnd, const QString &title) {
   GitWndMapItr itr = git_wnds_maps_.find(hwnd);
   // exist same window
   if (itr != git_wnds_maps_.end()) {
@@ -43,7 +43,7 @@ void GitWndHelper::SetFocus(QWidget *widget) {
   itr->second->SetFocus();
 }
 
-void GitWndHelper::Close(QWidget *widget) {
+void GitWndHelper::Delete(QWidget *widget) {
   GitWndMapItr itr = this->find(widget);
   if (itr == git_wnds_maps_.end()) {
     return;
