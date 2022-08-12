@@ -15,68 +15,52 @@ using std::wstring;
 GitWndHelper::~GitWndHelper() { CloseAllWindows(); }
 
 bool GitWndHelper::Put(HWND hwnd, const QString &title) {
-  GitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                          [hwnd](const GitWndWrap &wndWrap) {
-                            return wndWrap.GetGitWnd() == hwnd;
-                          });
-  // 已经存在同样的窗口
-  if (ite != mGitWindowWrap.end()) {
+  GitWndMapItr itr = git_wnds_maps_.find(hwnd);
+  // exist same window
+  if (itr != git_wnds_maps_.end()) {
     return false;
   }
-  mGitWindowWrap.emplace_back(hwnd, title);
+  git_wnds_maps_[hwnd] = new GitWndWrap(hwnd, title);
   mNotifyHelper.NotifyNewHandle(hwnd);
   return true;
 }
 
-void GitWndHelper::Clear() { mGitWindowWrap.clear(); }
+void GitWndHelper::Clear() { git_wnds_maps_.clear(); }
 
 void GitWndHelper::CloseAllWindows() {
-  std::for_each(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                [this](GitWndWrap &wndWrap) { wndWrap.Close(); });
+  std::for_each(git_wnds_maps_.begin(), git_wnds_maps_.end(),
+                [](GitWndPair &wnd_pair) { wnd_pair.second->Close(); });
+
   Clear();
 }
 
 void GitWndHelper::SetFocus(QWidget *widget) {
-  GitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                          [widget](const GitWndWrap &wndWrap) {
-                            return wndWrap.GetSmartWidget() == widget;
-                          });
-
-  if (ite == mGitWindowWrap.end()) {
+  GitWndMapItr itr = this->find(widget);
+  if (itr == git_wnds_maps_.end()) {
     return;
   }
 
-  ite->SetFocus();
+  itr->second->SetFocus();
 }
 
 void GitWndHelper::Close(QWidget *widget) {
-  GitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                          [widget](const GitWndWrap &wndWrap) {
-                            return wndWrap.GetSmartWidget() == widget;
-                          });
-
-  if (ite == mGitWindowWrap.end()) {
+  GitWndMapItr itr = this->find(widget);
+  if (itr == git_wnds_maps_.end()) {
     return;
   }
-  ite->Close();
-  mGitWindowWrap.erase(ite);
+  itr->second->Close();
+  git_wnds_maps_.erase(itr);
 }
 
 void GitWndHelper::ShowWindow(QWidget *widget) {
   if (nullptr == widget) {
     return;
   }
-  std::for_each(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                [](GitWndWrap &wndWrap) { wndWrap.ShowWindow(false); });
-
-  GitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                          [widget](const GitWndWrap &wndWrap) {
-                            return wndWrap.GetSmartWidget() == widget;
-                          });
-  if (ite == mGitWindowWrap.end()) {
+  GitWndMapItr itr = this->find(widget);
+  if (itr == git_wnds_maps_.end()) {
     return;
   }
-  ite->ShowWindow(true);
+  itr->second->ShowWindow(true);
 }
 
 void GitWndHelper::ConnectNotify(QObject *obj, const char *funName) {
@@ -96,12 +80,9 @@ bool GitWndHelper::InitGitWidget(HWND git_wnd, QWidget *parent, QString &title,
 }
 
 QWidget *GitWndHelper::GetWidget(HWND hwnd) {
-  ConstGitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                               [hwnd](const GitWndWrap &wndWrap) {
-                                 return wndWrap.GetGitWnd() == hwnd;
-                               });
-  if (ite != mGitWindowWrap.end()) {
-    return ite->GetSmartWidget();
+  GitWndMapItr itr = git_wnds_maps_.find(hwnd);
+  if (itr != git_wnds_maps_.end()) {
+    return itr->second->GetSmartWidget();
   } else {
     return nullptr;
   }
@@ -111,11 +92,22 @@ void GitWndHelper::init() {}
 
 bool GitWndHelper::find(HWND git_hwnd, GitWndWrap **git_wrap) {
   if (git_hwnd == INVALID_HANDLE_VALUE || 0 == git_hwnd) return false;
-  GitWndIte ite = find_if(mGitWindowWrap.begin(), mGitWindowWrap.end(),
-                          [git_hwnd](const GitWndWrap &wndWrap) {
-                            return wndWrap.GetGitWnd() == git_hwnd;
-                          });
-  if (ite == mGitWindowWrap.end()) return false;
-  *git_wrap = &(*ite);
+  GitWndMapItr ite =
+      std::find_if(git_wnds_maps_.begin(), git_wnds_maps_.end(),
+                   [git_hwnd](GitWndPair &git_pair) {
+                     return git_pair.second->GetGitWnd() == git_hwnd;
+                   });
+  if (ite == git_wnds_maps_.end()) return false;
+  *git_wrap = (ite->second);
   return true;
+}
+
+GitWndMapItr GitWndHelper::find(QWidget *widget) {
+  if (nullptr == widget) return git_wnds_maps_.end();
+  GitWndMapItr itr =
+      std::find_if(git_wnds_maps_.begin(), git_wnds_maps_.end(),
+                   [widget](GitWndPair &git_pair) {
+                     return git_pair.second->GetSmartWidget() == widget;
+                   });
+  return itr;
 }

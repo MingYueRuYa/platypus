@@ -224,7 +224,7 @@ void Platypus::exitWnd(const QString &data) {
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
   if (-1 == index) return;
   ui->tabWidgetProxy->tabWidget()->removeTab(index);
-  GitWndHelperInstance.Delete(widget);
+  GitWndHelperInstance.Close(widget);
 }
 
 void Platypus::updateTitle(const QString &data) {
@@ -256,7 +256,7 @@ void Platypus::OnTabInserted(int index) {
 void Platypus::OnCloseTab(int index) {
   QWidget *widget = ui->tabWidgetProxy->tabWidget()->widget(index);
   if (nullptr != widget) {
-    GitWndHelperInstance.Delete(widget);
+    GitWndHelperInstance.Close(widget);
   }
 }
 

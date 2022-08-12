@@ -10,13 +10,10 @@
 #include "gitwndwrap.h"
 #include "singleton.h"
 
-using std::thread;
-using std::vector;
-
-using GitWindows = vector<HWND>;
-using GitWindowsWrap = vector<GitWndWrap>;
-using GitWndIte = vector<GitWndWrap>::iterator;
-using ConstGitWndIte = vector<GitWndWrap>::const_iterator;
+using GitWndsMap = std::map<HWND, GitWndWrap*>;
+using GitWndMapItr = GitWndsMap::iterator;
+using ConstGitWndMapItr = GitWndsMap::const_iterator;
+using GitWndPair = std::pair<const HWND, GitWndWrap*>;
 
 #define GitWndHelperInstance SINGLETON_INSTANCE(GitWndHelper)
 #define GitWndHelperFinalize SINGLETON_FINALIZE(GitWndHelper)
@@ -46,7 +43,7 @@ class GitWndHelper : SINGLETON_INHERIT(GitWndHelper) {
   ~GitWndHelper();
 
   bool Put(HWND hwnd, const QString &title);
-  void Delete(QWidget *widget);
+  void Close(QWidget *widget);
   void Clear();
   void CloseAllWindows();
   void SetFocus(QWidget *widget);
@@ -59,14 +56,15 @@ class GitWndHelper : SINGLETON_INHERIT(GitWndHelper) {
  private:
   void init();
   bool find(HWND git_hwnd, GitWndWrap **git_wrap);
+  GitWndMapItr find(QWidget *widget);
 
  private:
-  GitWindowsWrap mGitWindowWrap;
+  GitWndsMap git_wnds_maps_;
+  NotifyHelper mNotifyHelper;
 
   DECLARE_FRIEND_SINGLETON(GitWndHelper);
   DECLARE_PRIVATE_CONSTRUCTOR(GitWndHelper, init);
 
-  NotifyHelper mNotifyHelper;
 };
 
 #endif  // gitwndhelper_h
