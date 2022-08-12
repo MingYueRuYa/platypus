@@ -7,22 +7,18 @@
 #include <QtWidgets/QWidget>
 #include <memory>
 
-#include "noncopyable.h"
-
 using std::shared_ptr;
 using std::wstring;
 
-class GitWndWrap : public QObject, public XIBAO::NonCopyable {
+class GitWndWrap : public QObject{
   Q_OBJECT
+  Q_DISABLE_COPY_MOVE(GitWndWrap)
 
  public:
   explicit GitWndWrap();
   explicit GitWndWrap(HWND gitHwnd);
   explicit GitWndWrap(HWND gitHwnd, const QString &title);
-  ~GitWndWrap();
-  // 右值拷贝
-  GitWndWrap(GitWndWrap &&rhs);
-  GitWndWrap &operator=(GitWndWrap &&rhs);
+  virtual ~GitWndWrap();
 
   void ShowWindow(bool isShow);
   void SetFocus();
@@ -34,7 +30,6 @@ class GitWndWrap : public QObject, public XIBAO::NonCopyable {
   const QString &GetTitle() const;
 
  private:
-  void copyValue(const GitWndWrap &rhs);
   void setStyle();
 
  private:

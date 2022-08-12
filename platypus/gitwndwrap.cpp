@@ -21,23 +21,6 @@ GitWndWrap::GitWndWrap(HWND gitHwnd, const QString &title)
 
 GitWndWrap::~GitWndWrap() { Close(); }
 
-GitWndWrap::GitWndWrap(GitWndWrap &&rhs) {
-  copyValue(rhs);
-
-  rhs.git_wnd_ = 0;
-  rhs.widget_ = nullptr;
-}
-
-GitWndWrap &GitWndWrap::operator=(GitWndWrap &&rhs) {
-  if (this == &rhs) {
-    return *this;
-  }
-  copyValue(rhs);
-  rhs.git_wnd_ = 0;
-  rhs.widget_ = nullptr;
-  return *this;
-}
-
 void GitWndWrap::ShowWindow(bool isShow) {
   ::ShowWindow(git_wnd_, isShow ? SW_SHOW : SW_HIDE);
 }
@@ -61,17 +44,17 @@ QWidget *GitWndWrap::GetSmartWidget() const { return widget_; }
 
 void GitWndWrap::InitWidget() {
   QWindow *window = QWindow::fromWinId((WId)git_wnd_);
+  if (nullptr == window)
+  {
+    OutDebug("error.init widget error window is nullptr.");
+    return;
+  }
   widget_ = QWidget::createWindowContainer(window, nullptr);
   static int i = 0;
   widget_->setObjectName(QString::number(i++));
 }
 
 const QString &GitWndWrap::GetTitle() const { return title_; }
-
-void GitWndWrap::copyValue(const GitWndWrap &rhs) {
-  this->git_wnd_ = rhs.git_wnd_;
-  this->widget_ = rhs.widget_;
-}
 
 void GitWndWrap::setStyle() {
   LONG styleValue = ::GetWindowLong(git_wnd_, GWL_STYLE);
