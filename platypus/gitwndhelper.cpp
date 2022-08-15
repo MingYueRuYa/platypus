@@ -49,8 +49,8 @@ void GitWndHelper::Delete(QWidget *widget) {
     return;
   }
   itr->second->Close();
-  git_wnds_maps_.erase(itr);
   delete itr->second;
+  git_wnds_maps_.erase(itr);
 }
 
 void GitWndHelper::ShowWindow(QWidget *widget) {
