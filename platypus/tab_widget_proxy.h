@@ -1,11 +1,11 @@
 #ifndef TAB_WIDGET_PROXY_H
 #define TAB_WIDGET_PROXY_H
 
-#include <QWidget>
 #include <QPixmap>
-#include <QToolButton>
-#include <memory>
 #include <QTabBar>
+#include <QToolButton>
+#include <QWidget>
+#include <memory>
 
 #include "qt_ext_tab_bar_define.h"
 #include "qt_ext_tab_widget.h"
@@ -17,7 +17,7 @@ class BaseTabBarDrawHelper;
 using QtExtTabBarDef::TabState;
 
 class TabWidgetProxy : public QWidget,
-                   public std::enable_shared_from_this<TabWidgetProxy> {
+                       public std::enable_shared_from_this<TabWidgetProxy> {
   Q_OBJECT
 
  public:
@@ -44,6 +44,7 @@ class TabWidgetProxy : public QWidget,
   void OnMaxWnd();
   void OnRestoreWnd();
   void OnMaxOrRestore();
+  void OnTabBarClicked(int index);
 
  private:
   bool isHasParent() const;

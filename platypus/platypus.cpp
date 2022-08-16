@@ -62,9 +62,8 @@ void Platypus::ReceiveMsg(const wchar_t *json_str) {
       qApp->postEvent(
           this, new CustomEvent((QEvent::Type)CusEventType::GitWndUpdateTitle,
                                 QString::fromStdString(json_msg)));
-  } else if ("init_hwnd" == action)
-  {
-      win_exe_hwnd_ = hwnd;
+  } else if ("init_hwnd" == action) {
+    win_exe_hwnd_ = hwnd;
   }
 }
 
@@ -137,6 +136,8 @@ void Platypus::setupUI() {
           SLOT(OnRestoreWnd()));
   connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(tabBarDoubleClicked()),
           this, SLOT(OnMaxOrRestore()));
+  connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(tabBarClicked(int)), this,
+          SLOT(OnTabBarClicked(int)));
 
   ui->tabWidgetProxy->updateDrawHelp(new TabBarDrawHelper());
 
@@ -150,9 +151,10 @@ void Platypus::OnAddWnd(HWND git_wnd) {
   QWidget *git_widget = nullptr;
   bool result =
       GitWndHelperInstance.InitGitWidget(git_wnd, this, title, &git_widget);
-  if (result)
+  if (result) {
     ui->tabWidgetProxy->addTab2(git_widget, title);
-  else
+    QTimer::singleShot(100, this, [git_widget] { GitWndHelperInstance.SetFocus(git_widget); });
+  } else
     OutDebug("add new git wnd error.");
 }
 
@@ -268,3 +270,9 @@ void Platypus::OnMaxWnd() { setGitFocus(); }
 void Platypus::OnRestoreWnd() { setGitFocus(); }
 
 void Platypus::OnMaxOrRestore() { setGitFocus(); }
+
+void Platypus::OnTabBarClicked(int index) {
+  QWidget *widget = ui->tabWidgetProxy->tabWidget()->widget(index);
+  if (nullptr == widget) return;
+  GitWndHelperInstance.SetFocus(widget);
+}

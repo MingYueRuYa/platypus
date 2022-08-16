@@ -19,6 +19,7 @@ class TabWidgetSignal : public QObject {
   void maxWnd();
   void restoreWnd();
   void tabBarDoubleClicked();
+  void tabBarClicked(int index);
 };
 
 #endif  // TAB_WIDGET_SIGNAL_H

@@ -153,6 +153,11 @@ void TabWidgetProxy::OnMaxOrRestore() {
   }
 }
 
+void TabWidgetProxy::OnTabBarClicked(int index)
+{
+    emit signal_.tabBarClicked(index);
+}
+
 bool TabWidgetProxy::isHasParent() const { return nullptr != parentWidget(); }
 
 void TabWidgetProxy::connectSignal() {
@@ -172,4 +177,6 @@ void TabWidgetProxy::connectSignal() {
           SLOT(OnRestoreWnd()));
   connect(&(ext_tab_widget_->getSignal()), SIGNAL(tabBarDoubleClicked()), this,
           SLOT(OnMaxOrRestore()));
+  connect(&(ext_tab_widget_->getSignal()), SIGNAL(tabBarClicked(int)), this,
+          SLOT(OnTabBarClicked(int)));
 }

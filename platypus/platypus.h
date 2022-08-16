@@ -54,6 +54,7 @@ Q_SIGNALS:
   void OnMaxWnd();
   void OnRestoreWnd();
   void OnMaxOrRestore();
+  void OnTabBarClicked(int index);
 
  private:
   Ui::platypusClass *ui;

@@ -368,6 +368,7 @@ void QtExtTabWidget::setupUI() {
           SLOT(OnStartDrag(int)));
   connect(&(tab_bar_->getSignal()), SIGNAL(signalEndDrag()), this,
           SLOT(createDraggedNewWindow()));
+  connect(this, SIGNAL(tabBarClicked(int)), &signal_, SIGNAL(tabBarClicked(int)));
 }
 
 bool QtExtTabWidget::isInMain() { return parentWidget() != nullptr; }
