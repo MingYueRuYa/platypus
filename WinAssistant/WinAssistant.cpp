@@ -27,7 +27,12 @@ wstring title_cache;
 void Test(PBYTE pPayload, UINT64 size) {}
 
 void Send(const wchar_t *title, HWND hwnd) {
-  string str_title = to_utf8_string(wstring(title));
+  wstring temp_title = wstring(title);
+  if (temp_title.empty()) {
+    OutputDebugStringA("empty title, not need to update");
+    return;
+  }
+  string str_title = to_utf8_string(temp_title);
   json title_json = {
       {"title", str_title}, {"HWND", (long long)hwnd}, {"action", "update"}};
   wstring wstr_title = to_wide_string(title_json.dump());
