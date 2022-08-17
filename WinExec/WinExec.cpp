@@ -17,6 +17,7 @@
 #include "WinAssistant.h"
 #include "json.hpp"
 #include "pipe_client.h"
+#include "single_process.h"
 #include "string_utils.hpp"
 
 #define MAX_LOADSTRING 100
@@ -66,6 +67,9 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                        _In_ int nCmdShow) {
   UNREFERENCED_PARAMETER(hPrevInstance);
   UNREFERENCED_PARAMETER(lpCmdLine);
+
+  SingleProcess single_process(L"abc_@winexec_2022");
+  if (single_process.isExist()) return -1;
 
   // TODO:  在此放置代码。
   MSG msg;
