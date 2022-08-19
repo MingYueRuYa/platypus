@@ -42,6 +42,9 @@
     <ClInclude Include="..\common\single_process.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rdparty\json\json.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

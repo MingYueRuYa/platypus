@@ -164,8 +164,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\3rdparty\json\json.hpp" />
     <ClInclude Include="..\common\Client.h" />
-    <ClInclude Include="..\common\json.hpp" />
     <ClInclude Include="..\common\pipe_client.h" />
     <ClInclude Include="..\common\Server.h" />
     <ClInclude Include="..\common\single_process.h" />

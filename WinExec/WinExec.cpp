@@ -15,7 +15,7 @@
 #include "Client.h"
 #include "Server.h"
 #include "WinAssistant.h"
-#include "json.hpp"
+#include "../3rdparty/json/json.hpp"
 #include "pipe_client.h"
 #include "single_process.h"
 #include "string_utils.hpp"
