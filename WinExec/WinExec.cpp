@@ -223,7 +223,7 @@ void RegisterDLL(HWND targetWnd, PROCESS_ID process_id) {
   THREAD_ID thread_id = GetWindowThreadProcessId(targetWnd, NULL);
 
   CWinAssistant *assist = new CWinAssistant();
-  assist->Register(thread_id);
+  assist->Register(targetWnd, thread_id);
   g_MapWndAssistant[process_id] = assist;
 }
 

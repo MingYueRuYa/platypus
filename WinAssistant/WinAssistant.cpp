@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <string>
+#include <algorithm>
 
 #include "../include/const.h"
 #include "../include/head.h"
@@ -29,9 +30,17 @@ void Test(PBYTE pPayload, UINT64 size) {}
 void Send(const wchar_t *title, HWND hwnd) {
   wstring temp_title = wstring(title);
   if (temp_title.empty()) {
-    OutputDebugStringA("empty title, not need to update");
+    OutputDebugStringA("empty title or Default IME title, not need to update");
     return;
   }
+
+  std::vector<wstring> vc_filter_title = {L"Default IME", L"MSCTFIME UI"};
+  auto find_itr = std::find_if(vc_filter_title.begin(), vc_filter_title.end(),
+                            [title](const wstring &temp_title) ->bool {
+                              return wstring::npos != temp_title.find(title);
+                            });
+  if (find_itr != vc_filter_title.end()) return;
+
   string str_title = to_utf8_string(temp_title);
   json title_json = {
       {"title", str_title}, {"HWND", (long long)hwnd}, {"action", "update"}};
@@ -60,11 +69,13 @@ void Quit(DWORD process_id, HWND hwnd) {
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   PCWPSTRUCT msg = (PCWPSTRUCT)lParam;
 
-  static long bFirst = 1;
-  if (InterlockedExchange(&bFirst, 0)) {
+  static long first = 1;
+  if (InterlockedExchange(&first, 0)) {
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
+    OutputDebugStringW(title);
     Send(title, (msg->hwnd));
+    OutputDebugStringA("first time");
   }
 
   if (WM_SETTEXT == msg->message) {
@@ -88,7 +99,7 @@ CWinAssistant::CWinAssistant() {}
 
 CWinAssistant::~CWinAssistant() { Unregister(); }
 
-bool CWinAssistant::Register(DWORD dwThreadId) {
+bool CWinAssistant::Register(HWND targetWnd, DWORD dwThreadId) {
   bool bOk = FALSE;
   if (dwThreadId != 0) {
     g_hHook =
@@ -98,6 +109,11 @@ bool CWinAssistant::Register(DWORD dwThreadId) {
     string successful = string("register successuful thread id:") + thread_id;
     string error = string("register error thread id:") + thread_id;
     OutputDebugStringA((bOk ? successful : error).c_str());
+    if (bOk)
+    {
+       ::Sleep(100);
+      ::PostMessage(targetWnd, WM_GETTEXT, 0, 0);
+    }
   } else {
     // Make sure that a hook has been installed.
     return Unregister();

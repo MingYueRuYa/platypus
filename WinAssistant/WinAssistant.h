@@ -17,6 +17,6 @@ class WINASSISTANT_API CWinAssistant {
 public:
     CWinAssistant(void);
     ~CWinAssistant(void);
-    bool Register(DWORD dwThreadId);
+    bool Register(HWND targetWnd, DWORD dwThreadId);
     bool Unregister();
 };
