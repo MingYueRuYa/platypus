@@ -109,11 +109,6 @@ bool CWinAssistant::Register(HWND targetWnd, DWORD dwThreadId) {
     string successful = string("register successuful thread id:") + thread_id;
     string error = string("register error thread id:") + thread_id;
     OutputDebugStringA((bOk ? successful : error).c_str());
-    if (bOk)
-    {
-       ::Sleep(100);
-      ::PostMessage(targetWnd, WM_GETTEXT, 0, 0);
-    }
   } else {
     // Make sure that a hook has been installed.
     return Unregister();
