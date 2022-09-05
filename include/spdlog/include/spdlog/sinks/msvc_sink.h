@@ -1,47 +1,42 @@
+//
 // Copyright(c) 2016 Alexander Dalshov.
 // Distributed under the MIT License (http://opensource.org/licenses/MIT)
+//
 
 #pragma once
 
 #if defined(_WIN32)
 
-#    include <spdlog/details/null_mutex.h>
-#    include <spdlog/sinks/base_sink.h>
+#include "../details/null_mutex.h"
+#include "base_sink.h"
 
-#    include <mutex>
-#    include <string>
+#include <winbase.h>
 
-// Avoid including windows.h (https://stackoverflow.com/a/30741042)
-extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char *lpOutputString);
+#include <mutex>
+#include <string>
 
 namespace spdlog {
 namespace sinks {
 /*
  * MSVC sink (logging using OutputDebugStringA)
  */
-template<typename Mutex>
+template<class Mutex>
 class msvc_sink : public base_sink<Mutex>
 {
 public:
-    msvc_sink() = default;
+    explicit msvc_sink() {}
 
 protected:
-    void sink_it_(const details::log_msg &msg) override
+    void _sink_it(const details::log_msg &msg) override
     {
-        memory_buf_t formatted;
-        base_sink<Mutex>::formatter_->format(msg, formatted);
-        formatted.push_back('\0'); // add a null terminator for OutputDebugStringA
-        OutputDebugStringA(formatted.data());
+        OutputDebugStringA(msg.formatted.c_str());
     }
 
-    void flush_() override {}
+    void _flush() override {}
 };
 
 using msvc_sink_mt = msvc_sink<std::mutex>;
 using msvc_sink_st = msvc_sink<details::null_mutex>;
-
-using windebug_sink_mt = msvc_sink_mt;
-using windebug_sink_st = msvc_sink_st;
 
 } // namespace sinks
 } // namespace spdlog
