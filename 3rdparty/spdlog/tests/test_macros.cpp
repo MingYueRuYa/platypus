@@ -4,51 +4,45 @@
 
 #include "includes.h"
 
-#if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_DEBUG
-#    error "Invalid SPDLOG_ACTIVE_LEVEL in test. Should be SPDLOG_LEVEL_DEBUG"
-#endif
-
-#define TEST_FILENAME "test_logs/simple_log"
-
 TEST_CASE("debug and trace w/o format string", "[macros]]")
 {
-
     prepare_logdir();
-    spdlog::filename_t filename = SPDLOG_FILENAME_T(TEST_FILENAME);
+    std::string filename = "logs/simple_log";
 
-    auto logger = spdlog::create<spdlog::sinks::basic_file_sink_mt>("logger", filename);
+    auto logger = spdlog::create<spdlog::sinks::simple_file_sink_mt>("logger", filename);
     logger->set_pattern("%v");
     logger->set_level(spdlog::level::trace);
 
-    SPDLOG_LOGGER_TRACE(logger, "Test message 1");
-    SPDLOG_LOGGER_DEBUG(logger, "Test message 2");
+    SPDLOG_TRACE(logger, "Test message 1");
+    // SPDLOG_DEBUG(logger, "Test message 2");
+    SPDLOG_DEBUG(logger, "Test message 2");
     logger->flush();
 
-    using spdlog::details::os::default_eol;
-    REQUIRE(ends_with(file_contents(TEST_FILENAME), spdlog::fmt_lib::format("Test message 2{}", default_eol)));
-    REQUIRE(count_lines(TEST_FILENAME) == 1);
+    REQUIRE(ends_with(file_contents(filename), "Test message 2\n"));
+    REQUIRE(count_lines(filename) == 2);
+}
 
-    auto orig_default_logger = spdlog::default_logger();
-    spdlog::set_default_logger(logger);
+TEST_CASE("debug and trace with format strings", "[macros]]")
+{
+    prepare_logdir();
+    std::string filename = "logs/simple_log";
 
-    SPDLOG_TRACE("Test message 3");
-    SPDLOG_DEBUG("Test message {}", 4);
+    auto logger = spdlog::create<spdlog::sinks::simple_file_sink_mt>("logger", filename);
+    logger->set_pattern("%v");
+    logger->set_level(spdlog::level::trace);
+
+#if !defined(SPDLOG_FMT_PRINTF)
+    SPDLOG_TRACE(logger, "Test message {}", 1);
+    // SPDLOG_DEBUG(logger, "Test message 2");
+    SPDLOG_DEBUG(logger, "Test message {}", 222);
+#else
+    SPDLOG_TRACE(logger, "Test message %d", 1);
+    // SPDLOG_DEBUG(logger, "Test message 2");
+    SPDLOG_DEBUG(logger, "Test message %d", 222);
+#endif
+
     logger->flush();
 
-    require_message_count(TEST_FILENAME, 2);
-    REQUIRE(ends_with(file_contents(TEST_FILENAME), spdlog::fmt_lib::format("Test message 4{}", default_eol)));
-    spdlog::set_default_logger(std::move(orig_default_logger));
-}
-
-TEST_CASE("disable param evaluation", "[macros]")
-{
-    SPDLOG_TRACE("Test message {}", throw std::runtime_error("Should not be evaluated"));
-}
-
-TEST_CASE("pass logger pointer", "[macros]")
-{
-    auto logger = spdlog::create<spdlog::sinks::null_sink_mt>("refmacro");
-    auto &ref = *logger;
-    SPDLOG_LOGGER_TRACE(&ref, "Test message 1");
-    SPDLOG_LOGGER_DEBUG(&ref, "Test message 2");
+    REQUIRE(ends_with(file_contents(filename), "Test message 222\n"));
+    REQUIRE(count_lines(filename) == 2);
 }

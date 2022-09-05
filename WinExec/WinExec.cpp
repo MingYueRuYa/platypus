@@ -10,17 +10,20 @@
 #include <string>
 #include <thread>
 
+#include "../3rdparty/json/json.hpp"
 #include "../include/const.h"
 #include "../include/head.h"
 #include "Client.h"
 #include "Server.h"
 #include "WinAssistant.h"
-#include "../3rdparty/json/json.hpp"
 #include "pipe_client.h"
 #include "single_process.h"
+#include "spdlog/details/os.h"
+#include "spdlog/spdlog.h"
 #include "string_utils.hpp"
 
 #define MAX_LOADSTRING 100
+#define LOG_NAME "win_exec"
 
 #ifdef X64
 #pragma comment(lib, "WinAssistant_x64.lib")
@@ -49,6 +52,8 @@ HWND g_HWND = 0x0;
 bool bStopEnum = false;
 std::thread g_EnumProcessThread;
 
+namespace spd = spdlog;
+
 std::map<PROCESS_ID, HWND> g_MapProcessIDHWND;
 using MapPIDHWNDPair = std::pair<PROCESS_ID, HWND>;
 
@@ -62,11 +67,31 @@ HWND GetWndByProcessID(DWORD dwProcessID);
 void StartServer();
 void EnumProcess(const wstring &exeName);
 
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+// #define SPDLOG_WCHAR_TO_UTF8_SUPPORT
+
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                        _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine,
                        _In_ int nCmdShow) {
   UNREFERENCED_PARAMETER(hPrevInstance);
   UNREFERENCED_PARAMETER(lpCmdLine);
+
+  // spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e %l] [thread %t] %v");
+  spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] [tid %t] %v");
+  spdlog::set_level(spdlog::level::trace);
+
+  // Create a file rotating logger with 5mb size max and 3 rotated files
+  const std::tm &loc_tm = spdlog::details::os::localtime();
+
+  SPDLOG_DEBUG("Some debug message");
+  auto rotating_logger =
+      spd::rotating_logger_mt(LOG_NAME, "rotating.txt", 1048576 * 5, 3);
+  for (int i = 0; i < 10; ++i) {
+    rotating_logger->info("{} * {} equals {:>10}", i, i, i * i);
+  }
+  rotating_logger->info(L"{}", wstring(L"╟в╬срв"));
+
+  SPDLOG_TRACE(rotating_logger, "abc");
 
   SingleProcess single_process(L"abc_@winexec_2022");
   if (single_process.isExist()) return -1;
@@ -164,7 +189,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   wstring wstr = to_wide_string(init_json.dump());
   PipeClient client;
   client.Write(pipe_name, wstr.c_str());
-  OutputDebugStringW(wstr.c_str());
+  spd::get(LOG_NAME)->info(L"{}", wstr);
 
   return TRUE;
 }
@@ -205,7 +230,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       if (g_MapProcessIDHWND.find(process_id) == g_MapProcessIDHWND.end()) {
         HWND wnd = GetWndByProcessID(process_id);
         if (wnd == NULL) {
-          OutputDebugStringA("Get Wnd error.");
+          spd::get(LOG_NAME)->error("Get Wnd error.");
         } else {
           g_MapProcessIDHWND[process_id] = wnd;
           RegisterDLL(wnd, process_id);
@@ -263,9 +288,9 @@ HWND GetWndByProcessID(DWORD dwProcessID) {
 
 void Test(PBYTE pPayload, UINT64 size) {}
 
-bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
+bool FindWndTitle(PBYTE pBuffer, UINT64& size) {
   if (0 != size) {
-    OutputDebugStringW((wchar_t *)(pBuffer));
+    spd::get(LOG_NAME)->info(L"{}", (wchar_t *)pBuffer);
     PipeClient client;
     client.Write(pipe_name, (wchar_t *)pBuffer);
   }
@@ -274,11 +299,11 @@ bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
 
 bool WndExit(PBYTE pBuffer, UINT64 &size) {
   if (0 == size) {
-    OutputDebugStringW(L"get buffer size is 0");
+    spd::get(LOG_NAME)->warn("get buffer size is 0");
     return false;
   }
   wstring log_msg = wstring(L"process exited ,json:") + (wchar_t *)(pBuffer);
-  OutputDebugStringW(log_msg.c_str());
+  spd::get(LOG_NAME)->info(L"{}", log_msg);
   wstring wstr_buff = (wchar_t *)pBuffer;
   std::string temp_str = to_utf8_string(wstr_buff);
   auto jsonObj = json::parse(temp_str);
