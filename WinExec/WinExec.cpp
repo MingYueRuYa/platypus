@@ -67,9 +67,6 @@ HWND GetWndByProcessID(DWORD dwProcessID);
 void StartServer();
 void EnumProcess(const wstring &exeName);
 
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-// #define SPDLOG_WCHAR_TO_UTF8_SUPPORT
-
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                        _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine,
                        _In_ int nCmdShow) {
