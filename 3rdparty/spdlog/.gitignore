@@ -14,12 +14,6 @@ build/*
 *.ipdb
 *.opensdf
 *.sdf
-bin_win32
-ipch
-x64
-GeneratedFiles
-*.user
-*.opendb
 
 # Compiled Dynamic libraries
 *.so
