@@ -20,6 +20,7 @@ x64
 GeneratedFiles
 *.user
 *.opendb
+.vs
 
 # Compiled Dynamic libraries
 *.so
