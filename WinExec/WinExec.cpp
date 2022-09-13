@@ -9,6 +9,7 @@
 #include <map>
 #include <string>
 #include <thread>
+#include <format>
 
 #include "../3rdparty/json/json.hpp"
 #include "../include/const.h"
@@ -78,11 +79,9 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
   const std::tm &loc_tm = spdlog::details::os::localtime();
 
-
-
-  SPDLOG_DEBUG("Some debug message");
+  std::string log_name = std::format("{}-{}-{}-{}-{}-{}.txt", loc_tm.tm_year+1900, loc_tm.tm_mon+1, loc_tm.tm_mday, loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
   auto rotating_logger =
-      spd::rotating_logger_mt(LOG_NAME, "rotating.txt", 1048576 * 5, 3);
+      spd::rotating_logger_mt(LOG_NAME, log_name, 1048576 * 5, 3);
 
   SingleProcess single_process(L"abc_@winexec_2022");
   if (single_process.isExist()) return -1;

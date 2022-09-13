@@ -24,7 +24,7 @@ void Server::createShm(const std::string& mapName, size_t size) {
 
 void Server::stop() {
   const std::string& eventType = "exit";
-  PVOID pdata = "exit";
+  PVOID pdata = (PVOID)"exit";
   size_t dataSize = strlen((char*)pdata) + 1;
   Header header;
   LPVOID pBuffer = ::MapViewOfFile(m_hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
