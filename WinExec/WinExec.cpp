@@ -73,22 +73,16 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   UNREFERENCED_PARAMETER(hPrevInstance);
   UNREFERENCED_PARAMETER(lpCmdLine);
 
-  // spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e %l] [thread %t] %v");
   spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] [tid %t] %v");
-  spdlog::set_level(spdlog::level::trace);
+  spdlog::set_level(spdlog::level::info);
 
-  // Create a file rotating logger with 5mb size max and 3 rotated files
   const std::tm &loc_tm = spdlog::details::os::localtime();
+
+
 
   SPDLOG_DEBUG("Some debug message");
   auto rotating_logger =
       spd::rotating_logger_mt(LOG_NAME, "rotating.txt", 1048576 * 5, 3);
-  for (int i = 0; i < 10; ++i) {
-    rotating_logger->info("{} * {} equals {:>10}", i, i, i * i);
-  }
-  rotating_logger->info(L"{}", wstring(L"╟в╬срв"));
-
-  SPDLOG_TRACE(rotating_logger, "abc");
 
   SingleProcess single_process(L"abc_@winexec_2022");
   if (single_process.isExist()) return -1;

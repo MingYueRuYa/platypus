@@ -229,7 +229,7 @@ public:
 				value = reinterpret_cast<wchar_t *>(lpData);	
 			case REG_DWORD:
 				dwvalue = *(reinterpret_cast<DWORD *>(lpData));	
-				value = to_wstring(dwvalue);
+				value = std::to_wstring(dwvalue);
 			default:
 				break;
 			}

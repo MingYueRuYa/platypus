@@ -104,6 +104,9 @@
     <ClInclude Include="common\single_process.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="common\process_utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platypus\button_widget.cpp">

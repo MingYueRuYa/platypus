@@ -12,7 +12,8 @@
 #include "platypus.h"
 #include "single_process.h"
 
-#define EXE_NAME "WinExec_x64.exe"
+#define EXE_NAME_X64 "WinExec_x64.exe"
+#define EXE_NAME "WinExec.exe"
 
 PipeServer *g_server = nullptr;
 void StartServer(Platypus *mainwindow) {

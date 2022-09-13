@@ -97,6 +97,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -238,6 +239,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\pipe_server.h" />
+    <ClInclude Include="common\process_utils.hpp" />
     <ClInclude Include="common\Server.h" />
     <ClInclude Include="common\single_process.h" />
     <ClInclude Include="platypus\base_tab_bar_draw_helper.h" />

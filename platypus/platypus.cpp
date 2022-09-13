@@ -184,21 +184,6 @@ void Platypus::startGitWnd() {
                             SW_HIDE)) {
     OutDebug("Create Process failed\n");
   }
-  //   STARTUPINFO StartInfo;
-  //   ZeroMemory(&StartInfo, sizeof(StartInfo));
-  //   StartInfo.wShowWindow = SW_HIDE;
-  //   StartInfo.dwFlags = STARTF_USESHOWWINDOW;
-  //   PROCESS_INFORMATION pi;
-  //   ZeroMemory(&pi, sizeof(pi));
-  //   BOOL result =
-  //       CreateProcessW(mintty_full_path.toStdWString().c_str(), args, NULL,
-  //       NULL,
-  //                      false, 0, NULL, NULL, &StartInfo, &pi);
-  //   if (!result) {
-  //     return;
-  //   }
-  //   ::CloseHandle(pi.hProcess);
-  //   ::CloseHandle(pi.hThread);
 }
 
 void Platypus::setGitFocus() {
