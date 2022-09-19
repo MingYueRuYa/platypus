@@ -6,10 +6,10 @@
 #include <Windows.h>
 
 #include <algorithm>
+#include <format>
 #include <map>
 #include <string>
 #include <thread>
-#include <format>
 
 #include "../3rdparty/json/json.hpp"
 #include "../include/const.h"
@@ -24,12 +24,13 @@
 #include "string_utils.hpp"
 
 #define MAX_LOADSTRING 100
-#define LOG_NAME "win_exec"
 
 #ifdef X64
 #pragma comment(lib, "WinAssistant_x64.lib")
+#define LOG_NAME "win_exec_x64"
 #else
 #pragma comment(lib, "WinAssistant.lib")
+#define LOG_NAME "win_exec"
 #endif
 
 using std::wstring;
@@ -68,23 +69,33 @@ HWND GetWndByProcessID(DWORD dwProcessID);
 void StartServer();
 void EnumProcess(const wstring &exeName);
 
+bool InitLog() {
+  spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] [tid %t] %v");
+  spdlog::set_level(spdlog::level::info);
+
+  const std::tm &loc_tm = spdlog::details::os::localtime();
+
+  std::string log_file_name = std::format(
+      "{}-{}-{}-{}-{}-{}-{}.txt", LOG_NAME, loc_tm.tm_year + 1900, loc_tm.tm_mon + 1,
+      loc_tm.tm_mday, loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
+  auto rotating_logger =
+      spd::basic_logger_mt(LOG_NAME, log_file_name, false);
+  rotating_logger->flush_on(spd::level::err);
+//  spd::set_async_mode(1 << 12, spd::async_overflow_policy::block_retry, nullptr,
+//                     std::chrono::milliseconds(3000), nullptr);
+  return true;
+}
+
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                        _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine,
                        _In_ int nCmdShow) {
   UNREFERENCED_PARAMETER(hPrevInstance);
   UNREFERENCED_PARAMETER(lpCmdLine);
 
-  spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] [tid %t] %v");
-  spdlog::set_level(spdlog::level::info);
-
-  const std::tm &loc_tm = spdlog::details::os::localtime();
-
-  std::string log_name = std::format("{}-{}-{}-{}-{}-{}.txt", loc_tm.tm_year+1900, loc_tm.tm_mon+1, loc_tm.tm_mday, loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
-  auto rotating_logger =
-      spd::rotating_logger_mt(LOG_NAME, log_name, 1048576 * 5, 3);
-
   SingleProcess single_process(L"abc_@winexec_2022");
   if (single_process.isExist()) return -1;
+
+  InitLog();
 
   // TODO:  在此放置代码。
   MSG msg;
@@ -278,7 +289,7 @@ HWND GetWndByProcessID(DWORD dwProcessID) {
 
 void Test(PBYTE pPayload, UINT64 size) {}
 
-bool FindWndTitle(PBYTE pBuffer, UINT64& size) {
+bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
   if (0 != size) {
     spd::get(LOG_NAME)->info(L"{}", (wchar_t *)pBuffer);
     PipeClient client;

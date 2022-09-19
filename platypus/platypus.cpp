@@ -25,6 +25,7 @@
 #include "tab_bar_draw_helper.h"
 #include "ui_platypus.h"
 #include "weak_call_back.hpp"
+#include "spdlog/spdlog.h"
 
 const int kLAYOUT_ITEM_WIDTH = 30;
 
@@ -155,7 +156,7 @@ void Platypus::OnAddWnd(HWND git_wnd) {
     ui->tabWidgetProxy->addTab2(git_widget, title);
     QTimer::singleShot(100, this, [git_widget] { GitWndHelperInstance.SetFocus(git_widget); });
   } else
-    OutDebug("add new git wnd error.");
+    spdlog::get(LOG_NAME)->info("{}", "add new git wnd error.");
 }
 
 void Platypus::OnAddNewTab() { startGitWnd(); }
@@ -182,7 +183,7 @@ void Platypus::startGitWnd() {
 
   if (!Common::StartProcess(mintty_full_path, QString::fromStdWString(args),
                             SW_HIDE)) {
-    OutDebug("Create Process failed\n");
+    spdlog::get(LOG_NAME)->info("Create Process failed");
   }
 }
 
@@ -202,7 +203,7 @@ void Platypus::exitWnd(const QString &data) {
   HWND git_hwnd = (HWND)exit_json.value("HWND", 0);
   QWidget *widget = GitWndHelperInstance.GetWidget(git_hwnd);
   if (nullptr == widget) {
-    OutDebug("Not find widget");
+    spdlog::get(LOG_NAME)->info("Not find widget");
     return;
   }
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);

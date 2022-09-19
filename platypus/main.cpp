@@ -11,9 +11,12 @@
 #include "pipe_server.h"
 #include "platypus.h"
 #include "single_process.h"
+#include "spdlog/spdlog.h"
 
 #define EXE_NAME_X64 "WinExec_x64.exe"
 #define EXE_NAME "WinExec.exe"
+
+namespace spd = spdlog;
 
 PipeServer *g_server = nullptr;
 void StartServer(Platypus *mainwindow) {
@@ -25,10 +28,26 @@ void StartServer(Platypus *mainwindow) {
 }
 
 void StartWinExec() {
-  QString path = qApp->applicationDirPath() + QString("/") + EXE_NAME;
+  QString path = qApp->applicationDirPath() + QString("/") + EXE_NAME_X64;
   if (!Common::StartProcess(path, "", SW_SHOW)) {
     OutDebug("error. create exe error.");
   }
+}
+
+bool InitLog()
+{
+  spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] [tid %t] %v");
+  spdlog::set_level(spdlog::level::info);
+
+  const std::tm &loc_tm = spdlog::details::os::localtime();
+
+  std::string log_file_name = std::format(
+      "{}-{}-{}-{}-{}-{}-{}.txt", LOG_NAME, loc_tm.tm_year + 1900, loc_tm.tm_mon + 1,
+      loc_tm.tm_mday, loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
+  auto rotating_logger =
+      spd::basic_logger_mt(LOG_NAME, log_file_name, false);
+  rotating_logger->flush_on(spd::level::err);
+  return true;
 }
 
 int main(int argc, char *argv[]) {
@@ -41,6 +60,8 @@ int main(int argc, char *argv[]) {
                              QMessageBox::StandardButton::Ok);
     return -1;
   }
+
+  InitLog();
 
   Platypus mainwindow;
   mainwindow.show();

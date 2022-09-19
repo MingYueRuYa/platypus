@@ -6,6 +6,8 @@
 
 #include "qt_ext_tab_bar_define.h"
 
+#define LOG_NAME "platypus"
+
 using std::list;
 using std::shared_ptr;
 
