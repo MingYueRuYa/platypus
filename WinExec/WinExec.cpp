@@ -76,7 +76,7 @@ bool InitLog() {
   const std::tm &loc_tm = spdlog::details::os::localtime();
 
   std::string log_file_name = std::format(
-      "{}-{}-{}-{}-{}-{}-{}.txt", LOG_NAME, loc_tm.tm_year + 1900, loc_tm.tm_mon + 1,
+      "./log/{}-{}-{}-{}-{}-{}-{}.txt", LOG_NAME, loc_tm.tm_year + 1900, loc_tm.tm_mon + 1,
       loc_tm.tm_mday, loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
   auto rotating_logger =
       spd::basic_logger_mt(LOG_NAME, log_file_name, false);

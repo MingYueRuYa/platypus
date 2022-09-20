@@ -1,7 +1,7 @@
 #include <QDir>
 #include <QMessageBox>
-#include <QtWidgets/QApplication>
 #include <QObject>
+#include <QtWidgets/QApplication>
 
 #include "Server.h"
 #include "common.h"
@@ -34,19 +34,25 @@ void StartWinExec() {
   }
 }
 
-bool InitLog()
-{
+bool InitLog() {
+  const QString log_dir_name = "log";
+  QDir log_dir;
+  if (!log_dir.exists(log_dir_name) && !log_dir.mkdir(log_dir_name)) {
+    QMessageBox::information(nullptr, "title", "create log dir error",
+                             QMessageBox::StandardButton::Ok);
+    return false;
+  }
   spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] [tid %t] %v");
   spdlog::set_level(spdlog::level::info);
 
   const std::tm &loc_tm = spdlog::details::os::localtime();
-
-  std::string log_file_name = std::format(
-      "{}-{}-{}-{}-{}-{}-{}.txt", LOG_NAME, loc_tm.tm_year + 1900, loc_tm.tm_mon + 1,
-      loc_tm.tm_mday, loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
-  auto rotating_logger =
-      spd::basic_logger_mt(LOG_NAME, log_file_name, false);
+  std::string log_file_name =
+      std::format("./{}/{}-{}-{}-{}-{}-{}-{}.txt", log_dir_name.toStdString(), LOG_NAME,
+                  loc_tm.tm_year + 1900, loc_tm.tm_mon + 1, loc_tm.tm_mday,
+                  loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
+  auto rotating_logger = spd::basic_logger_mt(LOG_NAME, log_file_name, false);
   rotating_logger->flush_on(spd::level::err);
+
   return true;
 }
 
