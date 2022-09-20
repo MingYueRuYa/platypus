@@ -156,7 +156,7 @@ void Platypus::OnAddWnd(HWND git_wnd) {
     ui->tabWidgetProxy->addTab2(git_widget, title);
     QTimer::singleShot(100, this, [git_widget] { GitWndHelperInstance.SetFocus(git_widget); });
   } else
-    spdlog::get(LOG_NAME)->info("{}", "add new git wnd error.");
+    spdlog::get(LOG_NAME)->error("{}", "add new git wnd error.");
 }
 
 void Platypus::OnAddNewTab() { startGitWnd(); }
@@ -183,7 +183,7 @@ void Platypus::startGitWnd() {
 
   if (!Common::StartProcess(mintty_full_path, QString::fromStdWString(args),
                             SW_HIDE)) {
-    spdlog::get(LOG_NAME)->info("Create Process failed");
+    spdlog::get(LOG_NAME)->error("Create Process failed");
   }
 }
 
@@ -203,7 +203,7 @@ void Platypus::exitWnd(const QString &data) {
   HWND git_hwnd = (HWND)exit_json.value("HWND", 0);
   QWidget *widget = GitWndHelperInstance.GetWidget(git_hwnd);
   if (nullptr == widget) {
-    spdlog::get(LOG_NAME)->info("Not find widget");
+    spdlog::get(LOG_NAME)->error("Not find widget");
     return;
   }
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
