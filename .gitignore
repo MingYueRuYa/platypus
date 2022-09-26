@@ -21,6 +21,10 @@ GeneratedFiles
 *.user
 *.opendb
 .vs
+Debug
+Release
+debug
+release
 
 # Compiled Dynamic libraries
 *.so
