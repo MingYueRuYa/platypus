@@ -81,8 +81,6 @@ bool InitLog() {
   auto rotating_logger =
       spd::basic_logger_mt(LOG_NAME, log_file_name, false);
   rotating_logger->flush_on(spd::level::err);
-//  spd::set_async_mode(1 << 12, spd::async_overflow_policy::block_retry, nullptr,
-//                     std::chrono::milliseconds(3000), nullptr);
   return true;
 }
 
@@ -346,6 +344,6 @@ void EnumProcess(const wstring &exeName) {
     }
     CloseHandle(hProcessSnap);
     // sleep 1s
-    std::this_thread::sleep_for(std::chrono::microseconds(1000));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }

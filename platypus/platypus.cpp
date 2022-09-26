@@ -66,6 +66,7 @@ void Platypus::ReceiveMsg(const wchar_t *json_str) {
   } else if ("init_hwnd" == action) {
     win_exe_hwnd_ = hwnd;
   }
+  spdlog::get(LOG_NAME)->error("receive message:{}", json_msg);
 }
 
 void Platypus::mouseReleaseEvent(QMouseEvent *e) {
@@ -166,6 +167,7 @@ void Platypus::startGitWnd() {
   static QString git_dir = Common::GetInstallGitPath();
 
   if (git_dir.isEmpty()) {
+    spdlog::get(LOG_NAME)->error("Not find git install path");
     QMessageBox::critical(this, tr("Error"), tr("Not find git install path"),
                           QMessageBox::Close);
     return;
@@ -183,7 +185,9 @@ void Platypus::startGitWnd() {
 
   if (!Common::StartProcess(mintty_full_path, QString::fromStdWString(args),
                             SW_HIDE)) {
-    spdlog::get(LOG_NAME)->error("Create Process failed");
+    spdlog::get(LOG_NAME)->error("Create git Process failed");
+  } else {
+    spdlog::get(LOG_NAME)->info("Create git Process finished");
   }
 }
 
@@ -210,6 +214,7 @@ void Platypus::exitWnd(const QString &data) {
   if (-1 == index) return;
   ui->tabWidgetProxy->tabWidget()->removeTab(index);
   GitWndHelperInstance.Delete(widget);
+  spdlog::get(LOG_NAME)->info("receive:git window exited message");
 }
 
 void Platypus::updateTitle(const QString &data) {
@@ -224,6 +229,7 @@ void Platypus::updateTitle(const QString &data) {
                                               QString::fromStdString(title));
   ui->tabWidgetProxy->tabWidget()->setTabToolTip(index,
                                                  QString::fromStdString(title));
+  spdlog::get(LOG_NAME)->info(str_json_data);
 }
 
 void Platypus::OnTabInserted(int index) {
@@ -243,6 +249,7 @@ void Platypus::OnCloseTab(int index) {
   if (nullptr != widget) {
     GitWndHelperInstance.Delete(widget);
   }
+  spdlog::get(LOG_NAME)->info("Close git window");
 }
 
 void Platypus::OnAddBtnClicked() { startGitWnd(); }
