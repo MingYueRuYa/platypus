@@ -21,11 +21,11 @@
 #include "gitwndhelper.h"
 #include "json.hpp"
 #include "round_shadow_helper.h"
+#include "spdlog/spdlog.h"
 #include "string_utils.hpp"
 #include "tab_bar_draw_helper.h"
 #include "ui_platypus.h"
 #include "weak_call_back.hpp"
-#include "spdlog/spdlog.h"
 
 const int kLAYOUT_ITEM_WIDTH = 30;
 
@@ -105,7 +105,7 @@ void Platypus::customEvent(QEvent *event) {
       break;
     case (int)CusEventType::GitWndUpdateTitle:
       updateTitle(custom->GetData());
-      setGitFocus(); 
+      setGitFocus();
       break;
     default:
       break;
@@ -156,7 +156,7 @@ void Platypus::OnAddWnd(HWND git_wnd) {
       GitWndHelperInstance.InitGitWidget(git_wnd, this, title, &git_widget);
   if (result) {
     ui->tabWidgetProxy->addTab2(git_widget, title);
-    spdlog::get(LOG_NAME)->info("{}","Create git widget finished.");
+    spdlog::get(LOG_NAME)->info("{}", "Create git widget finished.");
   } else
     spdlog::get(LOG_NAME)->error("{}", "add new git wnd error.");
 }
@@ -247,12 +247,14 @@ void Platypus::OnCloseTab(int index) {
   if (nullptr != widget) {
     GitWndHelperInstance.Delete(widget);
   }
+  QTimer::singleShot(100, this, [this] {
+    QWidget* widget = this->ui->tabWidgetProxy->tabWidget()->currentWidget();
+    GitWndHelperInstance.SetFocus(widget);
+  });
   spdlog::get(LOG_NAME)->info("Close git window");
 }
 
-void Platypus::OnAddBtnClicked() { 
-    startGitWnd(); 
-}
+void Platypus::OnAddBtnClicked() { startGitWnd(); }
 
 void Platypus::OnCloseWnd() { this->close(); }
 
