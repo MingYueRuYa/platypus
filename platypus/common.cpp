@@ -27,7 +27,7 @@ bool StartProcess(const QString &process_path, const QString &command_line,
                   int nShow, DWORD flags) {
   STARTUPINFO StartInfo;
   ZeroMemory(&StartInfo, sizeof(StartInfo));
-  StartInfo.wShowWindow = SW_HIDE;
+  StartInfo.wShowWindow = nShow;
   StartInfo.dwFlags = flags;
   PROCESS_INFORMATION pi;
   ZeroMemory(&pi, sizeof(pi));

@@ -95,9 +95,6 @@
     <ClInclude Include="common\Server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="common\pipe_server.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="platypus\custom_event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -105,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common\process_utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\pipe_server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

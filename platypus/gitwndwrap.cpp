@@ -3,6 +3,7 @@
 #include <QtGui/QWindow>
 
 #include "debughelper.h"
+#include "spdlog/spdlog.h"
 
 GitWndWrap::GitWndWrap() {}
 
@@ -22,7 +23,7 @@ GitWndWrap::GitWndWrap(HWND gitHwnd, const QString &title)
 GitWndWrap::~GitWndWrap() { Close(); }
 
 void GitWndWrap::ShowWindow(bool isShow) {
-  ::ShowWindow(git_wnd_, isShow ? SW_SHOW : SW_HIDE);
+  ::ShowWindow((HWND)widget_->winId(), isShow ? SW_SHOW : SW_HIDE);
 }
 
 void GitWndWrap::SetFocus() { ::SetFocus(git_wnd_); }
@@ -32,10 +33,6 @@ void GitWndWrap::Close() {
     ::PostMessage(git_wnd_, WM_CLOSE, 0, 0);
   }
   if (nullptr != widget_) widget_->deleteLater();
-}
-
-void GitWndWrap::SetParent(QWidget *parent) {
-  ::SetParent(git_wnd_, (HWND)parent->winId());
 }
 
 HWND GitWndWrap::GetGitWnd() const { return git_wnd_; }
@@ -49,6 +46,9 @@ void GitWndWrap::InitWidget() {
     return;
   }
   widget_ = QWidget::createWindowContainer(window, nullptr);
+
+  ::SetParent(git_wnd_, (HWND)widget_->winId());
+  spdlog::get("platypus")->info("init widget finished");
   static int i = 0;
   widget_->setObjectName(QString::number(i++));
 }

@@ -23,7 +23,6 @@ class GitWndWrap : public QObject{
   void ShowWindow(bool isShow);
   void SetFocus();
   void Close();
-  void SetParent(QWidget *parent);
   HWND GetGitWnd() const;
   QWidget *GetSmartWidget() const;
   void InitWidget();

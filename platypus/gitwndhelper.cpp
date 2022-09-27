@@ -40,6 +40,7 @@ void GitWndHelper::SetFocus(QWidget *widget) {
     return;
   }
 
+  itr->second->ShowWindow(true);
   itr->second->SetFocus();
 }
 
@@ -74,7 +75,6 @@ bool GitWndHelper::InitGitWidget(HWND git_wnd, QWidget *parent, QString &title,
   bool result = find(git_wnd, &git_wrap);
   if (!result) return false;
   git_wrap->InitWidget();
-  git_wrap->SetParent(parent);
   title = git_wrap->GetTitle();
   *widget = git_wrap->GetSmartWidget();
   return true;
