@@ -29,6 +29,7 @@ void GitWndWrap::ShowWindow(bool isShow) {
 void GitWndWrap::SetFocus() { ::SetFocus(git_wnd_); }
 
 void GitWndWrap::Close() {
+  ::SetParent(git_wnd_, 0);
   if (0 != git_wnd_) {
     ::PostMessage(git_wnd_, WM_CLOSE, 0, 0);
   }
