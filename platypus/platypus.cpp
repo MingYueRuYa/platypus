@@ -159,6 +159,8 @@ void Platypus::OnAddWnd(HWND git_wnd) {
     spdlog::get(LOG_NAME)->info("{}", "Create git widget finished.");
   } else
     spdlog::get(LOG_NAME)->error("{}", "add new git wnd error.");
+
+  setGitFocus();
 }
 
 void Platypus::OnAddNewTab() { startGitWnd(); }

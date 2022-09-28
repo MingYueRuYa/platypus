@@ -33,6 +33,7 @@ void StartWinExec() {
   spdlog::get(LOG_NAME)->info("start winexec process:{}", path.toStdString());
   if (!Common::StartProcess(path, "", SW_HIDE)) {
     OutDebug("error. create exe error.");
+    spdlog::get(LOG_NAME)->error("start winexec process error:{}", path.toStdString());
   }
 }
 
