@@ -30,6 +30,10 @@
         <file>image/default_100_precent/btn_add_pressed.png</file>
         <file>image/default_100_precent/git.png</file>
         <file>image/default_100_precent/git_32x32.png</file>
+        <file>image/default_100_precent/left_arrow_disabled.png</file>
+        <file>image/default_100_precent/left_arrow_normal.png</file>
+        <file>image/default_100_precent/right_arrow_disabled.png</file>
+        <file>image/default_100_precent/right_arrow_normal.png</file>
     </qresource>
     <qresource prefix="/2kplatypus">
         <file>image/default_200_precent/tab.png</file>
