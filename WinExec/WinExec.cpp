@@ -21,6 +21,7 @@
 #include "single_process.h"
 #include "spdlog/details/os.h"
 #include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 #include "string_utils.hpp"
 
 #define MAX_LOADSTRING 100
@@ -70,6 +71,7 @@ void StartServer();
 void EnumProcess(const wstring &exeName);
 
 bool InitLog() {
+  spdlog::flush_every(std::chrono::seconds(1));
   spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] [tid %t] %v");
   spdlog::set_level(spdlog::level::info);
 
@@ -79,7 +81,7 @@ bool InitLog() {
       "./log/{}-{}-{}-{}-{}-{}-{}.txt", LOG_NAME, loc_tm.tm_year + 1900, loc_tm.tm_mon + 1,
       loc_tm.tm_mday, loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
   auto rotating_logger =
-      spd::basic_logger_mt(LOG_NAME, log_file_name, false);
+      spdlog::create<spdlog::sinks::basic_file_sink_mt>(LOG_NAME, log_file_name, false);
   rotating_logger->flush_on(spd::level::err);
   return true;
 }
