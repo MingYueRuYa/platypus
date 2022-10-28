@@ -142,6 +142,13 @@ HookShortCut::Shortcut MyHook::containsShortcut(const std::set<DWORD>& keySet) {
     printf("Get TAB CTRL SHIFT key");
     return Shortcut::TAB_CTRL_SHIFT;
   }
+  
+  if (keySet.end() != keySet.find(VK_LCONTROL) &&
+      keySet.end() != keySet.find((int)KeyBoardVal::VK_W) &&
+      keySet.end() != keySet.find(VK_LSHIFT)) {
+    printf("Get CTRL SHIFT W key");
+    return Shortcut::CTRL_SHIFT_W;
+  }
 
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find(VK_TAB)) {
@@ -154,13 +161,6 @@ HookShortCut::Shortcut MyHook::containsShortcut(const std::set<DWORD>& keySet) {
       keySet.end() != keySet.find((int)KeyBoardVal::VK_A)) {
     printf("Get CTRL A key");
     return Shortcut::CTRL_A;
-  }
-
-  // 0x57 -> W
-  if (keySet.end() != keySet.find(VK_LCONTROL) &&
-      keySet.end() != keySet.find((int)KeyBoardVal::VK_W)) {
-    printf("Get CTRL W key");
-    return Shortcut::CTRL_W;
   }
 
   return Shortcut::Unknow;

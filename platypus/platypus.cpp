@@ -261,7 +261,7 @@ void Platypus::getShortcut(const QString &data) {
     case Shortcut::CTRL_A:
       startGitWnd();
       break;
-    case Shortcut::CTRL_W:
+    case Shortcut::CTRL_SHIFT_W:
       OnCloseTab(ui->tabWidgetProxy->tabWidget()->currentIndex());
       break;
     default:

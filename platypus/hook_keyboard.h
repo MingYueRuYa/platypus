@@ -14,7 +14,7 @@ enum class Shortcut {
   TAB_CTRL = 1,
   TAB_CTRL_SHIFT,
   CTRL_A,
-  CTRL_W
+  CTRL_SHIFT_W
 };
 }
 
