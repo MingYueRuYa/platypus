@@ -19,6 +19,7 @@
 #include "debughelper.h"
 #include "draw_helper.h"
 #include "gitwndhelper.h"
+#include "hook_keyboard.h"
 #include "json.hpp"
 #include "round_shadow_helper.h"
 #include "spdlog/spdlog.h"
@@ -32,6 +33,8 @@ const int kLAYOUT_ITEM_WIDTH = 30;
 using nlohmann::json;
 using std::vector;
 using XIBAO::DebugHelper;
+
+using Shortcut = HookShortCut::Shortcut;
 
 Platypus::Platypus(QWidget *parent)
     : QWidget(parent), ui(new Ui::platypusClass) {
@@ -243,17 +246,23 @@ void Platypus::updateTitle(const QString &data) {
 }
 
 void Platypus::getShortcut(const QString &data) {
-  //TODO: 需要判断当前的窗口是否需要接受快捷键
+  // TODO: 需要判断当前的窗口是否需要接受快捷键
   string str_json_data = data.toStdString();
   auto json_obj = json::parse(str_json_data);
-  ShortCut vkcode = (ShortCut)json_obj.value("shortcut", 0);
-  if (ShortCut::Unknow == vkcode) return;
+  Shortcut vkcode = (Shortcut)json_obj.value("shortcut", 0);
+  if (Shortcut::Unknow == vkcode) return;
   switch (vkcode) {
-    case ShortCut::TAB_CTRL:
+    case Shortcut::TAB_CTRL:
       moveTabWigetIndex(false);
       break;
-    case ShortCut::TAB_CTRL_SHIFT:
+    case Shortcut::TAB_CTRL_SHIFT:
       moveTabWigetIndex(true);
+      break;
+    case Shortcut::CTRL_A:
+      startGitWnd();
+      break;
+    case Shortcut::CTRL_W:
+      OnCloseTab(ui->tabWidgetProxy->tabWidget()->currentIndex());
       break;
     default:
       break;
@@ -265,7 +274,7 @@ void Platypus::moveTabWigetIndex(bool forward) {
   int max_count = ui->tabWidgetProxy->tabWidget()->count() - 1;
   if (forward) {
     cur_index -= 1;
-    if (cur_index < 0) cur_index = max_count-1;
+    if (cur_index < 0) cur_index = max_count - 1;
   } else {
     cur_index += 1;
     if (cur_index >= max_count) cur_index = 0;
@@ -292,9 +301,17 @@ void Platypus::OnCloseTab(int index) {
     GitWndHelperInstance.Delete(widget);
   }
   QTimer::singleShot(100, this, [this] {
-    QWidget *widget = this->ui->tabWidgetProxy->tabWidget()->currentWidget();
-    GitWndHelperInstance.SetFocus(widget);
+    setGitFocus();
   });
+
+  int temp_index = index;
+  // -2 是因为add 按钮，还有此时的tab未被删除
+  if (index >= ui->tabWidgetProxy->tabWidget()->count() - 2) {
+    temp_index -= 1;
+  } else {
+    temp_index = index;
+  }
+  ui->tabWidgetProxy->tabWidget()->setCurrentIndex(temp_index);
   spdlog::get(LOG_NAME)->info("Close git window");
 }
 

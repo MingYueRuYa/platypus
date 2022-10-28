@@ -8,7 +8,7 @@
 #include "debughelper.h"
 #include "gitwndhelper.h"
 #include "include/const.h"
-#include "my_hook.h"
+#include "hook_keyboard.h"
 #include "pipe_server.h"
 #include "platypus.h"
 #include "single_process.h"

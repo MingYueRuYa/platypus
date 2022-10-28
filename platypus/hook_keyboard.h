@@ -1,18 +1,29 @@
-
+#ifndef hook_keyboard_h
+#define hook_keyboard_h
 #include <Windows.h>
 
+#include <functional>
 #include <iostream>
 #include <list>
 #include <mutex>
-#include <functional>
+#include <set>
+
+namespace HookShortCut {
+enum class Shortcut {
+  Unknow = 0,
+  TAB_CTRL = 1,
+  TAB_CTRL_SHIFT,
+  CTRL_A,
+  CTRL_W
+};
+}
 
 class MyHook {
-
-using NotifyCallBack = std::function<void(int)>; 
+  using NotifyCallBack = std::function<void(int)>;
 
  public:
   // single ton
-  static MyHook& Instance() {
+  static MyHook &Instance() {
     static MyHook myHook;
     return myHook;
   }
@@ -29,6 +40,8 @@ using NotifyCallBack = std::function<void(int)>;
 
  private:
   void CheckKeyBoard();
+  void sendShortcut(const std::set<DWORD> &keySet);
+  HookShortCut::Shortcut containsShortcut(const std::set<DWORD> &keySet);
 
  private:
   HHOOK keyboardhook = NULL;
@@ -39,3 +52,5 @@ using NotifyCallBack = std::function<void(int)>;
   std::mutex mutex_;
   NotifyCallBack callBack_ = nullptr;
 };
+
+#endif  // hook_keyboard_h

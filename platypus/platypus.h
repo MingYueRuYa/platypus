@@ -21,7 +21,6 @@ using QtExtTabBarDef::TabState;
 class Platypus : public QWidget {
   Q_OBJECT
 
-  enum class ShortCut { Unknow = 0, TAB_CTRL = 1, TAB_CTRL_SHIFT = 2 };
 
  public:
   Platypus(QWidget *parent = Q_NULLPTR);
