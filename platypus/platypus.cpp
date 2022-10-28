@@ -246,11 +246,10 @@ void Platypus::updateTitle(const QString &data) {
 }
 
 void Platypus::getShortcut(const QString &data) {
-  // TODO: 需要判断当前的窗口是否需要接受快捷键
   string str_json_data = data.toStdString();
   auto json_obj = json::parse(str_json_data);
   Shortcut vkcode = (Shortcut)json_obj.value("shortcut", 0);
-  if (Shortcut::Unknow == vkcode) return;
+  if (Shortcut::Unknow == vkcode || !acceptShortcut((int)vkcode)) return;
   switch (vkcode) {
     case Shortcut::TAB_CTRL:
       moveTabWigetIndex(false);
@@ -283,6 +282,16 @@ void Platypus::moveTabWigetIndex(bool forward) {
   setGitFocus();
 }
 
+bool Platypus::acceptShortcut(int vkcode) const {
+  if (!this->isVisible()) return false;
+  if ((int)Shortcut::TAB_CTRL == vkcode || (int)Shortcut::TAB_CTRL_SHIFT == vkcode)
+    return true;
+  HWND hwnd = ::GetFocus();
+  if (nullptr != GitWndHelperInstance.GetWidget(::GetFocus()) || 
+     (HWND)this->winId() == hwnd) return true;
+  return false;
+}
+
 void Platypus::OnTabInserted(int index) {
   QPushButton *button = new QPushButton();
   button->setStyleSheet(
@@ -300,9 +309,7 @@ void Platypus::OnCloseTab(int index) {
   if (nullptr != widget) {
     GitWndHelperInstance.Delete(widget);
   }
-  QTimer::singleShot(100, this, [this] {
-    setGitFocus();
-  });
+  QTimer::singleShot(100, this, [this] { setGitFocus(); });
 
   int temp_index = index;
   // -2 是因为add 按钮，还有此时的tab未被删除
