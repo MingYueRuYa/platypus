@@ -248,6 +248,7 @@
     <ClInclude Include="platypus\custom_event.h" />
     <ClInclude Include="platypus\debughelper.h" />
     <ClInclude Include="platypus\draw_helper.h" />
+    <ClInclude Include="platypus\my_hook.h" />
     <ClInclude Include="platypus\NcFrameLessHelper.h" />
     <ClInclude Include="platypus\noncopyable.h" />
     <ClInclude Include="platypus\qt_ext_button.h" />
@@ -284,6 +285,7 @@
     <ClCompile Include="platypus\gitwndhelper.cpp" />
     <ClCompile Include="platypus\gitwndwrap.cpp" />
     <ClCompile Include="platypus\main.cpp" />
+    <ClCompile Include="platypus\my_hook.cpp" />
     <ClCompile Include="platypus\NcFrameLessHelper.cpp" />
     <ClCompile Include="platypus\platypus.cpp" />
     <ClCompile Include="platypus\qt_ext_button.cpp" />
@@ -313,7 +315,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties lreleaseOptions="" lupdateOnBuild="0" lupdateOptions="" MocDir=".\GeneratedFiles\$(ConfigurationName)" MocOptions="" Qt5Version_x0020_Win32="compile_vs_2019" RccDir=".\GeneratedFiles" UicDir=".\GeneratedFiles" />
+      <UserProperties lreleaseOptions="" lupdateOnBuild="0" lupdateOptions="" MocDir=".\GeneratedFiles\$(ConfigurationName)" MocOptions="" Qt5Version_x0020_Win32="office_5.15.2" RccDir=".\GeneratedFiles" UicDir=".\GeneratedFiles" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

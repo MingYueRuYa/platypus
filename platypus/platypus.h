@@ -21,10 +21,13 @@ using QtExtTabBarDef::TabState;
 class Platypus : public QWidget {
   Q_OBJECT
 
+  enum class ShortCut { Unknow = 0, TAB_CTRL = 1, TAB_CTRL_SHIFT = 2 };
+
  public:
   Platypus(QWidget *parent = Q_NULLPTR);
   ~Platypus();
   void ReceiveMsg(const wchar_t *msg);
+  void ReceiveShortcut(int vkcode);
 
  protected:
   virtual void mouseReleaseEvent(QMouseEvent *event);
@@ -32,7 +35,7 @@ class Platypus : public QWidget {
   virtual void showEvent(QShowEvent *event);
   virtual bool nativeEvent(const QByteArray &eventType, void *message,
                            long *result);
-  virtual void customEvent(QEvent * event);
+  virtual void customEvent(QEvent *event);
 
  private:
   void setupUI();
@@ -42,8 +45,10 @@ class Platypus : public QWidget {
   void setGitFocus();
   void exitWnd(const QString &data);
   void updateTitle(const QString &data);
+  void getShortcut(const QString &data);
+  void moveTabWigetIndex(bool forward);
 
-Q_SIGNALS:
+ Q_SIGNALS:
 
  protected Q_SLOTS:
   void OnAddWnd(HWND git_wnd);

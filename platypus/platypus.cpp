@@ -69,6 +69,13 @@ void Platypus::ReceiveMsg(const wchar_t *json_str) {
   spdlog::get(LOG_NAME)->info("receive message:{}", json_msg);
 }
 
+void Platypus::ReceiveShortcut(int vkcode) {
+  json init_json = {{"shortcut", vkcode}};
+  qApp->postEvent(this,
+                  new CustomEvent((QEvent::Type)CusEventType::ShortCut,
+                                  QString::fromStdString(init_json.dump())));
+}
+
 void Platypus::mouseReleaseEvent(QMouseEvent *e) {
   if (e->button() == Qt::LeftButton) {
     setGitFocus();
@@ -106,6 +113,9 @@ void Platypus::customEvent(QEvent *event) {
     case (int)CusEventType::GitWndUpdateTitle:
       updateTitle(custom->GetData());
       setGitFocus();
+      break;
+    case (int)CusEventType::ShortCut:
+      getShortcut(custom->GetData());
       break;
     default:
       break;
@@ -232,6 +242,38 @@ void Platypus::updateTitle(const QString &data) {
   spdlog::get(LOG_NAME)->info(str_json_data);
 }
 
+void Platypus::getShortcut(const QString &data) {
+  //TODO: 需要判断当前的窗口是否需要接受快捷键
+  string str_json_data = data.toStdString();
+  auto json_obj = json::parse(str_json_data);
+  ShortCut vkcode = (ShortCut)json_obj.value("shortcut", 0);
+  if (ShortCut::Unknow == vkcode) return;
+  switch (vkcode) {
+    case ShortCut::TAB_CTRL:
+      moveTabWigetIndex(false);
+      break;
+    case ShortCut::TAB_CTRL_SHIFT:
+      moveTabWigetIndex(true);
+      break;
+    default:
+      break;
+  }
+}
+
+void Platypus::moveTabWigetIndex(bool forward) {
+  int cur_index = ui->tabWidgetProxy->tabWidget()->currentIndex();
+  int max_count = ui->tabWidgetProxy->tabWidget()->count() - 1;
+  if (forward) {
+    cur_index -= 1;
+    if (cur_index < 0) cur_index = max_count-1;
+  } else {
+    cur_index += 1;
+    if (cur_index >= max_count) cur_index = 0;
+  }
+  ui->tabWidgetProxy->tabWidget()->setCurrentIndex(cur_index);
+  setGitFocus();
+}
+
 void Platypus::OnTabInserted(int index) {
   QPushButton *button = new QPushButton();
   button->setStyleSheet(
@@ -250,7 +292,7 @@ void Platypus::OnCloseTab(int index) {
     GitWndHelperInstance.Delete(widget);
   }
   QTimer::singleShot(100, this, [this] {
-    QWidget* widget = this->ui->tabWidgetProxy->tabWidget()->currentWidget();
+    QWidget *widget = this->ui->tabWidgetProxy->tabWidget()->currentWidget();
     GitWndHelperInstance.SetFocus(widget);
   });
   spdlog::get(LOG_NAME)->info("Close git window");
