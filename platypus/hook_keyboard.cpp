@@ -158,9 +158,10 @@ HookShortCut::Shortcut MyHook::containsShortcut(const std::set<DWORD>& keySet) {
 
   // 0x41 -> A
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
-      keySet.end() != keySet.find((int)KeyBoardVal::VK_A)) {
-    printf("Get CTRL A key");
-    return Shortcut::CTRL_A;
+      keySet.end() != keySet.find((int)KeyBoardVal::VK_A) &&
+      keySet.end() != keySet.find(VK_LSHIFT)) {
+    printf("Get CTRL + SHIFT + A key");
+    return Shortcut::CTRL_SHIFT_A;
   }
 
   return Shortcut::Unknow;

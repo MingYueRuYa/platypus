@@ -257,7 +257,7 @@ void Platypus::getShortcut(const QString &data) {
     case Shortcut::TAB_CTRL_SHIFT:
       moveTabWigetIndex(true);
       break;
-    case Shortcut::CTRL_A:
+    case Shortcut::CTRL_SHIFT_A:
       startGitWnd();
       break;
     case Shortcut::CTRL_SHIFT_W:

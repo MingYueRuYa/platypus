@@ -13,7 +13,7 @@ enum class Shortcut {
   Unknow = 0,
   TAB_CTRL = 1,
   TAB_CTRL_SHIFT,
-  CTRL_A,
+  CTRL_SHIFT_A,
   CTRL_SHIFT_W
 };
 }
