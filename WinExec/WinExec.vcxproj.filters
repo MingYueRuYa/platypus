@@ -37,7 +37,7 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\common\pipe_client.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WinExec.h"
 #include "Client.h"
-#include "pipe_client.h"
+#include "../common/pipe_client.h"
 
 #include <TlHelp32.h>
 #include <Windows.h>

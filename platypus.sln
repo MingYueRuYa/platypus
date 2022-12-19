@@ -1,16 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32413.511
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "platypus", "platypus.vcxproj", "{736B32AA-EB1D-443D-B09B-EC7E03F931B7}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAssistant", "WinAssistant\WinAssistant.vcxproj", "{72B671D8-7A52-4BA2-879B-0E589C86F22B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinExec", "WinExec\WinExec.vcxproj", "{9F18A176-5EF3-4A36-A3B5-4AB9E2900487}"
 	ProjectSection(ProjectDependencies) = postProject
 		{72B671D8-7A52-4BA2-879B-0E589C86F22B} = {72B671D8-7A52-4BA2-879B-0E589C86F22B}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "platypus", "platypus.vcxproj", "{736B32AA-EB1D-443D-B09B-EC7E03F931B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,14 +20,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Debug|Win32.ActiveCfg = Debug|Win32
-		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Debug|Win32.Build.0 = Debug|Win32
-		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Debug|x64.ActiveCfg = Debug|x64
-		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Debug|x64.Build.0 = Debug|x64
-		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|Win32.ActiveCfg = Release|Win32
-		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|Win32.Build.0 = Release|Win32
-		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|x64.ActiveCfg = Release|x64
-		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|x64.Build.0 = Release|x64
 		{72B671D8-7A52-4BA2-879B-0E589C86F22B}.Debug|Win32.ActiveCfg = Debug|Win32
 		{72B671D8-7A52-4BA2-879B-0E589C86F22B}.Debug|Win32.Build.0 = Debug|Win32
 		{72B671D8-7A52-4BA2-879B-0E589C86F22B}.Debug|x64.ActiveCfg = Debug|x64
@@ -44,11 +36,20 @@ Global
 		{9F18A176-5EF3-4A36-A3B5-4AB9E2900487}.Release|Win32.Build.0 = Release|Win32
 		{9F18A176-5EF3-4A36-A3B5-4AB9E2900487}.Release|x64.ActiveCfg = Release|x64
 		{9F18A176-5EF3-4A36-A3B5-4AB9E2900487}.Release|x64.Build.0 = Release|x64
+		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Debug|Win32.Build.0 = Debug|Win32
+		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Debug|x64.ActiveCfg = Debug|x64
+		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Debug|x64.Build.0 = Debug|x64
+		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|Win32.ActiveCfg = Release|Win32
+		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|Win32.Build.0 = Release|Win32
+		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|x64.ActiveCfg = Release|x64
+		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		Qt5Version = msvc2013
+		Qt5Version = Qt5.15.2
+		SolutionGuid = {67245A86-A8E0-4670-BE55-15B31B5BB678}
 	EndGlobalSection
 EndGlobal
