@@ -7,8 +7,8 @@
 #include "common.h"
 #include "debughelper.h"
 #include "gitwndhelper.h"
-#include "include/const.h"
 #include "hook_keyboard.h"
+#include "include/const.h"
 #include "pipe_server.h"
 #include "platypus.h"
 #include "single_process.h"
@@ -29,7 +29,7 @@ void StartServer(Platypus *mainwindow) {
   g_server->Run();
 }
 
-void StartWinExec() {
+void StartGitRegisterExec() {
   QString path = qApp->applicationDirPath() + QString("/") + EXE_NAME_X64;
   spdlog::get(LOG_NAME)->info("start winexec process:{}", path.toStdString());
   if (!Common::StartProcess(path, "", SW_HIDE)) {
@@ -81,9 +81,10 @@ int main(int argc, char *argv[]) {
   Platypus mainwindow;
   mainwindow.show();
   std::thread g_ServerThread = std::thread(StartServer, &mainwindow);
-  StartWinExec();
+  StartGitRegisterExec();
 
-  MyHook::Instance().setNotifyCallBack(std::bind(&Platypus::ReceiveShortcut, &mainwindow, std::placeholders::_1));
+  MyHook::Instance().setNotifyCallBack(std::bind(
+      &Platypus::ReceiveShortcut, &mainwindow, std::placeholders::_1));
 
   GitWndHelperInstance;
   GitWndHelperInstance.ConnectNotify(&mainwindow, SLOT(OnAddWnd(HWND)));
