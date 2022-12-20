@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "WinAssistant.h"
+#include "git_plugin.h"
 
 #include <cmath>
 #include <string>

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "WinExec.h"
+#include "git_register_exec.h"
 #include "pipe_client.h"
 
 #include <TlHelp32.h>

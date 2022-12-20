@@ -27,9 +27,6 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="WinExec.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\common\Server.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -45,12 +42,12 @@
     <ClInclude Include="..\3rdparty\json\json.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="git_register_exec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="WinExec.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\common\Server.cpp">
@@ -65,9 +62,12 @@
     <ClCompile Include="..\common\single_process.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="git_register_exec.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="WinExec.rc">
+    <ResourceCompile Include="git_register_exec.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>
@@ -75,7 +75,7 @@
     <Image Include="small.ico">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="WinExec.ico">
+    <Image Include="git_register_exec.ico">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

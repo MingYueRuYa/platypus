@@ -173,10 +173,10 @@
     <ClInclude Include="..\common\pipe_client.h" />
     <ClInclude Include="..\common\Server.h" />
     <ClInclude Include="..\common\single_process.h" />
+    <ClInclude Include="git_register_exec.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="WinExec.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\Client.cpp" />
@@ -193,20 +193,20 @@
     <ClCompile Include="..\common\single_process.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="git_register_exec.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="WinExec.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="WinExec.rc" />
+    <ResourceCompile Include="git_register_exec.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico" />
-    <Image Include="WinExec.ico" />
+    <Image Include="git_register_exec.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

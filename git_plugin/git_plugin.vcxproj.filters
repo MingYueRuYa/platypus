@@ -24,10 +24,10 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="WinAssistant.h">
+    <ClInclude Include="..\common\Client.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\Client.h">
+    <ClInclude Include="git_plugin.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,13 +35,13 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WinAssistant.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\common\Client.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="git_plugin.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
