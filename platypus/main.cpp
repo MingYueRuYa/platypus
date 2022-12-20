@@ -74,6 +74,10 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
+  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QApplication::setHighDpiScaleFactorRoundingPolicy(
+      Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
   QApplication app(argc, argv);
   // 需要放在这里否则注册的时候会失败，错误码：0x5
   MyHook::Instance().start();
