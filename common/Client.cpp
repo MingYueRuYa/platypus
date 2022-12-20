@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Client.h"
 #include "../include/head.h"
 

@@ -16,7 +16,7 @@
 #include "../include/head.h"
 #include "Client.h"
 #include "Server.h"
-#include "WinAssistant.h"
+#include "../git_plugin/WinAssistant.h"
 #include "pipe_client.h"
 #include "single_process.h"
 #include "spdlog/details/os.h"

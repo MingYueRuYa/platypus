@@ -3,12 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAssistant", "WinAssistant\WinAssistant.vcxproj", "{72B671D8-7A52-4BA2-879B-0E589C86F22B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAssistant", "git_plugin\WinAssistant.vcxproj", "{72B671D8-7A52-4BA2-879B-0E589C86F22B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinExec", "WinExec\WinExec.vcxproj", "{9F18A176-5EF3-4A36-A3B5-4AB9E2900487}"
-	ProjectSection(ProjectDependencies) = postProject
-		{72B671D8-7A52-4BA2-879B-0E589C86F22B} = {72B671D8-7A52-4BA2-879B-0E589C86F22B}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinExec", "git_register_exec\WinExec.vcxproj", "{9F18A176-5EF3-4A36-A3B5-4AB9E2900487}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "platypus", "platypus.vcxproj", "{736B32AA-EB1D-443D-B09B-EC7E03F931B7}"
 EndProject
