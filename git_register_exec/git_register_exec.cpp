@@ -16,7 +16,7 @@
 #include "../include/head.h"
 #include "Client.h"
 #include "Server.h"
-#include "../git_plugin/WinAssistant.h"
+#include "../git_plugin/git_plugin.h"
 #include "pipe_client.h"
 #include "single_process.h"
 #include "spdlog/details/os.h"
@@ -27,10 +27,10 @@
 #define MAX_LOADSTRING 100
 
 #ifdef X64
-#pragma comment(lib, "WinAssistant_x64.lib")
+#pragma comment(lib, "git_plugin_x64.lib")
 #define LOG_NAME "win_exec_x64"
 #else
-#pragma comment(lib, "WinAssistant.lib")
+#pragma comment(lib, "git_plugin.lib")
 #define LOG_NAME "win_exec"
 #endif
 

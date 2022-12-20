@@ -15,8 +15,8 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
-#define EXE_NAME_X64 "WinExec_x64.exe"
-#define EXE_NAME "WinExec.exe"
+#define EXE_NAME_X64 "git_register_exec_x64.exe"
+#define EXE_NAME "git_register_exec.exe"
 
 namespace spd = spdlog;
 
