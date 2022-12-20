@@ -22,7 +22,7 @@
     <ProjectGuid>{9F18A176-5EF3-4A36-A3B5-4AB9E2900487}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>WinExec</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -88,7 +88,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)_x64</TargetName>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../WinAssistant/;../Common;../include/spdlog/include/</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);../WinAssistant/;../Common;../3rdparty/spdlog/include/</IncludePath>
     <OutDir>../bin_win32/$(Configuration)/</OutDir>
     <IntDir>../bin_win32/$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
