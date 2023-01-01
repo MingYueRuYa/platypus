@@ -22,12 +22,14 @@ Q_SIGNALS:
     void minClicked();
     void maxClicked();
     void restoreClicked();
+    void helpClicked();
 
 protected Q_SLOTS:
     void on_btn_close_clicked();
     void on_btn_min_clicked();
     void on_btn_max_clicked();
     void on_btn_restore_clicked();
+    void on_btn_help_clicked();
 
 private:
     void setupUI();

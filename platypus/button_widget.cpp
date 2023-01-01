@@ -71,3 +71,8 @@ void ButtonWidget::on_btn_restore_clicked()
 {
     emit restoreClicked();
 }
+
+void ButtonWidget::on_btn_help_clicked()
+{
+    emit helpClicked();
+}

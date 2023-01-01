@@ -11,7 +11,7 @@
 #define DRAGABLE_TAB_ICON_MIME_KEY "DRAGABLE_TAB_ICON_MIME_KEY"
 #define WIN_FRAME_LEFE_OFFSET 8
 
-const int kBUTTON_CONTAINER_WIDTH = 100;
+const int kBUTTON_CONTAINER_WIDTH = 132;
 QtExtTabWidget::DragState QtExtTabWidget::drag_state_ = DragState::Unknown;
 QString QtExtTabWidget::dragging_label_ = "";
 QIcon QtExtTabWidget::dragging_icon_ = QIcon();
@@ -361,6 +361,8 @@ void QtExtTabWidget::setupUI() {
   connect(button_widget_, SIGNAL(minClicked()), this, SLOT(OnMinWnd()));
   connect(button_widget_, SIGNAL(maxClicked()), this, SLOT(OnMaxWnd()));
   connect(button_widget_, SIGNAL(restoreClicked()), this, SLOT(OnRestoreWnd()));
+  connect(button_widget_, SIGNAL(helpClicked()), this, SLOT(OnHelpClicked()));
+  
 
   connect(this, SIGNAL(tabBarDoubleClicked(int)), this,
           SLOT(OnTabBarDoubleClicked(int)));
@@ -400,6 +402,11 @@ QtExtTabWidget *QtExtTabWidget::createDraggedNewWindow() {
   dragging_widget_->setFocus();
   QTimer::singleShot(0, dragging_widget_, [=] { window->setFocus(); });
   return window;
+}
+
+void QtExtTabWidget::OnHelpClicked()
+{
+    emit signal_.helpClicked();
 }
 
 void QtExtTabWidget::deleteIfEmptyWindow() {

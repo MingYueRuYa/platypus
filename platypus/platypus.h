@@ -62,6 +62,7 @@ class Platypus : public QWidget {
   void OnRestoreWnd();
   void OnMaxOrRestore();
   void OnTabBarClicked(int index);
+  void OnHelpClicked();
 
  private:
   Ui::platypusClass *ui;

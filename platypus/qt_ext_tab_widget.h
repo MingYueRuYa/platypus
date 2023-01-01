@@ -66,6 +66,7 @@ class QtExtTabWidget : public QTabWidget {
   void OnRestoreWnd();
   bool OnMergeDroppedLabel(QDropEvent *event);
   QtExtTabWidget *createDraggedNewWindow();
+  void OnHelpClicked();
 
  private:
   void setupUI();

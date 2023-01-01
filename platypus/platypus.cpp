@@ -154,6 +154,8 @@ void Platypus::setupUI() {
           this, SLOT(OnMaxOrRestore()));
   connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(tabBarClicked(int)), this,
           SLOT(OnTabBarClicked(int)));
+  connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(helpClicked()), this,
+          SLOT(OnHelpClicked()));
 
   ui->tabWidgetProxy->updateDrawHelp(new TabBarDrawHelper());
 
@@ -284,11 +286,13 @@ void Platypus::moveTabWigetIndex(bool forward) {
 
 bool Platypus::acceptShortcut(int vkcode) const {
   if (!this->isVisible()) return false;
-  if ((int)Shortcut::TAB_CTRL == vkcode || (int)Shortcut::TAB_CTRL_SHIFT == vkcode)
+  if ((int)Shortcut::TAB_CTRL == vkcode ||
+      (int)Shortcut::TAB_CTRL_SHIFT == vkcode)
     return true;
   HWND hwnd = ::GetFocus();
-  if (nullptr != GitWndHelperInstance.GetWidget(::GetFocus()) || 
-     (HWND)this->winId() == hwnd) return true;
+  if (nullptr != GitWndHelperInstance.GetWidget(::GetFocus()) ||
+      (HWND)this->winId() == hwnd)
+    return true;
   return false;
 }
 
@@ -338,4 +342,9 @@ void Platypus::OnTabBarClicked(int index) {
   QWidget *widget = ui->tabWidgetProxy->tabWidget()->widget(index);
   if (nullptr == widget) return;
   GitWndHelperInstance.SetFocus(widget);
+}
+
+void Platypus::OnHelpClicked()
+{
+
 }
