@@ -13,10 +13,10 @@
 //1.×¢Èëº¯Êý
 //2.hook
 //3.unhook
-class WINASSISTANT_API CWinAssistant {
+class WINASSISTANT_API CGitPlugin {
 public:
-    CWinAssistant(void);
-    ~CWinAssistant(void);
+    CGitPlugin(void);
+    ~CGitPlugin(void);
     bool Register(HWND targetWnd, DWORD dwThreadId);
     bool Unregister();
 };

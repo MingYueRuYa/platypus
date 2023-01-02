@@ -30,10 +30,10 @@
 
 #ifdef X64
 #pragma comment(lib, "git_plugin_x64.lib")
-#define LOG_NAME "win_exec_x64"
+#define LOG_NAME "git_plugin_x64"
 #else
 #pragma comment(lib, "git_plugin.lib")
-#define LOG_NAME "win_exec"
+#define LOG_NAME "git_plugin"
 #endif
 
 using std::wstring;
@@ -48,8 +48,8 @@ using json = nlohmann::json;
 HINSTANCE hInst;                      // 当前实例
 TCHAR szTitle[MAX_LOADSTRING];        // 标题栏文本
 TCHAR szWindowClass[MAX_LOADSTRING];  // 主窗口类名
-std::map<PROCESS_ID, CWinAssistant *> g_MapWndAssistant;
-using MapAssistPair = std::pair<PROCESS_ID, CWinAssistant *>;
+std::map<PROCESS_ID, CGitPlugin *> g_MapWndAssistant;
+using MapAssistPair = std::pair<PROCESS_ID, CGitPlugin *>;
 Server *g_Server = nullptr;
 std::thread g_ServerThread;
 HWND g_HWND = 0x0;
@@ -251,7 +251,7 @@ void RegisterDLL(HWND targetWnd, PROCESS_ID process_id) {
   if (0 == targetWnd) return;
   THREAD_ID thread_id = GetWindowThreadProcessId(targetWnd, NULL);
 
-  CWinAssistant *assist = new CWinAssistant();
+  CGitPlugin *assist = new CGitPlugin();
   assist->Register(targetWnd, thread_id);
   g_MapWndAssistant[process_id] = assist;
 }
@@ -259,7 +259,7 @@ void RegisterDLL(HWND targetWnd, PROCESS_ID process_id) {
 void UnregisterDLL(PROCESS_ID process_id) {
   if (0 == process_id) return;
 
-  CWinAssistant *assist = g_MapWndAssistant[process_id];
+  CGitPlugin *assist = g_MapWndAssistant[process_id];
   delete assist;
   g_MapWndAssistant.erase(process_id);
   g_MapProcessIDHWND.erase(process_id);

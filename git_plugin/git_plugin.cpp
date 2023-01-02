@@ -95,11 +95,11 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   return (CallNextHookEx(g_hHook, nCode, wParam, lParam));
 }
 
-CWinAssistant::CWinAssistant() {}
+CGitPlugin::CGitPlugin() {}
 
-CWinAssistant::~CWinAssistant() { Unregister(); }
+CGitPlugin::~CGitPlugin() { Unregister(); }
 
-bool CWinAssistant::Register(HWND targetWnd, DWORD dwThreadId) {
+bool CGitPlugin::Register(HWND targetWnd, DWORD dwThreadId) {
   bool bOk = FALSE;
   if (dwThreadId != 0) {
     g_hHook =
@@ -117,7 +117,7 @@ bool CWinAssistant::Register(HWND targetWnd, DWORD dwThreadId) {
   return (bOk);
 }
 
-bool CWinAssistant::Unregister() {
+bool CGitPlugin::Unregister() {
   if (NULL == g_hHook) return true;
   bool ok = UnhookWindowsHookEx(g_hHook);
   g_hHook = NULL;
