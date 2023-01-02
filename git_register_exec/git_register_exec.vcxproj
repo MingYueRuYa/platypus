@@ -104,7 +104,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>WinAssistant.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>git_plugin.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../bin_win32/$(Configuration)/;../libs</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

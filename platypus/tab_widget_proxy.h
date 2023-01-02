@@ -45,6 +45,7 @@ class TabWidgetProxy : public QWidget,
   void OnRestoreWnd();
   void OnMaxOrRestore();
   void OnTabBarClicked(int index);
+  void OnHelpClicked();
 
  private:
   bool isHasParent() const;

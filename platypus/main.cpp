@@ -20,6 +20,8 @@
 #define EXE_NAME_X64 "git_register_exec_x64.exe"
 #define EXE_NAME "git_register_exec.exe"
 
+#define DEBUG_MODE 1
+
 namespace spd = spdlog;
 
 PipeServer *g_server = nullptr;
@@ -67,6 +69,7 @@ bool InitLog() {
 
 int main(int argc, char *argv[]) {
   InitLog();
+#if !DEBUG_MODE
   SingleProcess single_process(L"xyx_@_platypus_2022");
   if (single_process.isExist()) {
     QMessageBox::information(nullptr, QObject::tr("title"),
@@ -75,6 +78,7 @@ int main(int argc, char *argv[]) {
     spdlog::get(LOG_NAME)->error("already start same process");
     return -1;
   }
+#endif
 
   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QApplication::setHighDpiScaleFactorRoundingPolicy(

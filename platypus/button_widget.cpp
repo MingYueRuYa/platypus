@@ -49,7 +49,6 @@ void ButtonWidget::setupUI()
                 << ":/1kplatypus/image/default_100_precent/close_pressed.png"
                 << "";
     ui->btn_close->setImagePath(image_path);
-
 }
 
 void ButtonWidget::on_btn_close_clicked()

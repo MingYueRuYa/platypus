@@ -27,6 +27,7 @@
 #include "tab_bar_draw_helper.h"
 #include "ui_platypus.h"
 #include "weak_call_back.hpp"
+#include "helpdialog.h"
 
 const int kLAYOUT_ITEM_WIDTH = 30;
 
@@ -346,5 +347,6 @@ void Platypus::OnTabBarClicked(int index) {
 
 void Platypus::OnHelpClicked()
 {
-
+    HelpDialog dialog(this);
+    dialog.exec();
 }

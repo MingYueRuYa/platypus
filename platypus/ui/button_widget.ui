@@ -195,6 +195,12 @@ QPushButton:pressed{border-image: url(&quot;:/images/default_100_precent/max_pre
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>32</width>

@@ -184,6 +184,9 @@
     <ClCompile Include="platypus\hook_keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="platypus\helpdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="platypus\button_widget.h">
@@ -219,6 +222,9 @@
     <QtMoc Include="platypus\tabbutton.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="platypus\helpdialog.h">
+      <Filter>Source Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="platypus\ui\button_widget.ui">
@@ -228,6 +234,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="platypus\ui\platypus.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="platypus\ui\helpdialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
