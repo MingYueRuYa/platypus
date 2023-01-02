@@ -65,6 +65,18 @@ bool QtExtTabWidget::isEmpty()
   return 0 == count() - 1; 
 }
 
+void QtExtTabWidget::setNextCurrentIndex(int delIndex)
+{
+  int temp_index = delIndex;
+  // -2 是因为add 按钮，还有此时的tab未被删除
+  if (delIndex >= count() - 2) {
+    temp_index -= 1;
+  } else {
+    temp_index = delIndex;
+  }
+  this->setCurrentIndex(temp_index);
+}
+
 void QtExtTabWidget::setPaintAddBtnFunc(QtExtTabBar::PaintAddButtonFunc func) {
   if (nullptr != tab_bar_) tab_bar_->setPaintAddBtnFunc(func);
 }

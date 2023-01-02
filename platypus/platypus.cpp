@@ -228,6 +228,8 @@ void Platypus::exitWnd(const QString &data) {
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
   if (-1 == index) return;
   ui->tabWidgetProxy->tabWidget()->removeTab2(index);
+  ui->tabWidgetProxy->tabWidget()->setNextCurrentIndex(index);
+  QTimer::singleShot(100, this, [this] { setGitFocus(); });
   GitWndHelperInstance.Delete(widget);
   spdlog::get(LOG_NAME)->info("receive:git window exited message");
 }
@@ -314,15 +316,7 @@ void Platypus::OnCloseTab(int index) {
     GitWndHelperInstance.Delete(widget);
   }
   QTimer::singleShot(100, this, [this] { setGitFocus(); });
-
-  int temp_index = index;
-  // -2 是因为add 按钮，还有此时的tab未被删除
-  if (index >= ui->tabWidgetProxy->tabWidget()->count() - 2) {
-    temp_index -= 1;
-  } else {
-    temp_index = index;
-  }
-  ui->tabWidgetProxy->tabWidget()->setCurrentIndex(temp_index);
+  ui->tabWidgetProxy->tabWidget()->setNextCurrentIndex(index);
   spdlog::get(LOG_NAME)->info("Close git window");
 }
 

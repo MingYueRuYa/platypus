@@ -1,4 +1,4 @@
-#ifndef QTEXTTABWIDGET_H
+﻿#ifndef QTEXTTABWIDGET_H
 #define QTEXTTABWIDGET_H
 
 #include <QTabWidget>
@@ -26,6 +26,8 @@ class QtExtTabWidget : public QTabWidget {
   int pointInTabRectIndex(const QPoint &point);
   void removeTab2(int index);
   bool isEmpty();
+  // 需要删除的index
+  void setNextCurrentIndex(int delIndex);
 
   QSize tabSize() const;
   void setTabSize(const QSize &tab_size);
