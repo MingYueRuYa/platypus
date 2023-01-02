@@ -53,6 +53,18 @@ int QtExtTabWidget::pointInTabRectIndex(const QPoint &point) {
   return tab_bar_->pointInTabRectIndex(point);
 }
 
+void QtExtTabWidget::removeTab2(int index) {
+  this->removeTab(index);
+  if (isEmpty()) {
+    emit signal_.closeWnd();
+  }
+}
+
+bool QtExtTabWidget::isEmpty()
+{
+  return 0 == count() - 1; 
+}
+
 void QtExtTabWidget::setPaintAddBtnFunc(QtExtTabBar::PaintAddButtonFunc func) {
   if (nullptr != tab_bar_) tab_bar_->setPaintAddBtnFunc(func);
 }
@@ -196,6 +208,9 @@ void QtExtTabWidget::OnCloseTab(int index) {
   if (this->currentIndex() == index && index - 1 > 0)
     this->setCurrentIndex(index - 1);
   this->removeTab(index);
+  if (isEmpty()) {
+    emit signal_.closeWnd();
+  }
   deleteIfEmptyWindow();
 }
 
@@ -362,7 +377,6 @@ void QtExtTabWidget::setupUI() {
   connect(button_widget_, SIGNAL(maxClicked()), this, SLOT(OnMaxWnd()));
   connect(button_widget_, SIGNAL(restoreClicked()), this, SLOT(OnRestoreWnd()));
   connect(button_widget_, SIGNAL(helpClicked()), this, SLOT(OnHelpClicked()));
-  
 
   connect(this, SIGNAL(tabBarDoubleClicked(int)), this,
           SLOT(OnTabBarDoubleClicked(int)));
@@ -370,7 +384,8 @@ void QtExtTabWidget::setupUI() {
           SLOT(OnStartDrag(int)));
   connect(&(tab_bar_->getSignal()), SIGNAL(signalEndDrag()), this,
           SLOT(createDraggedNewWindow()));
-  connect(this, SIGNAL(tabBarClicked(int)), &signal_, SIGNAL(tabBarClicked(int)));
+  connect(this, SIGNAL(tabBarClicked(int)), &signal_,
+          SIGNAL(tabBarClicked(int)));
 }
 
 bool QtExtTabWidget::isInMain() { return parentWidget() != nullptr; }
@@ -404,10 +419,7 @@ QtExtTabWidget *QtExtTabWidget::createDraggedNewWindow() {
   return window;
 }
 
-void QtExtTabWidget::OnHelpClicked()
-{
-    emit signal_.helpClicked();
-}
+void QtExtTabWidget::OnHelpClicked() { emit signal_.helpClicked(); }
 
 void QtExtTabWidget::deleteIfEmptyWindow() {
   if (!is_main_ && count() == 0) deleteLater();

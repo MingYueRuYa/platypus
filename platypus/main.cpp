@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QObject>
 #include <QtWidgets/QApplication>
+#include <format>
 
 #include "Server.h"
 #include "common.h"
@@ -14,8 +15,6 @@
 #include "single_process.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
-
-#include <format>
 
 #define EXE_NAME_X64 "git_register_exec_x64.exe"
 #define EXE_NAME "git_register_exec.exe"
@@ -98,6 +97,7 @@ int main(int argc, char *argv[]) {
 
   GitWndHelperInstance;
   GitWndHelperInstance.ConnectNotify(&mainwindow, SLOT(OnAddWnd(HWND)));
+
   int ret_code = app.exec();
   GitWndHelperFinalize;
 

@@ -24,6 +24,8 @@ class QtExtTabWidget : public QTabWidget {
   void setTabButton2(int index, QTabBar::ButtonPosition, QWidget *btn);
   void setMaxRestoreBtnVisible(bool max_visible, bool restore_visible);
   int pointInTabRectIndex(const QPoint &point);
+  void removeTab2(int index);
+  bool isEmpty();
 
   QSize tabSize() const;
   void setTabSize(const QSize &tab_size);

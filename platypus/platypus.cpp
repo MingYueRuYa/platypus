@@ -19,6 +19,7 @@
 #include "debughelper.h"
 #include "draw_helper.h"
 #include "gitwndhelper.h"
+#include "helpdialog.h"
 #include "hook_keyboard.h"
 #include "json.hpp"
 #include "round_shadow_helper.h"
@@ -27,7 +28,6 @@
 #include "tab_bar_draw_helper.h"
 #include "ui_platypus.h"
 #include "weak_call_back.hpp"
-#include "helpdialog.h"
 
 const int kLAYOUT_ITEM_WIDTH = 30;
 
@@ -136,7 +136,12 @@ void Platypus::setupUI() {
                 std::placeholders::_1, std::placeholders::_2));
   frame_less_helper_->activeOnWithChildWidget(this,
                                               ui->tabWidgetProxy->tabBar());
+  initSig();
+  ui->tabWidgetProxy->updateDrawHelp(new TabBarDrawHelper());
+  QTimer::singleShot(100, [this]() { this->startGitWnd(); });
+}
 
+void Platypus::initSig() {
   connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(tabInserted(int)), this,
           SLOT(OnTabInserted(int)));
   connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(addBtnClicked()), this,
@@ -157,13 +162,7 @@ void Platypus::setupUI() {
           SLOT(OnTabBarClicked(int)));
   connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(helpClicked()), this,
           SLOT(OnHelpClicked()));
-
-  ui->tabWidgetProxy->updateDrawHelp(new TabBarDrawHelper());
-
-  initSig();
 }
-
-void Platypus::initSig() {}
 
 void Platypus::OnAddWnd(HWND git_wnd) {
   QString title = "";
@@ -228,7 +227,7 @@ void Platypus::exitWnd(const QString &data) {
   }
   int index = ui->tabWidgetProxy->tabWidget()->indexOf(widget);
   if (-1 == index) return;
-  ui->tabWidgetProxy->tabWidget()->removeTab(index);
+  ui->tabWidgetProxy->tabWidget()->removeTab2(index);
   GitWndHelperInstance.Delete(widget);
   spdlog::get(LOG_NAME)->info("receive:git window exited message");
 }
@@ -345,8 +344,7 @@ void Platypus::OnTabBarClicked(int index) {
   GitWndHelperInstance.SetFocus(widget);
 }
 
-void Platypus::OnHelpClicked()
-{
-    HelpDialog dialog(this);
-    dialog.exec();
+void Platypus::OnHelpClicked() {
+  HelpDialog dialog(this);
+  dialog.exec();
 }
