@@ -80,3 +80,6 @@ install_manifest.txt
 
 # vscode
 .vscode/
+
+# log
+log
