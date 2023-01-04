@@ -267,6 +267,9 @@ void Platypus::getShortcut(const QString &data) {
     case Shortcut::CTRL_SHIFT_W:
       OnCloseTab(ui->tabWidgetProxy->tabWidget()->currentIndex());
       break;
+    case Shortcut::ALT_F11:
+      ui->tabWidgetProxy->maxOrRestore();
+      break;
     default:
       break;
   }

@@ -81,6 +81,10 @@ void TabWidgetProxy::updateDrawHelp(BaseTabBarDrawHelper *helper) {
       std::placeholders::_2, std::placeholders::_3));
 }
 
+void TabWidgetProxy::maxOrRestore() {
+    OnMaxOrRestore();
+}
+
 void TabWidgetProxy::OnTabInserted(int index) {
   if (isHasParent()) emit signal_.tabInserted(index);
 }
@@ -153,15 +157,11 @@ void TabWidgetProxy::OnMaxOrRestore() {
   }
 }
 
-void TabWidgetProxy::OnTabBarClicked(int index)
-{
-    emit signal_.tabBarClicked(index);
+void TabWidgetProxy::OnTabBarClicked(int index) {
+  emit signal_.tabBarClicked(index);
 }
 
-void TabWidgetProxy::OnHelpClicked()
-{
-    emit signal_.helpClicked();
-}
+void TabWidgetProxy::OnHelpClicked() { emit signal_.helpClicked(); }
 
 bool TabWidgetProxy::isHasParent() const { return nullptr != parentWidget(); }
 

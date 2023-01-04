@@ -11,10 +11,11 @@
 namespace HookShortCut {
 enum class Shortcut {
   Unknow = 0,
-  TAB_CTRL = 1,
-  TAB_CTRL_SHIFT,
-  CTRL_SHIFT_A,
-  CTRL_SHIFT_W
+  TAB_CTRL = 1,    // tab向前滚动
+  TAB_CTRL_SHIFT,  // tab向后滚动
+  CTRL_SHIFT_A,    // 关闭tab
+  CTRL_SHIFT_W,    // 新建tab
+  ALT_F11,         // 放大窗口 or 恢复窗口
 };
 }
 
@@ -35,12 +36,12 @@ class MyHook {
 
   HHOOK KeyBoardHook() { return keyboardhook; }
   HHOOK MouseHook() { return mousehook; }
-  void insert(DWORD vkcode);
+  void insert(DWORD vkcode, bool alt);
   void setNotifyCallBack(NotifyCallBack callBack) { callBack_ = callBack; }
 
  private:
   void CheckKeyBoard();
-  void sendShortcut(const std::set<DWORD> &keySet);
+  HookShortCut::Shortcut sendShortcut(const std::set<DWORD> &keySet);
   HookShortCut::Shortcut containsShortcut(const std::set<DWORD> &keySet);
 
  private:
@@ -49,6 +50,8 @@ class MyHook {
 
   std::list<DWORD> keyboard_;
   bool checkable_ = true;
+  //TODO：使用原子变量
+  bool receive_key_ = true;
   std::mutex mutex_;
   NotifyCallBack callBack_ = nullptr;
 };

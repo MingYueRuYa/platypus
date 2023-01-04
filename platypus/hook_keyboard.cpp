@@ -1,4 +1,4 @@
-#include "hook_keyboard.h"
+ï»¿#include "hook_keyboard.h"
 
 #include <map>
 
@@ -8,14 +8,13 @@ LRESULT WINAPI MyMouseCallback(int nCode, WPARAM wParam,
                                LPARAM lParam);  // callback declaration
 LRESULT WINAPI MyKeyBoardCallback(int nCode, WPARAM wParam, LPARAM lParam);
 
-namespace KeyBoard
-{
-  enum class KeyBoardValue
-  {
-    VK_Unknow = 0,
-    VK_A = 0x41,
-    VK_W = 0x57
-  };
+namespace KeyBoard {
+enum class KeyBoardValue {
+  VK_Unknow = 0,
+  VK_A = 0x41,
+  VK_W = 0x57,
+  VK_ALT = 0x20
+};
 }
 
 using KeyBoardVal = KeyBoard::KeyBoardValue;
@@ -54,7 +53,11 @@ void MyHook::UninstallHook() {
 
 void MyHook::stop() { checkable_ = false; }
 
-void MyHook::insert(DWORD vkcode) { keyboard_.push_back(vkcode); }
+void MyHook::insert(DWORD vkcode, bool alt) {
+  if (!receive_key_) return;
+  if (alt) keyboard_.push_back((int)KeyBoardVal::VK_ALT);
+  keyboard_.push_back(vkcode);
+}
 
 void MyHook::start() {
   InstallHook();
@@ -65,7 +68,13 @@ void MyHook::start() {
 
 void MyHook::CheckKeyBoard() {
   const std::map<DWORD, DWORD> keyMap = {
-      {VK_LCONTROL, VK_LCONTROL}, {VK_TAB, VK_TAB}, {VK_LSHIFT, VK_LSHIFT}, {(int)KeyBoardVal::VK_A, (int)KeyBoardVal::VK_A}, {(int)KeyBoardVal::VK_W, (int)KeyBoardVal::VK_W} };
+      {VK_LCONTROL, VK_LCONTROL},
+      {VK_TAB, VK_TAB},
+      {VK_LSHIFT, VK_LSHIFT},
+      {VK_F11, VK_F11},
+      {(int)KeyBoardVal::VK_A, (int)KeyBoardVal::VK_A},
+      {(int)KeyBoardVal::VK_W, (int)KeyBoardVal::VK_W},
+      {(int)KeyBoardVal::VK_ALT, (int)KeyBoardVal::VK_ALT}};
   while (checkable_) {
     std::this_thread::sleep_for(std::chrono::milliseconds(80));
 
@@ -74,6 +83,7 @@ void MyHook::CheckKeyBoard() {
       continue;
     }
 
+#ifdef _DEBUG
     printf("list size:%d\n", keyboard_.size());
     printf("------------------------\n");
     for (auto i = keyboard_.begin(); i != keyboard_.end(); i++) {
@@ -81,12 +91,14 @@ void MyHook::CheckKeyBoard() {
     }
     printf("\n");
     printf("------------------------\n");
+#endif
 
     std::set<DWORD> keySet = {};
     while (!keyboard_.empty()) {
+      //TODO: ä¸‹é¢keyçš„æ£€æŸ¥éœ€è¦åœ¨ä¼˜åŒ–
       keySet.clear();
-      // Ö±½ÓÌáÈ¡Ç°2¸ö»òÇ°3¸ö¼ü
-      // 1.ÓÅÏÈÌáÈ¡Ç°3¸ö
+      // ç›´æŽ¥æå–å‰2ä¸ªæˆ–å‰3ä¸ªé”®
+      // 1.ä¼˜å…ˆæå–å‰3ä¸ª
       bool pop_data = true;
       if (keyboard_.size() >= 3) {
         auto ibeg = keyboard_.begin();
@@ -98,11 +110,8 @@ void MyHook::CheckKeyBoard() {
 
         Shortcut shortcut = containsShortcut(keySet);
         if (Shortcut::Unknow != shortcut) {
-          printf("we get tab + shift + control keys\n");
-          keyboard_.pop_front();
-          keyboard_.pop_front();
-          keyboard_.pop_front();
-          pop_data = false;
+          keyboard_.clear();
+          break;
         }
       }
       if (keyboard_.size() >= 2) {
@@ -115,23 +124,26 @@ void MyHook::CheckKeyBoard() {
 
         Shortcut shortcut = containsShortcut(keySet);
         if (Shortcut::Unknow != shortcut) {
-          printf("we get tab + control keys\n");
-          keyboard_.pop_front();
-          keyboard_.pop_front();
-          pop_data = false;
+          keyboard_.clear();
+          break;
         }
       }
 
       if (pop_data && !keyboard_.empty()) keyboard_.pop_front();
-    } //while
-    sendShortcut(keySet);
+    }  // while
+    if (Shortcut::Unknow != sendShortcut(keySet)) {
+      receive_key_ = false;
+      std::this_thread::sleep_for(std::chrono::milliseconds(250));
+      receive_key_ = true;
+    }
   }
 }
 
-void MyHook::sendShortcut(const std::set<DWORD>& keySet) {
+HookShortCut::Shortcut MyHook::sendShortcut(const std::set<DWORD>& keySet) {
   Shortcut shortcut = containsShortcut(keySet);
   if (Shortcut::Unknow != shortcut && nullptr != callBack_)
-        callBack_((int)shortcut);
+    callBack_((int)shortcut);
+  return shortcut;
 }
 
 HookShortCut::Shortcut MyHook::containsShortcut(const std::set<DWORD>& keySet) {
@@ -139,28 +151,35 @@ HookShortCut::Shortcut MyHook::containsShortcut(const std::set<DWORD>& keySet) {
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find(VK_TAB) &&
       keySet.end() != keySet.find(VK_LSHIFT)) {
-    printf("Get TAB CTRL SHIFT key");
+    printf("Get TAB CTRL SHIFT key\n");
     return Shortcut::TAB_CTRL_SHIFT;
   }
-  
+
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find((int)KeyBoardVal::VK_W) &&
       keySet.end() != keySet.find(VK_LSHIFT)) {
-    printf("Get CTRL SHIFT W key");
+    printf("Get CTRL SHIFT W key\n");
     return Shortcut::CTRL_SHIFT_W;
   }
 
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find(VK_TAB)) {
-    printf("Get TAB CTRL key");
+    printf("Get TAB CTRL key\n");
     return Shortcut::TAB_CTRL;
+  }
+
+  // ALT+F11
+  if (keySet.end() != keySet.find((int)KeyBoardVal::VK_ALT) &&
+      keySet.end() != keySet.find(VK_F11)) {
+    printf("Get ALT F11 key\n");
+    return Shortcut::ALT_F11;
   }
 
   // 0x41 -> A
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find((int)KeyBoardVal::VK_A) &&
       keySet.end() != keySet.find(VK_LSHIFT)) {
-    printf("Get CTRL + SHIFT + A key");
+    printf("Get CTRL + SHIFT + A key\n");
     return Shortcut::CTRL_SHIFT_A;
   }
 
@@ -219,7 +238,7 @@ LRESULT WINAPI MyKeyBoardCallback(int nCode, WPARAM wParam, LPARAM lParam) {
 
   if (nCode == 0 && nullptr != pKeyStruct) {
     DWORD vkcode = pKeyStruct->vkCode;
-    MyHook::Instance().insert(vkcode);
+    MyHook::Instance().insert(vkcode, pKeyStruct->flags & 0x20);
   }
   return CallNextHookEx(MyHook::Instance().KeyBoardHook(), nCode, wParam,
                         lParam);

@@ -31,6 +31,7 @@ class TabWidgetProxy : public QWidget,
   void setTabButton2(int index, QTabBar::ButtonPosition, QWidget *btn);
   void setTabIcon(int index, const QIcon &icon);
   void updateDrawHelp(BaseTabBarDrawHelper *helper);
+  void maxOrRestore();
 
  private:
   void setupUI();
