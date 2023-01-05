@@ -18,8 +18,10 @@ bool PipeServer::Start(const wstring &pipe_name) {
       pipe_name_.c_str(), PIPE_ACCESS_INBOUND, PIPE_READMODE_BYTE | PIPE_WAIT,
       PIPE_UNLIMITED_INSTANCES, BUF_SIZE, BUF_SIZE, 50 * 1000, nullptr);
   if (pipe_ == INVALID_HANDLE_VALUE) {
+    OutputDebugStringA("create pipe server error.");
     return false;
   } else {
+    OutputDebugStringA("create pipe server successful.");
     return true;
   }
 }
