@@ -1,14 +1,16 @@
+// clang-format off
 #include "stdafx.h"
+// clang-format on
 #include "git_plugin.h"
 
+#include <algorithm>
 #include <cmath>
 #include <string>
-#include <algorithm>
 
+#include "../3rdparty/json/json.hpp"
 #include "../include/const.h"
 #include "../include/head.h"
 #include "Client.h"
-#include "../3rdparty/json/json.hpp"
 #include "string_utils.hpp"
 
 using std::string;
@@ -36,9 +38,9 @@ void Send(const wchar_t *title, HWND hwnd) {
 
   std::vector<wstring> vc_filter_title = {L"Default IME", L"MSCTFIME UI"};
   auto find_itr = std::find_if(vc_filter_title.begin(), vc_filter_title.end(),
-                            [title](const wstring &temp_title) ->bool {
-                              return wstring::npos != temp_title.find(title);
-                            });
+                               [title](const wstring &temp_title) -> bool {
+                                 return wstring::npos != temp_title.find(title);
+                               });
   if (find_itr != vc_filter_title.end()) return;
 
   string str_title = to_utf8_string(temp_title);
@@ -70,10 +72,12 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   PCWPSTRUCT msg = (PCWPSTRUCT)lParam;
 
   static long first = 1;
+  static HWND temphwnd = 0;
   if (InterlockedExchange(&first, 0)) {
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
     OutputDebugStringW(title);
+    temphwnd = msg->hwnd;
     Send(title, (msg->hwnd));
     OutputDebugStringA("first time");
   }
@@ -85,7 +89,9 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
         OutputDebugStringA("empty title");
         Quit(GetCurrentProcessId(), msg->hwnd);
       } else {
-        Send(title, (msg->hwnd));
+        if (temphwnd == msg->hwnd) {
+          Send(title, (msg->hwnd));
+        }
       }
     }
   } else if (WM_CLOSE == msg->message || WM_QUIT == msg->message) {

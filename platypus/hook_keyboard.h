@@ -1,4 +1,4 @@
-#ifndef hook_keyboard_h
+﻿#ifndef hook_keyboard_h
 #define hook_keyboard_h
 #include <Windows.h>
 
