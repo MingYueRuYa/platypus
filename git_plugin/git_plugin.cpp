@@ -11,6 +11,7 @@
 #include "../include/const.h"
 #include "../include/head.h"
 #include "Client.h"
+#include "hook_keyboard.h"
 #include "string_utils.hpp"
 
 using std::string;
@@ -68,11 +69,11 @@ void Quit(DWORD process_id, HWND hwnd) {
               buffer.size() * sizeof(wchar_t), Test);
 }
 
+HWND wndHwnd = 0;
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   PCWPSTRUCT msg = (PCWPSTRUCT)lParam;
 
   static long first = 1;
-  static HWND wndHwnd = 0;
   if (InterlockedExchange(&first, 0)) {
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
@@ -119,6 +120,13 @@ bool CGitPlugin::Register(HWND targetWnd, DWORD dwThreadId) {
     string successful = string("register successuful thread id:") + thread_id;
     string error = string("register error thread id:") + thread_id;
     OutputDebugStringA((bOk ? successful : error).c_str());
+    if (MyHook::Instance().start(false)) {
+      MyHook::Instance().setNotifyCallBack(
+          std::bind(&CGitPlugin::ReceiveShortcut, this, std::placeholders::_1));
+      OutputDebugStringA("install keyboard successful.");
+    } else {
+      OutputDebugStringA("install keyboard error.");
+    }
   } else {
     // Make sure that a hook has been installed.
     return Unregister();
@@ -133,4 +141,17 @@ bool CGitPlugin::Unregister() {
   g_hHook = NULL;
   OutputDebugStringA("unregister hook.");
   return ok;
+}
+
+void CGitPlugin::ReceiveShortcut(int vkcode) {
+    if ((HookShortCut::Shortcut)vkcode == HookShortCut::Shortcut::ALT_F11) {
+        // if (0 != wndHwnd) {
+        //     PostMessage(wndHwnd,WM_KEYDOWN, VK_CONTROL, 0);
+        //     PostMessage(wndHwnd,WM_CHAR, , VK_CONTROL, 0);
+        // }
+    }
+  //   json init_json = {{"shortcut", vkcode}};
+  //   qApp->postEvent(this,
+  //                   new CustomEvent((QEvent::Type)CusEventType::ShortCut,
+  //                                   QString::fromStdString(init_json.dump())));
 }

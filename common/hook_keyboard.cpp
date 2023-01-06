@@ -24,24 +24,12 @@ MyHook::~MyHook() {
   UninstallHook();  // if we close, let's uninstall our hook
 }
 
-void MyHook::InstallHook(bool lowlevel) {
-  /*
-  SetWindowHookEx(
-  WM_MOUSE_LL = mouse low level hook type,
-  MyMouseCallback = our callback function that will deal with system messages
-  about mouse NULL, 0);
-
-  c++ note: we can check the return SetWindowsHookEx like this because:
-  If it return NULL, a NULL value is 0 and 0 is false.
-  */
-  //	if (!(hook = SetWindowsHookEx(WH_MOUSE_LL, MyMouseCallback, NULL, 0))){
-  //		printf_s("Error: %x \n", GetLastError());
-  //	}
-
-  if (!(keyboardhook =
-            SetWindowsHookEx(true ? WH_KEYBOARD_LL : WH_KEYBOARD, MyKeyBoardCallback, NULL, 0))) {
+bool MyHook::InstallHook(bool lowlevel) {
+  if (!(keyboardhook = SetWindowsHookEx(true ? WH_KEYBOARD_LL : WH_KEYBOARD,
+                                        MyKeyBoardCallback, NULL, 0))) {
     printf_s("Error: %x \n", GetLastError());
   }
+  return keyboardhook != NULL;
 }
 
 void MyHook::UninstallHook() {
@@ -53,17 +41,24 @@ void MyHook::UninstallHook() {
 
 void MyHook::stop() { checkable_ = false; }
 
+void MyHook::insertBlockKey(HookShortCut::Shortcut shortcut)
+{
+   blockKeySet_.insert(shortcut);
+}
+
 void MyHook::insert(DWORD vkcode, bool alt) {
   if (!receive_key_) return;
   if (alt) keyboard_.push_back((int)KeyBoardVal::VK_ALT);
   keyboard_.push_back(vkcode);
 }
 
-void MyHook::start(bool lowlevel) {
-  InstallHook(lowlevel);
-
-  std::thread thr(&MyHook::CheckKeyBoard, this);
-  thr.detach();
+bool MyHook::start(bool lowlevel) {
+  bool result = InstallHook(lowlevel);
+  if (result) {
+    std::thread thr(&MyHook::CheckKeyBoard, this);
+    thr.detach();
+  }
+  return result;
 }
 
 void MyHook::CheckKeyBoard() {
@@ -95,7 +90,7 @@ void MyHook::CheckKeyBoard() {
 
     std::set<DWORD> keySet = {};
     while (!keyboard_.empty()) {
-      //TODO: 下面key的检查需要在优化
+      // TODO: 下面key的检查需要在优化
       keySet.clear();
       // 直接提取前2个或前3个键
       // 1.优先提取前3个
@@ -132,9 +127,9 @@ void MyHook::CheckKeyBoard() {
       if (pop_data && !keyboard_.empty()) keyboard_.pop_front();
     }  // while
     if (Shortcut::Unknow != sendShortcut(keySet)) {
-      receive_key_ = false;
+      receive_key_.store(false);
       std::this_thread::sleep_for(std::chrono::milliseconds(250));
-      receive_key_ = true;
+      receive_key_.store(true);
     }
   }
 }

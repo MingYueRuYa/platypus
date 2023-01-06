@@ -19,4 +19,5 @@ public:
     ~CGitPlugin(void);
     bool Register(HWND targetWnd, DWORD dwThreadId);
     bool Unregister();
+    void ReceiveShortcut(int vkcode);
 };

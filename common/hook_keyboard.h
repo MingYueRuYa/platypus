@@ -2,12 +2,12 @@
 #define hook_keyboard_h
 #include <Windows.h>
 
+#include <atomic>
 #include <functional>
 #include <iostream>
 #include <list>
 #include <mutex>
 #include <set>
-#include <atomic>
 
 namespace HookShortCut {
 enum class Shortcut {
@@ -30,20 +30,21 @@ class MyHook {
     return myHook;
   }
   ~MyHook();
-  void InstallHook(bool lowlevel);    // function to install our hook
-  void UninstallHook();  // function to uninstall our hook
-  void start(bool lowlevel);
+  bool InstallHook(bool lowlevel);  // function to install our hook
+  void UninstallHook();             // function to uninstall our hook
+  bool start(bool lowlevel);
   void stop();
+  void insertBlockKey(HookShortCut::Shortcut shortcut);
 
   HHOOK KeyBoardHook() { return keyboardhook; }
   HHOOK MouseHook() { return mousehook; }
   void insert(DWORD vkcode, bool alt);
   void setNotifyCallBack(NotifyCallBack callBack) { callBack_ = callBack; }
+  HookShortCut::Shortcut containsShortcut(const std::set<DWORD> &keySet);
 
  private:
   void CheckKeyBoard();
   HookShortCut::Shortcut sendShortcut(const std::set<DWORD> &keySet);
-  HookShortCut::Shortcut containsShortcut(const std::set<DWORD> &keySet);
 
  private:
   HHOOK keyboardhook = NULL;
@@ -53,6 +54,7 @@ class MyHook {
   bool checkable_ = true;
   std::atomic<bool> receive_key_ = true;
   std::mutex mutex_;
+  std::set<HookShortCut::Shortcut> blockKeySet_;
   NotifyCallBack callBack_ = nullptr;
 };
 
