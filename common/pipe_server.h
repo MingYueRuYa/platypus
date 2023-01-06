@@ -26,7 +26,7 @@ class PipeServer {
   bool stop_ = false;
   HANDLE pipe_ = INVALID_HANDLE_VALUE;
   wstring pipe_name_;
-  _FUNC func_;
+  _FUNC func_ = nullptr;
 };
 
 #endif  // pipe_server_h

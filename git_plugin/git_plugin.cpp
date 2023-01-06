@@ -72,12 +72,12 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   PCWPSTRUCT msg = (PCWPSTRUCT)lParam;
 
   static long first = 1;
-  static HWND temphwnd = 0;
+  static HWND wndHwnd = 0;
   if (InterlockedExchange(&first, 0)) {
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
     OutputDebugStringW(title);
-    temphwnd = msg->hwnd;
+    wndHwnd = msg->hwnd;
     Send(title, (msg->hwnd));
     OutputDebugStringA("first time");
   }
@@ -87,9 +87,13 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     if (nullptr != title) {
       if (0 == wcslen(title)) {
         OutputDebugStringA("empty title");
-        Quit(GetCurrentProcessId(), msg->hwnd);
+        if (wndHwnd == msg->hwnd) {
+          Quit(GetCurrentProcessId(), msg->hwnd);
+        } else {
+          OutputDebugStringA("not target window hwnd.");
+        }
       } else {
-        if (temphwnd == msg->hwnd) {
+        if (wndHwnd == msg->hwnd) {
           Send(title, (msg->hwnd));
         }
       }

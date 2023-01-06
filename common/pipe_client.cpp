@@ -45,6 +45,7 @@ bool PipeClient::Write(const wstring &pipe_name, const wstring &msg) {
     oss.clear();
     oss << "Failed to send message!Error code: " << ::GetLastError() << "\n";
     OutputDebugStringA(oss.str().c_str());
+    OutputDebugStringW(msg.c_str());
     ::CloseHandle(pipe);
     return false;
   }
