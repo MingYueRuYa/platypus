@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
 
   QApplication app(argc, argv);
   // 需要放在这里否则注册的时候会失败，错误码：0x5
-  MyHook::Instance().start();
+  MyHook::Instance().start(true);
 
   Platypus mainwindow;
   mainwindow.show();

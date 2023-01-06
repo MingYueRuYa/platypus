@@ -107,7 +107,7 @@
     <ClInclude Include="common\pipe_server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="platypus\hook_keyboard.h">
+    <ClInclude Include="common\hook_keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -181,10 +181,10 @@
     <ClCompile Include="common\single_process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="platypus\hook_keyboard.cpp">
+    <ClCompile Include="platypus\helpdialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="platypus\helpdialog.cpp">
+    <ClCompile Include="common\hook_keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

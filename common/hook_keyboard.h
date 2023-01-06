@@ -7,6 +7,7 @@
 #include <list>
 #include <mutex>
 #include <set>
+#include <atomic>
 
 namespace HookShortCut {
 enum class Shortcut {
@@ -29,9 +30,9 @@ class MyHook {
     return myHook;
   }
   ~MyHook();
-  void InstallHook();    // function to install our hook
+  void InstallHook(bool lowlevel);    // function to install our hook
   void UninstallHook();  // function to uninstall our hook
-  void start();
+  void start(bool lowlevel);
   void stop();
 
   HHOOK KeyBoardHook() { return keyboardhook; }
@@ -50,8 +51,7 @@ class MyHook {
 
   std::list<DWORD> keyboard_;
   bool checkable_ = true;
-  //TODO：使用原子变量
-  bool receive_key_ = true;
+  std::atomic<bool> receive_key_ = true;
   std::mutex mutex_;
   NotifyCallBack callBack_ = nullptr;
 };

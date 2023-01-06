@@ -24,7 +24,7 @@ MyHook::~MyHook() {
   UninstallHook();  // if we close, let's uninstall our hook
 }
 
-void MyHook::InstallHook() {
+void MyHook::InstallHook(bool lowlevel) {
   /*
   SetWindowHookEx(
   WM_MOUSE_LL = mouse low level hook type,
@@ -39,7 +39,7 @@ void MyHook::InstallHook() {
   //	}
 
   if (!(keyboardhook =
-            SetWindowsHookEx(WH_KEYBOARD_LL, MyKeyBoardCallback, NULL, 0))) {
+            SetWindowsHookEx(true ? WH_KEYBOARD_LL : WH_KEYBOARD, MyKeyBoardCallback, NULL, 0))) {
     printf_s("Error: %x \n", GetLastError());
   }
 }
@@ -59,8 +59,8 @@ void MyHook::insert(DWORD vkcode, bool alt) {
   keyboard_.push_back(vkcode);
 }
 
-void MyHook::start() {
-  InstallHook();
+void MyHook::start(bool lowlevel) {
+  InstallHook(lowlevel);
 
   std::thread thr(&MyHook::CheckKeyBoard, this);
   thr.detach();
