@@ -18,6 +18,8 @@ using std::string;
 using std::wstring;
 using json = nlohmann::json;
 
+static HWND g_wndHwnd = 0;
+
 #define HWND_TO_WSTR(wnd) (std::to_wstring((long long)wnd))
 #define HWND_TO_PWCHAR(wnd) (std::to_wstring((long long)wnd).c_str())
 
@@ -69,7 +71,6 @@ void Quit(DWORD process_id, HWND hwnd) {
               buffer.size() * sizeof(wchar_t), Test);
 }
 
-HWND wndHwnd = 0;
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   PCWPSTRUCT msg = (PCWPSTRUCT)lParam;
 
@@ -78,7 +79,7 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
     OutputDebugStringW(title);
-    wndHwnd = msg->hwnd;
+    g_wndHwnd = msg->hwnd;
     Send(title, (msg->hwnd));
     OutputDebugStringA("first time");
   }
@@ -88,13 +89,13 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     if (nullptr != title) {
       if (0 == wcslen(title)) {
         OutputDebugStringA("empty title");
-        if (wndHwnd == msg->hwnd) {
+        if (g_wndHwnd == msg->hwnd) {
           Quit(GetCurrentProcessId(), msg->hwnd);
         } else {
           OutputDebugStringA("not target window hwnd.");
         }
       } else {
-        if (wndHwnd == msg->hwnd) {
+        if (g_wndHwnd == msg->hwnd) {
           Send(title, (msg->hwnd));
         }
       }
@@ -145,13 +146,10 @@ bool CGitPlugin::Unregister() {
 
 void CGitPlugin::ReceiveShortcut(int vkcode) {
     if ((HookShortCut::Shortcut)vkcode == HookShortCut::Shortcut::ALT_F11) {
-        // if (0 != wndHwnd) {
-        //     PostMessage(wndHwnd,WM_KEYDOWN, VK_CONTROL, 0);
-        //     PostMessage(wndHwnd,WM_CHAR, , VK_CONTROL, 0);
-        // }
+        if (0 != g_wndHwnd) {
+            PostMessage(g_wndHwnd,WM_KEYDOWN, VK_CONTROL, 0);
+            PostMessage(g_wndHwnd,WM_CHAR, 0x23, 0);
+            PostMessage(g_wndHwnd,WM_KEYUP, VK_CONTROL, 0);
+        }
     }
-  //   json init_json = {{"shortcut", vkcode}};
-  //   qApp->postEvent(this,
-  //                   new CustomEvent((QEvent::Type)CusEventType::ShortCut,
-  //                                   QString::fromStdString(init_json.dump())));
 }
