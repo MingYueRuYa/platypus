@@ -89,6 +89,15 @@ QWidget *GitWndHelper::GetWidget(HWND hwnd) {
   }
 }
 
+HWND GitWndHelper::GetHWND(QWidget *widget) {
+  GitWndMapItr itr = this->find(widget);
+  if (itr == git_wnds_maps_.end()) {
+    return 0;
+  } else {
+    return itr->first;
+  }
+}
+
 void GitWndHelper::init() {}
 
 bool GitWndHelper::find(HWND git_hwnd, GitWndWrap **git_wrap) {
