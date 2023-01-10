@@ -128,7 +128,9 @@ void Platypus::customEvent(QEvent *event) {
 
 void Platypus::setupUI() {
   this->setWindowFlags(Qt::FramelessWindowHint |
-                       Qt::X11BypassWindowManagerHint);
+                       Qt::X11BypassWindowManagerHint |
+                       Qt::WindowSystemMenuHint |
+                       Qt::WindowMinimizeButtonHint);
   frame_less_helper_ = new NcFramelessHelper();
   frame_less_helper_->activateOn(this);
   frame_less_helper_->setFilterEventCallBack(
