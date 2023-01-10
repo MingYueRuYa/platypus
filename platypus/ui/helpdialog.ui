@@ -23,7 +23,7 @@
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="title">
-      <string>作者</string>
+      <string>Author</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
@@ -48,7 +48,7 @@
 font: 14px &quot;Microsoft YaHei UI&quot;;</string>
           </property>
           <property name="text">
-           <string>联系方式：635672377@qq.com</string>
+           <string>QQ contact：635672377@qq.com</string>
           </property>
          </widget>
         </item>
@@ -59,7 +59,7 @@ font: 14px &quot;Microsoft YaHei UI&quot;;</string>
 font: 14px &quot;Microsoft YaHei UI&quot;;</string>
           </property>
           <property name="text">
-           <string>微信公众号：cpp手艺人</string>
+           <string>wechat public account：cpp手艺人</string>
           </property>
          </widget>
         </item>
@@ -87,7 +87,7 @@ font: 14px &quot;Microsoft YaHei UI&quot;;</string>
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="title">
-      <string>快捷键</string>
+      <string>Shortcut</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -97,7 +97,7 @@ font: 14px &quot;Microsoft YaHei UI&quot;;</string>
 font: 14px &quot;Microsoft YaHei UI&quot;;</string>
         </property>
         <property name="text">
-         <string>创建新Tab：CTRL+SHIFT+A</string>
+         <string>create new tab：CTRL+SHIFT+A</string>
         </property>
        </widget>
       </item>
@@ -108,7 +108,7 @@ font: 14px &quot;Microsoft YaHei UI&quot;;</string>
 font: 14px &quot;Microsoft YaHei UI&quot;;</string>
         </property>
         <property name="text">
-         <string>删除Tab: CTRL+SHIFT+W</string>
+         <string>delete tab: CTRL+SHIFT+W</string>
         </property>
        </widget>
       </item>
@@ -119,7 +119,7 @@ font: 14px &quot;Microsoft YaHei UI&quot;;</string>
 font: 14px &quot;Microsoft YaHei UI&quot;;</string>
         </property>
         <property name="text">
-         <string>向前切换Tab: CTRL+SHIFT+TAB</string>
+         <string>switch forward Tab: CTRL+SHIFT+TAB</string>
         </property>
        </widget>
       </item>
@@ -130,7 +130,18 @@ font: 14px &quot;Microsoft YaHei UI&quot;;</string>
 font: 14px &quot;Microsoft YaHei UI&quot;;</string>
         </property>
         <property name="text">
-         <string>向后切换Tab: CTRL+TAB</string>
+         <string>switch back Tab: CTRL+TAB</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);
+font: 14px &quot;Microsoft YaHei UI&quot;;</string>
+        </property>
+        <property name="text">
+         <string>maximum/minimize window: ALT+F11</string>
         </property>
        </widget>
       </item>
