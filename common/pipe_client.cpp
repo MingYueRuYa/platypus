@@ -25,19 +25,27 @@ bool PipeClient::Write(const wstring &pipe_name, const wstring &msg) {
       OutputDebugStringA("pipe client create pipe successful.");
       break;
     }
-    if (::GetLastError() != ERROR_PIPE_BUSY) {
+    DWORD error_code = ::GetLastError();
+    if (error_code == ERROR_PIPE_BUSY || error_code == ERROR_FILE_NOT_FOUND) {
+      oss.clear();
+      oss << "Pipe file is busy now or not found, error code:" << error_code
+          << "\n";
+      OutputDebugStringA(oss.str().c_str());
+      if (!WaitNamedPipeW(pipe_name.c_str(), 1000 * 2)) {
+        OutputDebugStringA("Could not open pipe: 2 second wait timed out.");
+        return false;
+      }
+    } else {
       oss.clear();
       oss << "Failed to open the appointed named pipe!Error code: "
-          << ::GetLastError() << "\n";
+          << error_code << "\n";
       OutputDebugStringA(oss.str().c_str());
       return false;
     }
-    if (!WaitNamedPipeW(pipe_name.c_str(), 1000 * 2)) {
-      printf("Could not open pipe: 2 second wait timed out.");
-      return false;
-    }
   }
-  if (::WriteFile(pipe, msg.c_str(), 1024, &num_rcv, nullptr)) {
+  if (::WriteFile(pipe, msg.c_str(),
+                  static_cast<DWORD>(wcslen(msg.c_str()) * sizeof(wchar_t)),
+                  &num_rcv, nullptr)) {
     oss.clear();
     oss << "Message sent successfully...\n";
     OutputDebugStringA(oss.str().c_str());
