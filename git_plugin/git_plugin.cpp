@@ -1,4 +1,4 @@
-// clang-format off
+﻿// clang-format off
 #include "stdafx.h"
 // clang-format on
 #include "git_plugin.h"
@@ -18,7 +18,6 @@ using std::string;
 using std::wstring;
 using json = nlohmann::json;
 
-static HWND g_wndHwnd = 0;
 
 #define HWND_TO_WSTR(wnd) (std::to_wstring((long long)wnd))
 #define HWND_TO_PWCHAR(wnd) (std::to_wstring((long long)wnd).c_str())
@@ -71,6 +70,13 @@ void Quit(DWORD process_id, HWND hwnd) {
               buffer.size() * sizeof(wchar_t), Test);
 }
 
+static volatile HWND g_wndHwnd = 0;
+void ReceiveShortcut(int vkcode)
+{
+    // ::PostMessageA(g_wndHwnd, WM_KEYDOWN, VK_BACK, 0x000E0001);
+    // ::PostMessageA(g_wndHwnd, WM_KEYUP, VK_BACK, 0xC00E0001);
+}
+
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   PCWPSTRUCT msg = (PCWPSTRUCT)lParam;
 
@@ -82,6 +88,13 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     g_wndHwnd = msg->hwnd;
     Send(title, (msg->hwnd));
     OutputDebugStringA("first time");
+    if (MyHook::Instance().start(false)) {
+      MyHook::Instance().insertBlockKey(HookShortCut::Shortcut::ALT_F11);
+      MyHook::Instance().setNotifyCallBack(ReceiveShortcut);
+      OutputDebugStringA("install keyboard successful.");
+    } else {
+      OutputDebugStringA("install keyboard error.");
+    }
   }
 
   if (WM_SETTEXT == msg->message) {
@@ -114,6 +127,7 @@ CGitPlugin::~CGitPlugin() { Unregister(); }
 bool CGitPlugin::Register(HWND targetWnd, DWORD dwThreadId) {
   bool bOk = FALSE;
   if (dwThreadId != 0) {
+    gitHwnd_ = targetWnd;
     g_hHook =
         SetWindowsHookEx(WH_CALLWNDPROC, CallWndProc, g_hInstDll, dwThreadId);
     bOk = (g_hHook != NULL);
@@ -121,13 +135,6 @@ bool CGitPlugin::Register(HWND targetWnd, DWORD dwThreadId) {
     string successful = string("register successuful thread id:") + thread_id;
     string error = string("register error thread id:") + thread_id;
     OutputDebugStringA((bOk ? successful : error).c_str());
-    if (MyHook::Instance().start(false)) {
-      MyHook::Instance().setNotifyCallBack(
-          std::bind(&CGitPlugin::ReceiveShortcut, this, std::placeholders::_1));
-      OutputDebugStringA("install keyboard successful.");
-    } else {
-      OutputDebugStringA("install keyboard error.");
-    }
   } else {
     // Make sure that a hook has been installed.
     return Unregister();
@@ -142,14 +149,4 @@ bool CGitPlugin::Unregister() {
   g_hHook = NULL;
   OutputDebugStringA("unregister hook.");
   return ok;
-}
-
-void CGitPlugin::ReceiveShortcut(int vkcode) {
-    if ((HookShortCut::Shortcut)vkcode == HookShortCut::Shortcut::ALT_F11) {
-        if (0 != g_wndHwnd) {
-            PostMessage(g_wndHwnd,WM_KEYDOWN, VK_CONTROL, 0);
-            PostMessage(g_wndHwnd,WM_CHAR, 0x23, 0);
-            PostMessage(g_wndHwnd,WM_KEYUP, VK_CONTROL, 0);
-        }
-    }
 }

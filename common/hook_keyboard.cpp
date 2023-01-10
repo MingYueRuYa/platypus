@@ -41,9 +41,8 @@ void MyHook::UninstallHook() {
 
 void MyHook::stop() { checkable_ = false; }
 
-void MyHook::insertBlockKey(HookShortCut::Shortcut shortcut)
-{
-   blockKeySet_.insert(shortcut);
+void MyHook::insertBlockKey(HookShortCut::Shortcut shortcut) {
+  blockKeySet_.insert(shortcut);
 }
 
 void MyHook::insert(DWORD vkcode, bool alt) {
@@ -136,8 +135,10 @@ void MyHook::CheckKeyBoard() {
 
 HookShortCut::Shortcut MyHook::sendShortcut(const std::set<DWORD>& keySet) {
   Shortcut shortcut = containsShortcut(keySet);
-  if (Shortcut::Unknow != shortcut && nullptr != callBack_)
+  if (Shortcut::Unknow != shortcut && nullptr != callBack_) {
+    OutputDebugStringA("call back function"); 
     callBack_((int)shortcut);
+  }
   return shortcut;
 }
 
@@ -146,27 +147,27 @@ HookShortCut::Shortcut MyHook::containsShortcut(const std::set<DWORD>& keySet) {
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find(VK_TAB) &&
       keySet.end() != keySet.find(VK_LSHIFT)) {
-    printf("Get TAB CTRL SHIFT key\n");
+    OutputDebugStringA("Get TAB CTRL SHIFT key\n");
     return Shortcut::TAB_CTRL_SHIFT;
   }
 
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find((int)KeyBoardVal::VK_W) &&
       keySet.end() != keySet.find(VK_LSHIFT)) {
-    printf("Get CTRL SHIFT W key\n");
+    OutputDebugStringA("Get CTRL SHIFT W key\n");
     return Shortcut::CTRL_SHIFT_W;
   }
 
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find(VK_TAB)) {
-    printf("Get TAB CTRL key\n");
+    OutputDebugStringA("Get TAB CTRL key\n");
     return Shortcut::TAB_CTRL;
   }
 
   // ALT+F11
   if (keySet.end() != keySet.find((int)KeyBoardVal::VK_ALT) &&
       keySet.end() != keySet.find(VK_F11)) {
-    printf("Get ALT F11 key\n");
+    OutputDebugStringA("Get ALT F11 key\n");
     return Shortcut::ALT_F11;
   }
 
@@ -174,7 +175,7 @@ HookShortCut::Shortcut MyHook::containsShortcut(const std::set<DWORD>& keySet) {
   if (keySet.end() != keySet.find(VK_LCONTROL) &&
       keySet.end() != keySet.find((int)KeyBoardVal::VK_A) &&
       keySet.end() != keySet.find(VK_LSHIFT)) {
-    printf("Get CTRL + SHIFT + A key\n");
+    OutputDebugStringA("Get CTRL + SHIFT + A key\n");
     return Shortcut::CTRL_SHIFT_A;
   }
 

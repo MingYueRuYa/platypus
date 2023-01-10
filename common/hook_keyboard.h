@@ -41,6 +41,7 @@ class MyHook {
   void insert(DWORD vkcode, bool alt);
   void setNotifyCallBack(NotifyCallBack callBack) { callBack_ = callBack; }
   HookShortCut::Shortcut containsShortcut(const std::set<DWORD> &keySet);
+  bool isBlockShortcut() { return !(blockKeySet_.empty());}
 
  private:
   void CheckKeyBoard();
