@@ -29,11 +29,11 @@ void Client::send(const std::string& eventType, LPVOID pdata, size_t dataSize,
   LPVOID pBuffer = ::MapViewOfFile(m_hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
   memset(pBuffer, 0, m_mapSize);
 
-  // 设置数据头
+  // set data head
   strncpy_s(header.type, eventType.length() + 1, eventType.c_str(), 20);
   header.size = dataSize;
 
-  // 将数据复制到共享内存(数据头+有效数据)
+  // copy data to share memory (data head + valid data)
   memmove((PBYTE)pBuffer, &header, sizeof(header));
 
   PBYTE pPayload = (PBYTE)pBuffer + sizeof(header);
@@ -49,7 +49,6 @@ void Client::send(const std::string& eventType, LPVOID pdata, size_t dataSize,
   }
   SetEvent(hSendEvent);
 
-  // 开始监听数据返回事件
   std::string rcvEventName = m_EventName + "stoc";
   HANDLE hRcvEvent = CreateEventA(NULL, FALSE, FALSE, rcvEventName.c_str());
   if (hRcvEvent == nullptr) {
@@ -60,7 +59,6 @@ void Client::send(const std::string& eventType, LPVOID pdata, size_t dataSize,
   }
   DWORD result = 0;
   if (WAIT_OBJECT_0 == (result = WaitForSingleObject(hRcvEvent, 5 * 1000))) {
-    // 解包
     memset(&header, 0, sizeof(header));
     memmove(&header, (PBYTE)pBuffer, sizeof(header));
     pPayload = (PBYTE)pBuffer + sizeof(header);

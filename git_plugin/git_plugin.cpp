@@ -18,7 +18,6 @@ using std::string;
 using std::wstring;
 using json = nlohmann::json;
 
-
 #define HWND_TO_WSTR(wnd) (std::to_wstring((long long)wnd))
 #define HWND_TO_PWCHAR(wnd) (std::to_wstring((long long)wnd).c_str())
 
@@ -38,12 +37,17 @@ void Send(const wchar_t *title, HWND hwnd) {
     return;
   }
 
+  // TODO:How to solve this situation
+  // maybe we should restart process
   std::vector<wstring> vc_filter_title = {L"Default IME", L"MSCTFIME UI"};
   auto find_itr = std::find_if(vc_filter_title.begin(), vc_filter_title.end(),
                                [title](const wstring &temp_title) -> bool {
                                  return wstring::npos != temp_title.find(title);
                                });
-  if (find_itr != vc_filter_title.end()) return;
+  if (find_itr != vc_filter_title.end()) {
+    OutputDebugStringA("find title: Default IME, MSCTFIME UI");
+    return;
+  }
 
   string str_title = to_utf8_string(temp_title);
   json title_json = {
@@ -71,10 +75,9 @@ void Quit(DWORD process_id, HWND hwnd) {
 }
 
 static volatile HWND g_wndHwnd = 0;
-void ReceiveShortcut(int vkcode)
-{
-    // ::PostMessageA(g_wndHwnd, WM_KEYDOWN, VK_BACK, 0x000E0001);
-    // ::PostMessageA(g_wndHwnd, WM_KEYUP, VK_BACK, 0xC00E0001);
+void ReceiveShortcut(int vkcode) {
+  // ::PostMessageA(g_wndHwnd, WM_KEYDOWN, VK_BACK, 0x000E0001);
+  // ::PostMessageA(g_wndHwnd, WM_KEYUP, VK_BACK, 0xC00E0001);
 }
 
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
