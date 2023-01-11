@@ -2,6 +2,8 @@
 #include "Client.h"
 #include "../include/head.h"
 
+#include <format>
+
 Client::Client() : m_hMap(NULL), m_mapSize(0) {}
 
 void Client::init(const std::string& mapName, size_t size,
@@ -40,7 +42,8 @@ void Client::send(const std::string& eventType, LPVOID pdata, size_t dataSize,
   std::string sndEventName = m_EventName + "ctos";
   HANDLE hSendEvent = OpenEventA(EVENT_ALL_ACCESS, NULL, sndEventName.c_str());
   if (hSendEvent == nullptr) {
-    //错误处理
+    std::wstring error_info = std::format(L"Open event error code: {}", ::GetLastError());
+    OutputDebugStringW(error_info.c_str());
     return;
   }
   SetEvent(hSendEvent);
@@ -49,18 +52,23 @@ void Client::send(const std::string& eventType, LPVOID pdata, size_t dataSize,
   std::string rcvEventName = m_EventName + "stoc";
   HANDLE hRcvEvent = CreateEventA(NULL, FALSE, FALSE, rcvEventName.c_str());
   if (hRcvEvent == nullptr) {
-    //错误处理
+    std::wstring error_info = std::format(L"Create event error code: {}", ::GetLastError());
+    OutputDebugStringW(error_info.c_str());
     return;
   }
-  std::cout << "等待数据返回中..." << std::endl;
-  WaitForSingleObject(hRcvEvent, INFINITE);  //收到信号，自动重置
+  DWORD result = 0;
+  if (WAIT_OBJECT_0 == (result = WaitForSingleObject(hRcvEvent, 5*1000)))
+  {
+    //解包
+    memset(&header, 0, sizeof(header));
+    memmove(&header, (PBYTE)pBuffer, sizeof(header));
+    pPayload = (PBYTE)pBuffer + sizeof(header);
 
-  //数据返回以后：
-  //解包
-  memset(&header, 0, sizeof(header));
-  memmove(&header, (PBYTE)pBuffer, sizeof(header));
-  pPayload = (PBYTE)pBuffer + sizeof(header);
+    callback(pPayload, header.size);
+    CloseHandle(hRcvEvent);
+  } else {
+    std::string error_info = std::format(" WaitForSingleObjecterror code: {}", ::GetLastError());
+    OutputDebugStringA(error_info.c_str());
+  }
 
-  callback(pPayload, header.size);
-  CloseHandle(hRcvEvent);
 }
