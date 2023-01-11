@@ -3,7 +3,8 @@
 	"update_code_command":"git pull",
 	"pre_compile_command":"",
 	"compile_file":"../platypus.sln",
-	"compile_tool_dir":"C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE",
-	"start_process_path":"../bin_win32/debug/platypus.exe",
-	"start_process_args":[]
+	"compile_tool_dir":"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/Common7/IDE",
+	"start_process_path":"../bin_win32/Debug/platypus.exe",
+	"start_release_process_path":"../bin_win32/Release/platypus.exe",
+	"start_process_args":["-dev", "-test", "devdebug"]
 }

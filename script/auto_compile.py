@@ -63,7 +63,6 @@ def execute(cmd, stdout_cb, stderr_cb):
     loop.close()
     return rc
 
-
 class App:
     def __init__(self):
         self._clear()
@@ -73,6 +72,7 @@ class App:
         self.start_process_args = ""
         self.process_name = ""
         self.start_process_path = ""
+        self.start_release_process_path = ""
         self.update_code_command = ""
         self.compile_args = ""
         self.compile_file = ""
@@ -82,6 +82,7 @@ class App:
         self.resource = False
         self.is_kill = False
         self.is_start = False
+        self.is_start_release = False
         self.is_compile = False
         self.compile_args = ""
         self.config_path = ""
@@ -147,21 +148,19 @@ class App:
         os.putenv("path", self.compile_tool_dir + ";" + strewn)
         return
 
-    def _start_process(self):
+
+    def _start_process(self, process_path):
         try:
-            if os.path.isabs(self.start_process_path):
-                list_process_args = [self.start_process_path]
-            else:
-                process_path = os.getcwd() + "/" + self.start_process_path
-                list_process_args = [process_path]
+            list_process_args = [process_path]
             for args in self.start_process_args:
                 list_process_args.append(args)
             sub_process = subprocess.Popen(list_process_args, shell=False)
-            print(colorama.Fore.GREEN + "Start target process successful, pid=" + str(sub_process.pid))
+            print(colorama.Fore.GREEN + "Start target process successful. pid =" + str(sub_process.pid))
         except Exception as error:
             print(colorama.Fore.GREEN + str(error))
         else:
             pass
+        print(colorama.Fore.GREEN + ' '.join(list_process_args))
         return
 
     def _update_code(self):
@@ -178,6 +177,7 @@ class App:
                                                                                     'example Qt qrc file.')
         parser.add_argument('-k', '--kill', action='store_true', help='kill target process')
         parser.add_argument('-s', '--start', action='store_true', help='start target process')
+        parser.add_argument('-sr', '--start_release', action='store_true', help='start release version target process')
         parser.add_argument('-c', '--compile', action='store_true', help='compile project')
         parser.add_argument('-a', '--compileargs', default='Debug|Win32', type=str,
                             help='compile project with args, for example:"Debug|Win32" or "Release|Win32". default '
@@ -189,6 +189,7 @@ class App:
         self.pre_compileaction = args.precompileaction
         self.is_kill = args.kill
         self.is_start = args.start
+        self.is_start_release = args.start_release
         self.is_compile = args.compile
         self.compile_args = args.compileargs
         self.rebuild = args.rebuild
@@ -205,6 +206,7 @@ class App:
         self.compile_file = data['compile_file']
         self.compile_tool_dir = data['compile_tool_dir']
         self.start_process_path = data['start_process_path']
+        self.start_release_process_path = data['start_release_process_path']
         self.start_process_args = data['start_process_args']
 
     def run(self, args):
@@ -254,8 +256,21 @@ class App:
 
             if self.is_start:
                 print('--------------------start call application-------------------------')
-                self._start_process()
+                if os.path.isabs(self.start_process_path):
+                    process_path = self.start_process_path
+                else:
+                    process_path = os.getcwd() + "/" + self.start_process_path
+                self._start_process(process_path)
                 print('--------------------end call application---------------------------')
+            elif self.is_start_release:
+                print('--------------------start call application-------------------------')
+                if os.path.isabs(self.start_release_process_path):
+                    process_path = self.start_release_process_path
+                else:
+                    process_path = os.getcwd() + "/" + self.start_release_process_path
+                self._start_process(process_path)
+                print('--------------------end call application---------------------------')
+
 
 import getpass
 
