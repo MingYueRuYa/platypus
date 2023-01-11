@@ -1,16 +1,19 @@
-#include "Client.h"
+ï»¿#include "Client.h"
+
+#include <format>
+
 #include "../include/head.h"
 
 Client::Client() : m_hMap(NULL), m_mapSize(0) {}
 
 void Client::init(const std::string& mapName, size_t size,
                   const std::string& eventName) {
-  // Ê×ÏÈÊÔÍ¼´ò¿ªÒ»¸öÃüÃûµÄÄÚ´æÓ³ÉäÎÄ¼ş¶ÔÏó
+  // é¦–å…ˆè¯•å›¾æ‰“å¼€ä¸€ä¸ªå‘½åçš„å†…å­˜æ˜ å°„æ–‡ä»¶å¯¹è±¡
   m_hMap = ::OpenFileMappingA(
       FILE_MAP_ALL_ACCESS,
-      0,  //ÈçÕâ¸öº¯Êı·µ»ØµÄ¾ä±úÄÜÓÉµ±Ç°½ø³ÌÆô¶¯µÄĞÂ½ø³Ì¼Ì³Ğ£¬ÔòÕâ¸ö²ÎÊıÎªTRUE¡£
+      0,  // å¦‚è¿™ä¸ªå‡½æ•°è¿”å›çš„å¥æŸ„èƒ½ç”±å½“å‰è¿›ç¨‹å¯åŠ¨çš„æ–°è¿›ç¨‹ç»§æ‰¿ï¼Œåˆ™è¿™ä¸ªå‚æ•°ä¸ºTRUEã€‚
       mapName.c_str());
-  if (NULL == m_hMap)  // ´ò¿ªÊ§°Ü
+  if (NULL == m_hMap)  // æ‰“å¼€å¤±è´¥
   {
     throw;
   }
@@ -26,11 +29,11 @@ void Client::send(const std::string& eventType, LPVOID pdata, size_t dataSize,
   LPVOID pBuffer = ::MapViewOfFile(m_hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
   memset(pBuffer, 0, m_mapSize);
 
-  //ÉèÖÃÊı¾İÍ·
+  // è®¾ç½®æ•°æ®å¤´
   strncpy_s(header.type, eventType.length() + 1, eventType.c_str(), 20);
   header.size = dataSize;
 
-  //½«Êı¾İ¸´ÖÆµ½¹²ÏíÄÚ´æ(Êı¾İÍ·+ÓĞĞ§Êı¾İ)
+  // å°†æ•°æ®å¤åˆ¶åˆ°å…±äº«å†…å­˜(æ•°æ®å¤´+æœ‰æ•ˆæ•°æ®)
   memmove((PBYTE)pBuffer, &header, sizeof(header));
 
   PBYTE pPayload = (PBYTE)pBuffer + sizeof(header);
@@ -39,27 +42,34 @@ void Client::send(const std::string& eventType, LPVOID pdata, size_t dataSize,
   std::string sndEventName = m_EventName + "ctos";
   HANDLE hSendEvent = OpenEventA(EVENT_ALL_ACCESS, NULL, sndEventName.c_str());
   if (hSendEvent == nullptr) {
-    //´íÎó´¦Àí
+    std::wstring error_info =
+        std::format(L"Open event error code: {}", ::GetLastError());
+    OutputDebugStringW(error_info.c_str());
     return;
   }
   SetEvent(hSendEvent);
 
-  //¿ªÊ¼¼àÌıÊı¾İ·µ»ØÊÂ¼ş
+  // å¼€å§‹ç›‘å¬æ•°æ®è¿”å›äº‹ä»¶
   std::string rcvEventName = m_EventName + "stoc";
   HANDLE hRcvEvent = CreateEventA(NULL, FALSE, FALSE, rcvEventName.c_str());
   if (hRcvEvent == nullptr) {
-    //´íÎó´¦Àí
+    std::wstring error_info =
+        std::format(L"Create event error code: {}", ::GetLastError());
+    OutputDebugStringW(error_info.c_str());
     return;
   }
-  std::cout << "µÈ´ıÊı¾İ·µ»ØÖĞ..." << std::endl;
-  WaitForSingleObject(hRcvEvent, INFINITE);  //ÊÕµ½ĞÅºÅ£¬×Ô¶¯ÖØÖÃ
+  DWORD result = 0;
+  if (WAIT_OBJECT_0 == (result = WaitForSingleObject(hRcvEvent, 5 * 1000))) {
+    // è§£åŒ…
+    memset(&header, 0, sizeof(header));
+    memmove(&header, (PBYTE)pBuffer, sizeof(header));
+    pPayload = (PBYTE)pBuffer + sizeof(header);
 
-  //Êı¾İ·µ»ØÒÔºó£º
-  //½â°ü
-  memset(&header, 0, sizeof(header));
-  memmove(&header, (PBYTE)pBuffer, sizeof(header));
-  pPayload = (PBYTE)pBuffer + sizeof(header);
-
-  callback(pPayload, header.size);
-  CloseHandle(hRcvEvent);
+    callback(pPayload, header.size);
+    CloseHandle(hRcvEvent);
+  } else {
+    std::string error_info =
+        std::format(" WaitForSingleObjecterror code: {}", ::GetLastError());
+    OutputDebugStringA(error_info.c_str());
+  }
 }
