@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
+    <width>412</width>
     <height>271</height>
    </rect>
   </property>
@@ -48,7 +48,7 @@
 font: 14px &quot;Microsoft YaHei UI&quot;;</string>
           </property>
           <property name="text">
-           <string>email：635672377@qq.com</string>
+           <string>email: studycpp1024@gmail.com 635672377@qq.com</string>
           </property>
          </widget>
         </item>
