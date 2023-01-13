@@ -2,7 +2,6 @@
 #include "stdafx.h"
 // clang-format on
 #include "git_register_exec.h"
-#include "pipe_client.h"
 
 #include <TlHelp32.h>
 #include <Windows.h>
@@ -53,6 +52,7 @@ using MapAssistPair = std::pair<PROCESS_ID, CGitPlugin *>;
 Server *g_Server = nullptr;
 std::thread g_ServerThread;
 HWND g_HWND = 0x0;
+std::map<PROCESS_ID, HWND> g_ExcludeWnd;
 
 bool bStopEnum = false;
 std::thread g_EnumProcessThread;
@@ -249,6 +249,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
 
 void RegisterDLL(HWND targetWnd, PROCESS_ID process_id) {
   if (0 == targetWnd) return;
+  if (g_ExcludeWnd[process_id] == targetWnd) {
+    std::string str = std::format("we don't need this wnd {}", (int)targetWnd);
+    OutputDebugStringA(str.c_str());
+    return;
+  }
   THREAD_ID thread_id = GetWindowThreadProcessId(targetWnd, NULL);
 
   CGitPlugin *assist = new CGitPlugin();
@@ -321,11 +326,23 @@ bool WndExit(PBYTE pBuffer, UINT64 &size) {
 
 bool Stop(PBYTE pBuffer, UINT64 &size) { return false; }
 
+bool TransferData(PBYTE pBuffer, UINT64 &size) {
+  if (0 == size) {
+    OutputDebugStringA("receive size equal 0");
+    return false;
+  }
+  spd::get(LOG_NAME)->info(L"{}", (wchar_t *)pBuffer);
+  PipeClient client;
+  client.Write(pipe_name, (wchar_t *)pBuffer);
+  return true;
+}
+
 void StartServer() {
   g_Server = new Server();
   g_Server->createShm(dll_shm_name, MAX_SHM_SIZE);
   g_Server->appendRcvEvent(function_name, FindWndTitle);
   g_Server->appendRcvEvent(wnd_exit_name, WndExit);
+  g_Server->appendRcvEvent(data_transfor_name, TransferData);
   g_Server->appendRcvEvent(exit_name, Stop);
   g_Server->eventLoop(dll_evt_name);
 }

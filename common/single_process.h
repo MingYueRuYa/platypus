@@ -1,4 +1,4 @@
-#ifndef single_process_h
+﻿#ifndef single_process_h
 #define single_process_h
 
 #include <Windows.h>

@@ -1,21 +1,25 @@
 ﻿// clang-format off
 #include "stdafx.h"
 // clang-format on
-#include "git_plugin.h"
+#include <windows.h>
 
 #include <algorithm>
 #include <cmath>
+#include <format>
 #include <string>
 
 #include "../3rdparty/json/json.hpp"
 #include "../include/const.h"
 #include "../include/head.h"
 #include "Client.h"
+#include "git_plugin.h"
 #include "string_utils.hpp"
 
 using std::string;
 using std::wstring;
 using json = nlohmann::json;
+
+static HWND g_wndHwnd = 0;
 
 #define HWND_TO_WSTR(wnd) (std::to_wstring((long long)wnd))
 #define HWND_TO_PWCHAR(wnd) (std::to_wstring((long long)wnd).c_str())
@@ -27,25 +31,24 @@ HHOOK g_hHook = NULL;
 extern HINSTANCE g_hInstDll;
 wstring title_cache;
 
+bool Send(const wchar_t *title, HWND hwnd);
+
 void Test(PBYTE pPayload, UINT64 size) {}
 
-void Send(const wchar_t *title, HWND hwnd) {
-  wstring temp_title = wstring(title);
-  if (temp_title.empty()) {
-    OutputDebugStringA("empty title or Default IME title, not need to update");
-    return;
-  }
-
-  // TODO:How to solve this situation
+bool ContainsSpecTitle(const wstring &title) {
   std::vector<wstring> vc_filter_title = {L"Default IME", L"MSCTFIME UI"};
   auto find_itr = std::find_if(vc_filter_title.begin(), vc_filter_title.end(),
                                [title](const wstring &temp_title) -> bool {
                                  return wstring::npos != temp_title.find(title);
                                });
-  if (find_itr != vc_filter_title.end()) {
-    //TODO timer to update title
-    OutputDebugStringA("find title: Default IME, MSCTFIME UI");
-    return;
+  return find_itr != vc_filter_title.end();
+}
+
+bool Send(const wchar_t *title, HWND hwnd) {
+  wstring temp_title = wstring(title);
+  if (temp_title.empty()) {
+    OutputDebugStringA("empty title, not need to update");
+    return false;
   }
 
   string str_title = to_utf8_string(temp_title);
@@ -59,6 +62,7 @@ void Send(const wchar_t *title, HWND hwnd) {
     client.send(function_name, (wchar_t *)wstr_title.c_str(),
                 wstr_title.size() * sizeof(wchar_t), Test);
   }
+  return true;
 }
 
 void Quit(DWORD process_id, HWND hwnd) {
@@ -79,14 +83,8 @@ void SetForegroundWnd(HWND hwnd) {
   OutputDebugStringW(buffer.c_str());
   Client client;
   client.init(dll_shm_name, MAX_SHM_SIZE, dll_evt_name);
-  client.send(wnd_exit_name, (PVOID)buffer.c_str(),
+  client.send(data_transfor_name, (PVOID)buffer.c_str(),
               buffer.size() * sizeof(wchar_t), Test);
-}
-
-static HWND g_wndHwnd = 0;
-void ReceiveShortcut(int vkcode) {
-  // ::PostMessageA(g_wndHwnd, WM_KEYDOWN, VK_BACK, 0x000E0001);
-  // ::PostMessageA(g_wndHwnd, WM_KEYUP, VK_BACK, 0xC00E0001);
 }
 
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
@@ -97,9 +95,15 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
     OutputDebugStringW(title);
-    g_wndHwnd = msg->hwnd;
-    Send(title, (msg->hwnd));
-    OutputDebugStringA("first time");
+    if (!ContainsSpecTitle(title)) {
+      g_wndHwnd = msg->hwnd;
+      Send(title, msg->hwnd);
+      OutputDebugStringA("first time");
+    } else {
+      first = 1;
+      OutputDebugStringA(
+          "find title: Default IME, MSCTFIME UI");
+    }
   }
 
   if (WM_SETTEXT == msg->message) {
