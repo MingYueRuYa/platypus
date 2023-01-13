@@ -3,8 +3,11 @@
 // clang-format on
 #include "git_plugin.h"
 
+#include <windows.h>
+
 #include <algorithm>
 #include <cmath>
+#include <format>
 #include <string>
 
 #include "../3rdparty/json/json.hpp"
@@ -17,6 +20,9 @@ using std::string;
 using std::wstring;
 using json = nlohmann::json;
 
+static HWND g_wndHwnd = 0;
+UINT_PTR IDT_GET_TEXT_TIMER = 1000;
+
 #define HWND_TO_WSTR(wnd) (std::to_wstring((long long)wnd))
 #define HWND_TO_PWCHAR(wnd) (std::to_wstring((long long)wnd).c_str())
 
@@ -27,25 +33,45 @@ HHOOK g_hHook = NULL;
 extern HINSTANCE g_hInstDll;
 wstring title_cache;
 
+bool Send(const wchar_t *title, HWND hwnd);
+
 void Test(PBYTE pPayload, UINT64 size) {}
 
-void Send(const wchar_t *title, HWND hwnd) {
-  wstring temp_title = wstring(title);
-  if (temp_title.empty()) {
-    OutputDebugStringA("empty title or Default IME title, not need to update");
-    return;
-  }
-
-  // TODO:How to solve this situation
+bool ContainsSpecTitle(const wstring &title) {
   std::vector<wstring> vc_filter_title = {L"Default IME", L"MSCTFIME UI"};
   auto find_itr = std::find_if(vc_filter_title.begin(), vc_filter_title.end(),
                                [title](const wstring &temp_title) -> bool {
                                  return wstring::npos != temp_title.find(title);
                                });
-  if (find_itr != vc_filter_title.end()) {
-    //TODO timer to update title
-    OutputDebugStringA("find title: Default IME, MSCTFIME UI");
-    return;
+  return find_itr != vc_filter_title.end();
+  //   if (find_itr != vc_filter_title.end()) {
+  //     OutputDebugStringA(
+  //         "find title: Default IME, MSCTFIME UI, ready to start timer");
+  //     ::SetTimer(g_wndHwnd, IDT_GET_TEXT_TIMER, 1000, GetWndTextTimer);
+  //     return false;
+  //   }
+}
+
+VOID CALLBACK GetWndTextTimer(HWND hwnd,  // handle to window for timer messages
+                              UINT message,      // WM_TIMER message
+                              UINT_PTR idTimer,  // timer identifier
+                              DWORD dwTime)      // current system time )
+{
+  wchar_t title[MAX_PATH] = {0};
+  GetWindowTextW(hwnd, title, MAX_PATH);
+  wstring info = std::format(L"Timer gets title,{}", title);
+  OutputDebugStringW(title);
+  if (!ContainsSpecTitle(title)) {
+    Send(title, hwnd);
+    ::KillTimer(hwnd, idTimer);
+  }
+}
+
+bool Send(const wchar_t *title, HWND hwnd) {
+  wstring temp_title = wstring(title);
+  if (temp_title.empty()) {
+    OutputDebugStringA("empty title, not need to update");
+    return false;
   }
 
   string str_title = to_utf8_string(temp_title);
@@ -59,6 +85,7 @@ void Send(const wchar_t *title, HWND hwnd) {
     client.send(function_name, (wchar_t *)wstr_title.c_str(),
                 wstr_title.size() * sizeof(wchar_t), Test);
   }
+  return true;
 }
 
 void Quit(DWORD process_id, HWND hwnd) {
@@ -83,12 +110,6 @@ void SetForegroundWnd(HWND hwnd) {
               buffer.size() * sizeof(wchar_t), Test);
 }
 
-static HWND g_wndHwnd = 0;
-void ReceiveShortcut(int vkcode) {
-  // ::PostMessageA(g_wndHwnd, WM_KEYDOWN, VK_BACK, 0x000E0001);
-  // ::PostMessageA(g_wndHwnd, WM_KEYUP, VK_BACK, 0xC00E0001);
-}
-
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
   PCWPSTRUCT msg = (PCWPSTRUCT)lParam;
 
@@ -98,7 +119,22 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
     OutputDebugStringW(title);
     g_wndHwnd = msg->hwnd;
-    Send(title, (msg->hwnd));
+    while(ContainsSpecTitle(title)) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        GetWindowTextW(msg->hwnd, title, MAX_PATH);
+        OutputDebugStringW(title);
+    }
+    if (!ContainsSpecTitle(title)) {
+      Send(title, (msg->hwnd));
+    //   UINT_PTR result = ::SetTimer(g_wndHwnd, IDT_GET_TEXT_TIMER, 1000, NULL);
+    //   std::string error_info = std::format("settimer result:{}, error:{}", result, ::GetLastError());
+    //   OutputDebugStringA(
+    //       error_info.c_str());
+    } else {
+      OutputDebugStringA(
+          "find title: Default IME, MSCTFIME UI, ready to start timer");
+      ::SetTimer(g_wndHwnd, IDT_GET_TEXT_TIMER, 1000, GetWndTextTimer);
+    }
     OutputDebugStringA("first time");
   }
 
@@ -129,6 +165,13 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     if (g_wndHwnd != msg->hwnd) {
       SetForegroundWnd(g_wndHwnd);
     }
+  } else if (WM_TIMER == msg->message) {
+    if (IDT_GET_TEXT_TIMER == msg->wParam) 
+    {
+      OutputDebugStringA("I'm timeout 1000");
+    }
+    string id = std::format("timer id:{}", (int)msg->wParam);
+      OutputDebugStringA(id.c_str());
   }
   return (CallNextHookEx(g_hHook, nCode, wParam, lParam));
 }
