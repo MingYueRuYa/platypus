@@ -1,5 +1,7 @@
 **English | [简体中文](./README_zh.md)**
 
+[![GitHub release](https://img.shields.io/github/release/MingYueRuYa/platypus.svg?style=flat-square)](https://github.com/MingYueRuYa/platypus/releases/latest)
+
 ### 1、What is it？
 
 Platypus is a management of the git bash window. The effect is similar to that of the chrome browser. It manages the bash window and can be switched and created at will.
@@ -19,6 +21,11 @@ Software screenshot:
 ​      shortcut key support：
 
 ​	![](./images/shortcut_rounder.png)
+
+
+**In order to avoid conflicts with the functions of git bash, it is recommended that you turn off the shortcut key processing of git bash.**
+
+​	![](./images/config_dialog_rounder.png)
 
 
  ### 2. Why write this software?

@@ -1,4 +1,7 @@
 **简体中文 | [English](./README.md)**
+
+[![GitHub release](https://img.shields.io/github/release/MingYueRuYa/platypus.svg?style=flat-square)](https://github.com/MingYueRuYa/platypus/releases/latest)
+
 ### 1、是什么？
 
 platypus 是一个对git bash窗口的管理，效果就是类似chrome浏览器那样，对bash窗口进行管理，可以随意的切换和创建。
@@ -15,6 +18,11 @@ platypus 是一个对git bash窗口的管理，效果就是类似chrome浏览器
 ​      快捷键支持：
 
 ​	![](./images/shortcut_rounder.png)
+
+**为了避免和git bash的功能有冲突，建议你关闭git bash 的快捷键处理。**
+
+​	![](./images/config_dialog_rounder.png)
+
 
  ### 2、为什么写这个软件？
 
