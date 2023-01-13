@@ -10,7 +10,7 @@
 using std::shared_ptr;
 using std::wstring;
 
-class GitWndWrap : public QObject{
+class GitWndWrap : public QObject {
   Q_OBJECT
   Q_DISABLE_COPY_MOVE(GitWndWrap)
 
@@ -27,6 +27,7 @@ class GitWndWrap : public QObject{
   QWidget *GetSmartWidget() const;
   void InitWidget();
   const QString &GetTitle() const;
+  void SetForeground();
 
  private:
   void setStyle();

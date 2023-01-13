@@ -98,6 +98,14 @@ HWND GitWndHelper::GetHWND(QWidget *widget) {
   }
 }
 
+void GitWndHelper::SetForegroundWnd(HWND git_wnd)
+{
+  GitWndMapItr itr = git_wnds_maps_.find(git_wnd);
+  if (itr != git_wnds_maps_.end()) {
+    return itr->second->SetForeground();
+  }
+}
+
 void GitWndHelper::init() {}
 
 bool GitWndHelper::find(HWND git_hwnd, GitWndWrap **git_wrap) {

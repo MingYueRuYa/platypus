@@ -26,7 +26,10 @@ void GitWndWrap::ShowWindow(bool isShow) {
   ::ShowWindow((HWND)widget_->winId(), isShow ? SW_SHOW : SW_HIDE);
 }
 
-void GitWndWrap::SetFocus() { ::SetFocus(git_wnd_); }
+void GitWndWrap::SetFocus() {
+  SetForeground();
+  ::SetFocus(git_wnd_);
+}
 
 void GitWndWrap::Close() {
   ::SetParent(git_wnd_, 0);
@@ -66,4 +69,11 @@ void GitWndWrap::setStyle() {
   ::SetWindowLong(git_wnd_, GWL_STYLE, styleValue);
   ::SetWindowLong(git_wnd_, GWL_EXSTYLE,
                   ::GetWindowLong(git_wnd_, GWL_STYLE) | ~WS_EX_TOOLWINDOW);
+}
+
+void GitWndWrap::SetForeground()
+{
+  if (git_wnd_ != ::GetForegroundWindow()) {
+    ::SetForegroundWindow(git_wnd_);
+  }
 }

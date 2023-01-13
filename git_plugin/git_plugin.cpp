@@ -11,7 +11,6 @@
 #include "../include/const.h"
 #include "../include/head.h"
 #include "Client.h"
-#include "hook_keyboard.h"
 #include "string_utils.hpp"
 
 using std::string;
@@ -38,13 +37,13 @@ void Send(const wchar_t *title, HWND hwnd) {
   }
 
   // TODO:How to solve this situation
-  // maybe we should restart process
   std::vector<wstring> vc_filter_title = {L"Default IME", L"MSCTFIME UI"};
   auto find_itr = std::find_if(vc_filter_title.begin(), vc_filter_title.end(),
                                [title](const wstring &temp_title) -> bool {
                                  return wstring::npos != temp_title.find(title);
                                });
   if (find_itr != vc_filter_title.end()) {
+    //TODO timer to update title
     OutputDebugStringA("find title: Default IME, MSCTFIME UI");
     return;
   }
@@ -74,7 +73,17 @@ void Quit(DWORD process_id, HWND hwnd) {
               buffer.size() * sizeof(wchar_t), Test);
 }
 
-static volatile HWND g_wndHwnd = 0;
+void SetForegroundWnd(HWND hwnd) {
+  json quit_json = {{"HWND", (long long)hwnd}, {"action", "set_foreground"}};
+  wstring buffer = to_wide_string(quit_json.dump());
+  OutputDebugStringW(buffer.c_str());
+  Client client;
+  client.init(dll_shm_name, MAX_SHM_SIZE, dll_evt_name);
+  client.send(wnd_exit_name, (PVOID)buffer.c_str(),
+              buffer.size() * sizeof(wchar_t), Test);
+}
+
+static HWND g_wndHwnd = 0;
 void ReceiveShortcut(int vkcode) {
   // ::PostMessageA(g_wndHwnd, WM_KEYDOWN, VK_BACK, 0x000E0001);
   // ::PostMessageA(g_wndHwnd, WM_KEYUP, VK_BACK, 0xC00E0001);
@@ -91,13 +100,6 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     g_wndHwnd = msg->hwnd;
     Send(title, (msg->hwnd));
     OutputDebugStringA("first time");
-    if (MyHook::Instance().start(false)) {
-      MyHook::Instance().insertBlockKey(HookShortCut::Shortcut::ALT_F11);
-      MyHook::Instance().setNotifyCallBack(ReceiveShortcut);
-      OutputDebugStringA("install keyboard successful.");
-    } else {
-      OutputDebugStringA("install keyboard error.");
-    }
   }
 
   if (WM_SETTEXT == msg->message) {
@@ -117,8 +119,16 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
       }
     }
   } else if (WM_CLOSE == msg->message || WM_QUIT == msg->message) {
-    OutputDebugStringA("quit wnd");
-    Quit(GetCurrentProcessId(), msg->hwnd);
+    if (g_wndHwnd == msg->hwnd) {
+      OutputDebugStringA("quit wnd");
+      Quit(GetCurrentProcessId(), msg->hwnd);
+    } else {
+      OutputDebugStringA("not should quit wnd");
+    }
+  } else if (WM_DESTROY == msg->message) {
+    if (g_wndHwnd != msg->hwnd) {
+      SetForegroundWnd(g_wndHwnd);
+    }
   }
   return (CallNextHookEx(g_hHook, nCode, wParam, lParam));
 }

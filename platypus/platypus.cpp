@@ -69,6 +69,10 @@ void Platypus::ReceiveMsg(const wchar_t *json_str) {
                                 QString::fromStdString(json_msg)));
   } else if ("init_hwnd" == action) {
     win_exe_hwnd_ = hwnd;
+  } else if ("set_foreground" == action) {
+    qApp->postEvent(this,
+                    new CustomEvent((QEvent::Type)CusEventType::SetForeground,
+                                    QString::fromStdString(json_msg)));
   }
   spdlog::get(LOG_NAME)->info("receive message:{}", json_msg);
 }
@@ -96,11 +100,6 @@ bool Platypus::nativeEvent(const QByteArray &eventType, void *message,
                            long *result) {
   MSG *msg = (MSG *)message;
   switch (msg->message) {
-    case WM_SETFOCUS: {
-      ReleaseCapture();
-      setGitFocus();
-      return false;
-    }
     default:
       break;
   }
@@ -121,6 +120,9 @@ void Platypus::customEvent(QEvent *event) {
     case (int)CusEventType::ShortCut:
       getShortcut(custom->GetData());
       break;
+    case (int)CusEventType::SetForeground:
+      setForeGroundWnd(custom->GetData());
+      break;
     default:
       break;
   }
@@ -129,8 +131,7 @@ void Platypus::customEvent(QEvent *event) {
 void Platypus::setupUI() {
   this->setWindowFlags(Qt::FramelessWindowHint |
                        Qt::X11BypassWindowManagerHint |
-                       Qt::WindowSystemMenuHint |
-                       Qt::WindowMinimizeButtonHint);
+                       Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint);
   frame_less_helper_ = new NcFramelessHelper();
   frame_less_helper_->activateOn(this);
   frame_less_helper_->setFilterEventCallBack(
@@ -301,6 +302,12 @@ bool Platypus::acceptShortcut(int vkcode) const {
       (HWND)this->winId() == hwnd)
     return true;
   return false;
+}
+
+void Platypus::setForeGroundWnd(const QString &data) {
+  auto exit_json = json::parse(data.toStdString());
+  HWND git_hwnd = (HWND)exit_json.value("HWND", 0);
+  GitWndHelperInstance.SetForegroundWnd(git_hwnd);
 }
 
 void Platypus::OnTabInserted(int index) {

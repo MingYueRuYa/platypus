@@ -53,6 +53,7 @@ class GitWndHelper : SINGLETON_INHERIT(GitWndHelper) {
                      QWidget **widget);
   QWidget *GetWidget(HWND git_wnd);
   HWND GetHWND(QWidget *widget);
+  void SetForegroundWnd(HWND git_wnd);
 
  private:
   void init();
