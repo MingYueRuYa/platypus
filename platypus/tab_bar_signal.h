@@ -2,6 +2,7 @@
 #define TAB_BAR_SIGNAL_H
 
 #include <QObject>
+#include <QMouseEvent>
 
 class TabBarSingal : public QObject
 {
@@ -16,6 +17,7 @@ signals:
   void closeTab(int index);
   void signalStartDrag(int index);
   void signalEndDrag();
+  void mouseRelease(QMouseEvent *);
 
 };
 

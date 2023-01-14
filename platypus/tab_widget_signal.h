@@ -2,6 +2,7 @@
 #define TAB_WIDGET_SIGNAL_H
 
 #include <QObject>
+#include <QMouseEvent>
 
 class TabWidgetSignal : public QObject {
   Q_OBJECT
@@ -21,6 +22,7 @@ class TabWidgetSignal : public QObject {
   void tabBarDoubleClicked();
   void tabBarClicked(int index);
   void helpClicked();
+  void tabBarMouseRelease(QMouseEvent *e);
 };
 
 #endif  // TAB_WIDGET_SIGNAL_H

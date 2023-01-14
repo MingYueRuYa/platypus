@@ -121,6 +121,7 @@ void QtExtTabBar::mouseReleaseEvent(QMouseEvent *e) {
   if (dragging_ && e->button() == Qt::LeftButton) {
     dragging_ = false;
   }
+  emit signal_.mouseRelease(e);
 }
 
 void QtExtTabBar::mousePressEvent(QMouseEvent *event) {

@@ -21,7 +21,6 @@ using QtExtTabBarDef::TabState;
 class Platypus : public QWidget {
   Q_OBJECT
 
-
  public:
   Platypus(QWidget *parent = Q_NULLPTR);
   ~Platypus();
@@ -64,6 +63,7 @@ class Platypus : public QWidget {
   void OnMaxOrRestore();
   void OnTabBarClicked(int index);
   void OnHelpClicked();
+  void OnTabBarMouseRelease(QMouseEvent *);
 
  private:
   Ui::platypusClass *ui;

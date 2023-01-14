@@ -165,6 +165,8 @@ void Platypus::initSig() {
           SLOT(OnTabBarClicked(int)));
   connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(helpClicked()), this,
           SLOT(OnHelpClicked()));
+  connect(&(ui->tabWidgetProxy->getSignal()), SIGNAL(tabBarMouseRelease(QMouseEvent *)), this,
+          SLOT(OnTabBarMouseRelease(QMouseEvent *)));
 }
 
 void Platypus::OnAddWnd(HWND git_wnd) {
@@ -353,4 +355,9 @@ void Platypus::OnTabBarClicked(int index) {
 void Platypus::OnHelpClicked() {
   HelpDialog dialog(this);
   dialog.exec();
+}
+
+void Platypus::OnTabBarMouseRelease(QMouseEvent *)
+{
+    setGitFocus();
 }
