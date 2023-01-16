@@ -119,11 +119,11 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
     OutputDebugStringW(title);
     g_wndHwnd = msg->hwnd;
-    while(ContainsSpecTitle(title)) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(250));
-        GetWindowTextW(msg->hwnd, title, MAX_PATH);
-        OutputDebugStringW(title);
-    }
+    // while(ContainsSpecTitle(title)) {
+    //     std::this_thread::sleep_for(std::chrono::milliseconds(250));
+    //     GetWindowTextW(msg->hwnd, title, MAX_PATH);
+    //     OutputDebugStringW(title);
+    // }
     if (!ContainsSpecTitle(title)) {
       Send(title, (msg->hwnd));
     //   UINT_PTR result = ::SetTimer(g_wndHwnd, IDT_GET_TEXT_TIMER, 1000, NULL);
@@ -133,7 +133,7 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     } else {
       OutputDebugStringA(
           "find title: Default IME, MSCTFIME UI, ready to start timer");
-      ::SetTimer(g_wndHwnd, IDT_GET_TEXT_TIMER, 1000, GetWndTextTimer);
+    //   ::SetTimer(g_wndHwnd, IDT_GET_TEXT_TIMER, 1000, GetWndTextTimer);
     }
     OutputDebugStringA("first time");
   }
