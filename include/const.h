@@ -14,6 +14,7 @@ const char* platypus_evt_name = "platypus@event_name";
 const char* function_name = "find_wnd_title";
 const char* wnd_exit_name = "wnd_exit";
 const char* exit_name = "exit";
+const char* data_transfor_name = "data_transfor";
 
 // pipe info
 const wchar_t *pipe_name = L"\\\\.\\pipe\\platypus@!#pipe";
