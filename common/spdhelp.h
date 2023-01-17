@@ -1,7 +1,7 @@
 ﻿#include <string>
 
-#include "../3rdparty/spdlog/include/spdlog/common.h"
-#include "../3rdparty/spdlog/include/spdlog/spdlog.h"
+#include "spdlog/common.h"
+#include "spdlog/spdlog.h"
 
 using string = std::string;
 

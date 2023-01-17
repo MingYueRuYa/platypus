@@ -105,7 +105,7 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     CSingleton<spdlog::SpdHelper>::Init(log_file_name, kLOG_NANE);
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
-    SPDLOG.info(L"{}", title);
+       SPDLOG.info(L"{}", title);
     if (!ContainsSpecTitle(title)) {
       g_wndHwnd = msg->hwnd;
       Send(title, msg->hwnd);
