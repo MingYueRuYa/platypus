@@ -1,9 +1,6 @@
 ﻿#pragma once
 #include <Windows.h>
 
-#include <functional>
-#include <iostream>
-#include <map>
 #include <string>
 
 class Server {
