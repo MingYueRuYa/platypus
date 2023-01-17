@@ -35,8 +35,6 @@ bool Send(const wchar_t *title, HWND hwnd);
 
 void Test(PBYTE pPayload, UINT64 size) {}
 
-bool ResearchWnd(DWORD process_id, HWND hwnd);
-
 bool ContainsSpecTitle(const wstring &title) {
   std::vector<wstring> vc_filter_title = {L"Default IME", L"MSCTFIME UI"};
   auto find_itr = std::find_if(vc_filter_title.begin(), vc_filter_title.end(),
@@ -87,20 +85,6 @@ void SetForegroundWnd(HWND hwnd) {
   client.init(dll_shm_name, MAX_SHM_SIZE, dll_evt_name);
   client.send(data_transfor_name, (PVOID)buffer.c_str(),
               buffer.size() * sizeof(wchar_t), Test);
-}
-
-bool ResearchWnd(DWORD process_id, HWND hwnd) {
-  json quit_json = {{"process_id", (unsigned long)process_id},
-                    {"HWND", (long long)hwnd},
-                    {"action", "research_wnd"}};
-  wstring buffer = to_wide_string(quit_json.dump());
-  OutputDebugStringW(buffer.c_str());
-  Client client;
-  client.init(dll_shm_name, MAX_SHM_SIZE, dll_evt_name);
-  client.send(data_transfor_name, (PVOID)buffer.c_str(),
-              buffer.size() * sizeof(wchar_t), Test);
-//   ::FreeLibrary(GetModuleHandleA(NULL));
-  return true;
 }
 
 LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {

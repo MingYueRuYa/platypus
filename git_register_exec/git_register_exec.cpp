@@ -236,19 +236,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
         if (wnd == NULL) {
           spd::get(LOG_NAME)->error("Get Wnd error.");
         } else {
-          RECT rect;
-          ::GetWindowRect(wnd, &rect);
-          wchar_t class_name[1024]  = {0};
-          GetClassNameW(wnd, class_name, 1024);
-            std::wstring str = std::format(L"class name:{}, wnd:{}", class_name, (int)wnd);
-            OutputDebugStringW(str.c_str());
-          if (0 == rect.bottom && 0 == rect.top && 0 == rect.left && 0 == rect.right) {
-            spd::get(LOG_NAME)->error("Get IME Wnd.");
-            OutputDebugStringA("Get IME Wnd.");
-          } else {
-            g_MapProcessIDHWND[process_id] = wnd;
-            RegisterDLL(wnd, process_id);
-          }
+          g_MapProcessIDHWND[process_id] = wnd;
+          RegisterDLL(wnd, process_id);
         }
       }
     } break;
@@ -260,7 +249,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
 
 void RegisterDLL(HWND targetWnd, PROCESS_ID process_id) {
   if (0 == targetWnd) return;
-  if (g_ExcludeWnd[process_id] == targetWnd)  {
+  if (g_ExcludeWnd[process_id] == targetWnd) {
     std::string str = std::format("we don't need this wnd {}", (int)targetWnd);
     OutputDebugStringA(str.c_str());
     return;
@@ -342,21 +331,9 @@ bool TransferData(PBYTE pBuffer, UINT64 &size) {
     OutputDebugStringA("receive size equal 0");
     return false;
   }
-  wstring buff = (wchar_t *)pBuffer;
-  std::string temp_str = to_utf8_string(buff);
-  auto jsonObj = json::parse(temp_str);
-  std::string action = jsonObj.value("action", "");
-  if ("research_wnd" == action) {
-    // PROCESS_ID process_id = jsonObj.value("process_id", 0);
-    // HWND exclude_hwnd = (HWND)jsonObj.value("HWND", 0);
-    // g_ExcludeWnd[process_id] = exclude_hwnd;
-    // g_MapProcessIDHWND.erase(process_id);
-    // UnregisterDLL(process_id);
-  } else {
-    spd::get(LOG_NAME)->info(L"{}", (wchar_t *)pBuffer);
-    PipeClient client;
-    client.Write(pipe_name, (wchar_t *)pBuffer);
-  }
+  spd::get(LOG_NAME)->info(L"{}", (wchar_t *)pBuffer);
+  PipeClient client;
+  client.Write(pipe_name, (wchar_t *)pBuffer);
   return true;
 }
 
