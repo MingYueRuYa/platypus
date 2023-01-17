@@ -1,4 +1,4 @@
-ï»?  // clang-format off
+ï»¿// clang-format off
 #include "stdafx.h"
 // clang-format on
 #include <windows.h>
@@ -20,7 +20,6 @@ using std::wstring;
 using json = nlohmann::json;
 
 static HWND g_wndHwnd = 0;
-UINT_PTR IDT_GET_TEXT_TIMER = 1000;
 
 #define HWND_TO_WSTR(wnd) (std::to_wstring((long long)wnd))
 #define HWND_TO_PWCHAR(wnd) (std::to_wstring((long long)wnd).c_str())
@@ -100,7 +99,7 @@ bool ResearchWnd(DWORD process_id, HWND hwnd) {
   client.init(dll_shm_name, MAX_SHM_SIZE, dll_evt_name);
   client.send(data_transfor_name, (PVOID)buffer.c_str(),
               buffer.size() * sizeof(wchar_t), Test);
-  ::FreeLibrary(GetModuleHandleA(NULL));
+//   ::FreeLibrary(GetModuleHandleA(NULL));
   return true;
 }
 
@@ -112,14 +111,14 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
     OutputDebugStringW(title);
-    g_wndHwnd = msg->hwnd;
     if (!ContainsSpecTitle(title)) {
+      g_wndHwnd = msg->hwnd;
       Send(title, msg->hwnd);
       OutputDebugStringA("first time");
     } else {
+      first = 1;
       OutputDebugStringA(
-          "find title: Default IME, MSCTFIME UI, we ready to exit");
-      ResearchWnd(GetCurrentProcessId(), msg->hwnd);
+          "find title: Default IME, MSCTFIME UI");
     }
   }
 

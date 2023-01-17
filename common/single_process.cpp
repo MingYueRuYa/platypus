@@ -1,4 +1,4 @@
-#include "single_process.h"
+﻿#include "single_process.h"
 
 SingleProcess::SingleProcess(const wstring &key) {
   if (key.empty()) throw std::exception("the key is allowed empty");
