@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 
+#include "singleton_spdlog.hpp"
 #include "qt_ext_tab_bar_define.h"
 
 #define LOG_NAME "platypus"

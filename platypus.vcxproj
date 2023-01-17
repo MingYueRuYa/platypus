@@ -244,7 +244,10 @@
     <ClInclude Include="common\pipe_server.h" />
     <ClInclude Include="common\process_utils.hpp" />
     <ClInclude Include="common\Server.h" />
+    <ClInclude Include="common\singleton.h" />
+    <ClInclude Include="common\singleton_spdlog.hpp" />
     <ClInclude Include="common\single_process.h" />
+    <ClInclude Include="common\spdhelp.h" />
     <ClInclude Include="platypus\base_tab_bar_draw_helper.h" />
     <ClInclude Include="platypus\common.h" />
     <ClInclude Include="platypus\common_ui_define.h" />
@@ -281,6 +284,7 @@
     <ClCompile Include="common\pipe_server.cpp" />
     <ClCompile Include="common\Server.cpp" />
     <ClCompile Include="common\single_process.cpp" />
+    <ClCompile Include="common\spdhelp.cpp" />
     <ClCompile Include="platypus\button_widget.cpp" />
     <ClCompile Include="platypus\common.cpp" />
     <ClCompile Include="platypus\custom_event.cpp" />

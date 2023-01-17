@@ -3,7 +3,7 @@
 #include <QtGui/QWindow>
 
 #include "debughelper.h"
-#include "spdlog/spdlog.h"
+#include "../common/singleton_spdlog.hpp"
 
 GitWndWrap::GitWndWrap() {}
 
@@ -52,7 +52,7 @@ void GitWndWrap::InitWidget() {
   widget_ = QWidget::createWindowContainer(window, nullptr);
 
   ::SetParent(git_wnd_, (HWND)widget_->winId());
-  spdlog::get("platypus")->info("init widget finished");
+spdlog::logInstance().info("init widget finished");
   static int i = 0;
   widget_->setObjectName(QString::number(i++));
 }
