@@ -5,13 +5,11 @@
 
 using string = std::string;
 
-// 1.单例模式
-// 2.提供接口
 namespace spdlog {
 
 class SpdHelper {
  public:
-   explicit SpdHelper(const string &file_name, const string &log_name);
+  explicit SpdHelper(const string &file_name, const string &log_name);
   ~SpdHelper();
 
   template <typename... Args>

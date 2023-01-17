@@ -1,11 +1,13 @@
-#include "Server.h"
+ï»¿#include "Server.h"
 
 #include "../include/head.h"
+#include "spdhelp.h"
+#include "singleton.h"
 
 Server::Server() : m_hMap(NULL), m_mapSize(0) {}
 
 void Server::createShm(const std::string& mapName, size_t size) {
-  //µ÷ÓÃ CreateFileMapping ´´½¨Ò»¸öÄÚ´æÎÄ¼şÓ³Éä¶ÔÏó
+  //è°ƒç”¨ CreateFileMapping åˆ›å»ºä¸€ä¸ªå†…å­˜æ–‡ä»¶æ˜ å°„å¯¹è±¡
   m_hMap =
       ::CreateFileMappingA(INVALID_HANDLE_VALUE,  // handle to file to map
                            NULL,            // optional security attributes
@@ -14,7 +16,7 @@ void Server::createShm(const std::string& mapName, size_t size) {
                            (DWORD)size,            // low-order 32 bits of object size
                            mapName.c_str());  // name of file-mapping object
 
-  if (m_hMap == nullptr)  //´´½¨Ê§°Ü
+  if (m_hMap == nullptr)  //åˆ›å»ºå¤±è´¥
   {
     throw;
   }
@@ -32,11 +34,11 @@ void Server::stop() {
     return;
   memset(pBuffer, 0, m_mapSize);
 
-  //ÉèÖÃÊı¾İÍ·
+  //è®¾ç½®æ•°æ®å¤´
   strncpy_s(header.type, eventType.length() + 1, eventType.c_str(), 20);
   header.size = dataSize;
 
-  //½«Êı¾İ¸´ÖÆµ½¹²ÏíÄÚ´æ(Êı¾İÍ·+ÓĞĞ§Êı¾İ)
+  //å°†æ•°æ®å¤åˆ¶åˆ°å…±äº«å†…å­˜(æ•°æ®å¤´+æœ‰æ•ˆæ•°æ®)
   memmove((PBYTE)pBuffer, &header, sizeof(header));
 
   PBYTE pPayload = (PBYTE)pBuffer + sizeof(header);
@@ -63,18 +65,18 @@ void Server::eventLoop(const std::string& eventName) {
   }
 
   while (true) {
-    WaitForSingleObject(hRcvEvent, INFINITE);  //ÊÕµ½ĞÅºÅ£¬×Ô¶¯ÖØÖÃ
+    WaitForSingleObject(hRcvEvent, INFINITE);  //æ”¶åˆ°ä¿¡å·ï¼Œè‡ªåŠ¨é‡ç½®
     LPVOID pBuffer = ::MapViewOfFile(m_hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
     if (nullptr == pBuffer)
       return;
     Header header;
     memmove_s(&header, sizeof(header), pBuffer, sizeof(header));
 
-    //´¦ÀíÊı¾İ
+    //å¤„ç†æ•°æ®
     _FUNC func = m_handlers.at(header.type);
     bool is_continue = func((PBYTE)pBuffer + sizeof(header), header.size);
 
-    //ÖØĞÂ·â°ü
+    //é‡æ–°å°åŒ…
     memset(pBuffer, 0, sizeof(header));
     memmove((PBYTE)pBuffer, &header, sizeof(header));
 

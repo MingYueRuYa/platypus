@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Windows.h>
 #include <string>
 #include <map>
@@ -7,8 +7,8 @@
 
 class Server
 {
-	typedef std::function<bool(PBYTE pPayload, UINT64& size)> _FUNC;  //¿ÉÒÔ×¢²áµÄÊÂ¼şÀàĞÍ
-	// typedef std::tuple<std::string, HANDLE, _FUNC> _NODE;  //Ã¿¸öÊÂ¼ş½Úµã
+	typedef std::function<bool(PBYTE pPayload, UINT64& size)> _FUNC;  //å¯ä»¥æ³¨å†Œçš„äº‹ä»¶ç±»å‹
+	// typedef std::tuple<std::string, HANDLE, _FUNC> _NODE;  //æ¯ä¸ªäº‹ä»¶èŠ‚ç‚¹
 
 	struct Event
 	{
