@@ -1,4 +1,4 @@
-// clang-format off
+ï»¿// clang-format off
 #include "stdafx.h"
 // clang-format on
 #include "git_register_exec.h"
@@ -13,6 +13,7 @@
 #include <thread>
 
 #include "../3rdparty/json/json.hpp"
+#include "../common/spdhelp.h"
 #include "../git_plugin/git_plugin.h"
 #include "../include/const.h"
 #include "../include/head.h"
@@ -20,19 +21,18 @@
 #include "Server.h"
 #include "pipe_client.h"
 #include "single_process.h"
-#include "spdlog/details/os.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/spdlog.h"
+#include "singleton.h"
 #include "string_utils.hpp"
 
 #define MAX_LOADSTRING 100
+#define SPDLOG CSingleton<spdlog::SpdHelper>::GetInstance()
 
 #ifdef X64
 #pragma comment(lib, "git_plugin_x64.lib")
-#define LOG_NAME "git_plugin_x64"
+#define LOG_NAME "git_register_exec_x64"
 #else
 #pragma comment(lib, "git_plugin.lib")
-#define LOG_NAME "git_plugin"
+#define LOG_NAME "git_register_exec"
 #endif
 
 using std::wstring;
@@ -43,26 +43,23 @@ using json = nlohmann::json;
 #define THREAD_ID DWORD
 #define PROCESS_ID DWORD
 
-// È«¾Ö±äÁ¿:
-HINSTANCE hInst;                      // µ±Ç°ÊµÀı
-TCHAR szTitle[MAX_LOADSTRING];        // ±êÌâÀ¸ÎÄ±¾
-TCHAR szWindowClass[MAX_LOADSTRING];  // Ö÷´°¿ÚÀàÃû
+// å…¨å±€å˜é‡:
+HINSTANCE hInst;                      // å½“å‰å®ä¾‹
+TCHAR szTitle[MAX_LOADSTRING];        // æ ‡é¢˜æ æ–‡æœ¬
+TCHAR szWindowClass[MAX_LOADSTRING];  // ä¸»çª—å£ç±»å
 std::map<PROCESS_ID, CGitPlugin *> g_MapWndAssistant;
 using MapAssistPair = std::pair<PROCESS_ID, CGitPlugin *>;
 Server *g_Server = nullptr;
 std::thread g_ServerThread;
 HWND g_HWND = 0x0;
-std::map<PROCESS_ID, HWND> g_ExcludeWnd;
 
 bool bStopEnum = false;
 std::thread g_EnumProcessThread;
 
-namespace spd = spdlog;
-
 std::map<PROCESS_ID, HWND> g_MapProcessIDHWND;
 using MapPIDHWNDPair = std::pair<PROCESS_ID, HWND>;
 
-// ´Ë´úÂëÄ£¿éÖĞ°üº¬µÄº¯ÊıµÄÇ°ÏòÉùÃ÷:
+// æ­¤ä»£ç æ¨¡å—ä¸­åŒ…å«çš„å‡½æ•°çš„å‰å‘å£°æ˜:
 ATOM MyRegisterClass(HINSTANCE hInstance);
 BOOL InitInstance(HINSTANCE, int);
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -71,23 +68,6 @@ void UnregisterDLL(PROCESS_ID process_id);
 HWND GetWndByProcessID(DWORD dwProcessID);
 void StartServer();
 void EnumProcess(const wstring &exeName);
-
-bool InitLog() {
-  spdlog::flush_every(std::chrono::seconds(1));
-  spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] [tid %t] %v");
-  spdlog::set_level(spdlog::level::info);
-
-  const std::tm &loc_tm = spdlog::details::os::localtime();
-
-  std::string log_file_name =
-      std::format("./log/{}-{}-{}-{}-{}-{}-{}.txt", LOG_NAME,
-                  loc_tm.tm_year + 1900, loc_tm.tm_mon + 1, loc_tm.tm_mday,
-                  loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
-  auto rotating_logger = spdlog::create<spdlog::sinks::basic_file_sink_mt>(
-      LOG_NAME, log_file_name, false);
-  rotating_logger->flush_on(spd::level::err);
-  return true;
-}
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                        _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine,
@@ -98,18 +78,24 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   SingleProcess single_process(L"abc_@winexec_2022");
   if (single_process.isExist()) return -1;
 
-  InitLog();
+  // å®ä¾‹åŒ–
+  const std::tm &loc_tm = spdlog::details::os::localtime();
+  std::string log_file_name =
+      std::format("logs/{}-{}-{}-{}-{}-{}-{}.txt", LOG_NAME,
+                  loc_tm.tm_year + 1900, loc_tm.tm_mon + 1, loc_tm.tm_mday,
+                  loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
+  CSingleton<spdlog::SpdHelper>::Init(log_file_name, LOG_NAME);
 
-  // TODO:  ÔÚ´Ë·ÅÖÃ´úÂë¡£
+  // TODO:  åœ¨æ­¤æ”¾ç½®ä»£ç ã€‚
   MSG msg;
   HACCEL hAccelTable;
 
-  // ³õÊ¼»¯È«¾Ö×Ö·û´®
+  // åˆå§‹åŒ–å…¨å±€å­—ç¬¦ä¸²
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
   LoadString(hInstance, IDC_WINEXEC, szWindowClass, MAX_LOADSTRING);
   MyRegisterClass(hInstance);
 
-  // Ö´ĞĞÓ¦ÓÃ³ÌĞò³õÊ¼»¯:
+  // æ‰§è¡Œåº”ç”¨ç¨‹åºåˆå§‹åŒ–:
   if (!InitInstance(hInstance, nCmdShow)) {
     return FALSE;
   }
@@ -119,7 +105,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
   hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINEXEC));
 
-  // Ö÷ÏûÏ¢Ñ­»·:
+  // ä¸»æ¶ˆæ¯å¾ªç¯:
   while (GetMessage(&msg, NULL, 0, 0)) {
     if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) {
       TranslateMessage(&msg);
@@ -138,9 +124,9 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 }
 
 //
-//  º¯Êı:  MyRegisterClass()
+//  å‡½æ•°:  MyRegisterClass()
 //
-//  Ä¿µÄ:  ×¢²á´°¿ÚÀà¡£
+//  ç›®çš„:  æ³¨å†Œçª—å£ç±»ã€‚
 //
 ATOM MyRegisterClass(HINSTANCE hInstance) {
   WNDCLASSEX wcex;
@@ -163,19 +149,19 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
 }
 
 //
-//   º¯Êı:  InitInstance(HINSTANCE, int)
+//   å‡½æ•°:  InitInstance(HINSTANCE, int)
 //
-//   Ä¿µÄ:  ±£´æÊµÀı¾ä±ú²¢´´½¨Ö÷´°¿Ú
+//   ç›®çš„:  ä¿å­˜å®ä¾‹å¥æŸ„å¹¶åˆ›å»ºä¸»çª—å£
 //
-//   ×¢ÊÍ:
+//   æ³¨é‡Š:
 //
-//        ÔÚ´Ëº¯ÊıÖĞ£¬ÎÒÃÇÔÚÈ«¾Ö±äÁ¿ÖĞ±£´æÊµÀı¾ä±ú²¢
-//        ´´½¨ºÍÏÔÊ¾Ö÷³ÌĞò´°¿Ú¡£
+//        åœ¨æ­¤å‡½æ•°ä¸­ï¼Œæˆ‘ä»¬åœ¨å…¨å±€å˜é‡ä¸­ä¿å­˜å®ä¾‹å¥æŸ„å¹¶
+//        åˆ›å»ºå’Œæ˜¾ç¤ºä¸»ç¨‹åºçª—å£ã€‚
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   HWND hWnd;
 
-  hInst = hInstance;  // ½«ÊµÀı¾ä±ú´æ´¢ÔÚÈ«¾Ö±äÁ¿ÖĞ
+  hInst = hInstance;  // å°†å®ä¾‹å¥æŸ„å­˜å‚¨åœ¨å…¨å±€å˜é‡ä¸­
 
   hWnd =
       CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT,
@@ -193,19 +179,19 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
   wstring wstr = to_wide_string(init_json.dump());
   PipeClient client;
   client.Write(pipe_name, wstr.c_str());
-  spd::get(LOG_NAME)->info(L"{}", wstr);
+  SPDLOG.info(L"{}", wstr);
 
   return TRUE;
 }
 
 //
-//  º¯Êı:  WndProc(HWND, UINT, WPARAM, LPARAM)
+//  å‡½æ•°:  WndProc(HWND, UINT, WPARAM, LPARAM)
 //
-//  Ä¿µÄ:    ´¦ÀíÖ÷´°¿ÚµÄÏûÏ¢¡£
+//  ç›®çš„:    å¤„ç†ä¸»çª—å£çš„æ¶ˆæ¯ã€‚
 //
-//  WM_COMMAND	- ´¦ÀíÓ¦ÓÃ³ÌĞò²Ëµ¥
-//  WM_PAINT	- »æÖÆÖ÷´°¿Ú
-//  WM_DESTROY	- ·¢ËÍÍË³öÏûÏ¢²¢·µ»Ø
+//  WM_COMMAND	- å¤„ç†åº”ç”¨ç¨‹åºèœå•
+//  WM_PAINT	- ç»˜åˆ¶ä¸»çª—å£
+//  WM_DESTROY	- å‘é€é€€å‡ºæ¶ˆæ¯å¹¶è¿”å›
 //
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
@@ -221,7 +207,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       break;
     case WM_PAINT:
       hdc = BeginPaint(hWnd, &ps);
-      // TODO:  ÔÚ´ËÌí¼ÓÈÎÒâ»æÍ¼´úÂë...
+      // TODO:  åœ¨æ­¤æ·»åŠ ä»»æ„ç»˜å›¾ä»£ç ...
       EndPaint(hWnd, &ps);
       break;
     case WM_DESTROY:
@@ -234,7 +220,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       if (g_MapProcessIDHWND.find(process_id) == g_MapProcessIDHWND.end()) {
         HWND wnd = GetWndByProcessID(process_id);
         if (wnd == NULL) {
-          spd::get(LOG_NAME)->error("Get Wnd error.");
+          SPDLOG.error("Get Wnd error.");
         } else {
           g_MapProcessIDHWND[process_id] = wnd;
           RegisterDLL(wnd, process_id);
@@ -249,11 +235,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
 
 void RegisterDLL(HWND targetWnd, PROCESS_ID process_id) {
   if (0 == targetWnd) return;
-  if (g_ExcludeWnd[process_id] == targetWnd) {
-    std::string str = std::format("we don't need this wnd {}", (int)targetWnd);
-    OutputDebugStringA(str.c_str());
-    return;
-  }
   THREAD_ID thread_id = GetWindowThreadProcessId(targetWnd, NULL);
 
   CGitPlugin *assist = new CGitPlugin();
@@ -299,7 +280,7 @@ void Test(PBYTE pPayload, UINT64 size) {}
 
 bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
   if (0 != size) {
-    spd::get(LOG_NAME)->info(L"{}", (wchar_t *)pBuffer);
+    SPDLOG.info(L"{}", (wchar_t *)(pBuffer));
     PipeClient client;
     client.Write(pipe_name, (wchar_t *)pBuffer);
   }
@@ -308,11 +289,10 @@ bool FindWndTitle(PBYTE pBuffer, UINT64 &size) {
 
 bool WndExit(PBYTE pBuffer, UINT64 &size) {
   if (0 == size) {
-    spd::get(LOG_NAME)->warn("get buffer size is 0");
+    SPDLOG.warn("get buffer size is 0");
     return false;
   }
-  wstring log_msg = wstring(L"process exited ,json:") + (wchar_t *)(pBuffer);
-  spd::get(LOG_NAME)->info(L"{}", log_msg);
+  SPDLOG.info(L"process exited ,json:{}", (wchar_t *)(pBuffer));
   wstring wstr_buff = (wchar_t *)pBuffer;
   std::string temp_str = to_utf8_string(wstr_buff);
   auto jsonObj = json::parse(temp_str);
@@ -328,10 +308,10 @@ bool Stop(PBYTE pBuffer, UINT64 &size) { return false; }
 
 bool TransferData(PBYTE pBuffer, UINT64 &size) {
   if (0 == size) {
-    OutputDebugStringA("receive size equal 0");
+    SPDLOG.error("receive size equal 0");
     return false;
   }
-  spd::get(LOG_NAME)->info(L"{}", (wchar_t *)pBuffer);
+  SPDLOG.info(L"{}", (wchar_t *)pBuffer);
   PipeClient client;
   client.Write(pipe_name, (wchar_t *)pBuffer);
   return true;

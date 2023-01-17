@@ -172,7 +172,9 @@
     <ClInclude Include="..\common\Client.h" />
     <ClInclude Include="..\common\pipe_client.h" />
     <ClInclude Include="..\common\Server.h" />
+    <ClInclude Include="..\common\singleton.h" />
     <ClInclude Include="..\common\single_process.h" />
+    <ClInclude Include="..\common\spdhelp.h" />
     <ClInclude Include="git_register_exec.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -196,6 +198,7 @@
     <ClCompile Include="..\common\single_process.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\common\spdhelp.cpp" />
     <ClCompile Include="git_register_exec.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
