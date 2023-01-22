@@ -81,11 +81,13 @@ If you are interested in the rest, just look at the code yourself.。😄，hava
 
 - [ ] 2、Optimize the keyboard filtering algorithm
 
-- [ ] 3、Sometimes can't get mintty window
+- [x] 3、Sometimes can't get mintty window
 
 - [ ] 4、IPC stability needs to be strengthened
 
 - [ ] 5、The tab window needs refactoring
+
+- [ ] 6、Put the wrong message in the message queue for processing
 
 If you are interested and have ideas, I hope you can join us.
 
