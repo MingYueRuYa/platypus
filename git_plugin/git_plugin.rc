@@ -27,7 +27,7 @@ LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
 
 1 TEXTINCLUDE 
 BEGIN
-    "resource.h\0"
+    "resource2.h\0"
 END
 
 2 TEXTINCLUDE 
@@ -51,8 +51,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,95
- PRODUCTVERSION 1,0,0,95
+ FILEVERSION 1,0,0,109
+ PRODUCTVERSION 1,0,0,109
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -67,14 +67,14 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "CompanyName", "TODO: <Company name>"
-            VALUE "FileDescription", "TODO: <File description>"
-            VALUE "FileVersion", "1.0.0.95"
-            VALUE "InternalName", "git_plug.dll"
+            VALUE "CompanyName", "shixiong.Liu"
+            VALUE "FileDescription", "git plugin"
+            VALUE "FileVersion", "1.0.0.109"
+            VALUE "InternalName", "git_plugin.dll"
             VALUE "LegalCopyright", "Copyright (C) 2023"
-            VALUE "OriginalFilename", "git_plug.dll"
-            VALUE "ProductName", "TODO: <Product name>"
-            VALUE "ProductVersion", "1.0.0.95"
+            VALUE "OriginalFilename", "git_plugin.dll"
+            VALUE "ProductName", "git plugin"
+            VALUE "ProductVersion", "1.0.0.109"
         END
     END
     BLOCK "VarFileInfo"

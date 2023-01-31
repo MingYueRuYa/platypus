@@ -255,6 +255,7 @@
     <ClInclude Include="platypus\debughelper.h" />
     <ClInclude Include="platypus\draw_helper.h" />
     <QtMoc Include="platypus\helpdialog.h" />
+    <ClInclude Include="platypus\feature.h" />
     <ClInclude Include="platypus\NcFrameLessHelper.h" />
     <ClInclude Include="platypus\noncopyable.h" />
     <ClInclude Include="platypus\qt_ext_button.h" />

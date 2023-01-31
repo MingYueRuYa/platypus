@@ -119,6 +119,9 @@
     <ClInclude Include="common\singleton_spdlog.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="platypus\feature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platypus\button_widget.cpp">
