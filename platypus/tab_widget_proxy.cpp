@@ -186,4 +186,6 @@ void TabWidgetProxy::connectSignal() {
           SLOT(OnTabBarClicked(int)));
   connect(&(ext_tab_widget_->getSignal()), SIGNAL(helpClicked()), this,
           SLOT(OnHelpClicked()));
+  connect(&(ext_tab_widget_->getSignal()), SIGNAL(tabBarMouseRelease(QMouseEvent *)), &signal_,
+          SIGNAL(tabBarMouseRelease(QMouseEvent *)));
 }

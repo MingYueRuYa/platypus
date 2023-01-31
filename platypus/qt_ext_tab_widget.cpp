@@ -396,8 +396,9 @@ void QtExtTabWidget::setupUI() {
           SLOT(OnStartDrag(int)));
   connect(&(tab_bar_->getSignal()), SIGNAL(signalEndDrag()), this,
           SLOT(createDraggedNewWindow()));
-  connect(&(tab_bar_->getSignal()), SIGNAL(mouseRelease(QMouseEvent *)), &signal_,
-          SIGNAL(tabBarMouseRelease(QMouseEvent *)));
+  connect(&(tab_bar_->getSignal()), SIGNAL(mouseRelease(QMouseEvent *)),
+          &signal_,
+        SIGNAL(tabBarMouseRelease(QMouseEvent *)));
   connect(this, SIGNAL(tabBarClicked(int)), &signal_,
           SIGNAL(tabBarClicked(int)));
 }

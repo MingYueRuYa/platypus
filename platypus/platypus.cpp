@@ -101,6 +101,9 @@ bool Platypus::nativeEvent(const QByteArray &eventType, void *message,
                            long *result) {
   MSG *msg = (MSG *)message;
   switch (msg->message) {
+    case WM_SETFOCUS:
+    setGitFocus();
+    break;
     default:
       break;
   }
@@ -191,7 +194,6 @@ void Platypus::startGitWnd() {
   static QString git_dir = Common::GetInstallGitPath();
 
   if (git_dir.isEmpty()) {
-    // spdlog::get(LOG_NAME)->error("Not find git install path");
     spdlog::logInstance().error("Not find git install path");
     QMessageBox::critical(this, tr("Error"), tr("Not find git install path"),
                           QMessageBox::Close);
@@ -210,10 +212,8 @@ void Platypus::startGitWnd() {
 
   if (!Common::StartProcess(mintty_full_path, QString::fromStdWString(args),
                             SW_HIDE)) {
-    // spdlog::get(LOG_NAME)->error("Create git Process failed");
     spdlog::logInstance().error("Create git Process failed");
   } else {
-    // spdlog::get(LOG_NAME)->info("Create git Process finished");
     spdlog::logInstance().info("Create git Process finished");
   }
 }
@@ -231,7 +231,6 @@ void Platypus::exitWnd(const QString &data) {
   HWND git_hwnd = (HWND)exit_json.value("HWND", 0);
   QWidget *widget = GitWndHelperInstance.GetWidget(git_hwnd);
   if (nullptr == widget) {
-    // spdlog::get(LOG_NAME)->error("Not find widget");
     spdlog::logInstance().error("Not find widget");
     return;
   }
@@ -241,7 +240,6 @@ void Platypus::exitWnd(const QString &data) {
   ui->tabWidgetProxy->tabWidget()->setNextCurrentIndex(index);
   QTimer::singleShot(100, this, [this] { setGitFocus(); });
   GitWndHelperInstance.Delete(widget);
-  //   spdlog::get(LOG_NAME)->info("receive:git window exited message");
   spdlog::logInstance().info("receive:git window exited message");
 }
 
@@ -257,8 +255,6 @@ void Platypus::updateTitle(const QString &data) {
                                               QString::fromStdString(title));
   ui->tabWidgetProxy->tabWidget()->setTabToolTip(index,
                                                  QString::fromStdString(title));
-  //   spdlog::get(LOG_NAME)->info(str_json_data);
-
   spdlog::logInstance().info(str_json_data);
 }
 
@@ -339,7 +335,6 @@ void Platypus::OnCloseTab(int index) {
   }
   QTimer::singleShot(100, this, [this] { setGitFocus(); });
   ui->tabWidgetProxy->tabWidget()->setNextCurrentIndex(index);
-  //   spdlog::get(LOG_NAME)->info("Close git window");
   spdlog::logInstance().info("Close git window");
 }
 
@@ -366,4 +361,6 @@ void Platypus::OnHelpClicked() {
   dialog.exec();
 }
 
-void Platypus::OnTabBarMouseRelease(QMouseEvent *) { setGitFocus(); }
+void Platypus::OnTabBarMouseRelease(QMouseEvent *) { 
+    setGitFocus(); 
+}
