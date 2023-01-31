@@ -174,7 +174,7 @@
     <ClInclude Include="..\common\Server.h" />
     <ClInclude Include="..\common\singleton.h" />
     <ClInclude Include="..\common\single_process.h" />
-    <ClInclude Include="..\common\spdhelp.h" />
+    <ClInclude Include="..\common\spdhelper.h" />
     <ClInclude Include="git_register_exec.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -199,7 +199,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\common\spdhelp.cpp">
+    <ClCompile Include="..\common\spdhelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="git_register_exec.cpp" />

@@ -13,7 +13,7 @@
 #include <thread>
 
 #include "../3rdparty/json/json.hpp"
-#include "../common/spdhelp.h"
+#include "../common/spdhelper.h"
 #include "../git_plugin/git_plugin.h"
 #include "../include/const.h"
 #include "../include/head.h"

@@ -1,7 +1,7 @@
 ﻿#include "Server.h"
 
 #include "../include/head.h"
-#include "spdhelp.h"
+#include "spdhelper.h"
 #include "singleton.h"
 
 Server::Server() : m_hMap(NULL), m_mapSize(0) {}

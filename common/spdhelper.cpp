@@ -1,4 +1,4 @@
-﻿#include "spdhelp.h"
+﻿#include "spdhelper.h"
 
 #include "../3rdparty/spdlog/include/spdlog/logger.h"
 #include "../3rdparty/spdlog/include/spdlog/sinks/basic_file_sink.h"

@@ -45,7 +45,7 @@
     <ClInclude Include="git_register_exec.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\spdhelp.h">
+    <ClInclude Include="..\common\spdhelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\common\singleton.h">
@@ -71,7 +71,7 @@
     <ClCompile Include="git_register_exec.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\spdhelp.cpp">
+    <ClCompile Include="..\common\spdhelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

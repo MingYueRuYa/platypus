@@ -1,4 +1,4 @@
-// clang-format off
+﻿// clang-format off
 #include "stdafx.h"
 // clang-format on
 #include "git_plugin.h"
@@ -15,7 +15,7 @@
 #include "../include/head.h"
 #include "Client.h"
 #include "singleton.h"
-#include "spdhelp.h"
+#include "spdhelper.h"
 #include "string_utils.hpp"
 
 using std::string;

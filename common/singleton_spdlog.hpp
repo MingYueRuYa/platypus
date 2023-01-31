@@ -2,7 +2,7 @@
 #define singleton_spdlog_h
 
 #include "singleton.h"
-#include "spdhelp.h"
+#include "spdhelper.h"
 
 namespace spdlog {
     template <typename... Arags>
