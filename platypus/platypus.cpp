@@ -300,9 +300,6 @@ void Platypus::moveTabWigetIndex(bool forward) {
 
 bool Platypus::acceptShortcut(int vkcode) const {
   if (!this->isVisible()) return false;
-  if ((int)Shortcut::TAB_CTRL == vkcode ||
-      (int)Shortcut::TAB_CTRL_SHIFT == vkcode)
-    return true;
   HWND hwnd = ::GetFocus();
   if (nullptr != GitWndHelperInstance.GetWidget(::GetFocus()) ||
       (HWND)this->winId() == hwnd)
