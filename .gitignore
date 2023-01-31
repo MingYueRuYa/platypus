@@ -14,6 +14,7 @@ build/*
 *.ipdb
 *.opensdf
 *.sdf
+*.aps
 bin_win32
 ipch
 x64
