@@ -105,7 +105,7 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
     CSingleton<spdlog::SpdHelper>::Init(log_file_name, kLOG_NANE);
     wchar_t title[MAX_PATH] = {0};
     GetWindowTextW(msg->hwnd, title, MAX_PATH);
-       SPDLOG.info(L"{}", title);
+    SPDLOG.info(L"{}", title);
     if (!ContainsSpecTitle(title)) {
       g_wndHwnd = msg->hwnd;
       Send(title, msg->hwnd);
@@ -132,17 +132,6 @@ LRESULT WINAPI CallWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
         }
       }
     }
-  } else if (WM_CLOSE == msg->message || WM_QUIT == msg->message) {
-    if (g_wndHwnd == msg->hwnd) {
-      SPDLOG.info("quit wnd");
-      Quit(GetCurrentProcessId(), msg->hwnd);
-    } else {
-      SPDLOG.info("not should quit wnd");
-    }
-  } else if (WM_DESTROY == msg->message) {
-    if (g_wndHwnd != msg->hwnd) {
-      SetForegroundWnd(g_wndHwnd);
-    }
   }
   return (CallNextHookEx(g_hHook, nCode, wParam, lParam));
 }
@@ -158,7 +147,7 @@ bool CGitPlugin::Register(HWND targetWnd, DWORD dwThreadId) {
     g_hHook =
         SetWindowsHookEx(WH_CALLWNDPROC, CallWndProc, g_hInstDll, dwThreadId);
     bOk = (g_hHook != NULL);
-    //notice: we can't use spdlog, if we used we must init spdlog
+    // notice: we can't use spdlog, if we used we must init spdlog
     string msg = std::format(
         "{}, {}",
         bOk ? "register successuful thread id:" : "register error thread id:",
@@ -173,9 +162,12 @@ bool CGitPlugin::Register(HWND targetWnd, DWORD dwThreadId) {
 }
 
 bool CGitPlugin::Unregister() {
-  if (NULL == g_hHook) return true;
-  bool ok = UnhookWindowsHookEx(g_hHook);
-  g_hHook = NULL;
-  OutputDebugStringA("unregister hook.");
-  return ok;
+// TODO: if uninstalling here will cause the second mintty
+// (in order) to not receive the exit message when exiting
+//   if (NULL == g_hHook) return true;
+//   bool ok = UnhookWindowsHookEx(g_hHook);
+//   g_hHook = NULL;
+//   OutputDebugStringA("unregister hook.");
+//   return ok;
+    return true;
 }

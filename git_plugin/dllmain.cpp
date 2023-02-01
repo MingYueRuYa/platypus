@@ -1,6 +1,5 @@
-// dllmain.cpp : ∂®“Â DLL ”¶”√≥Ã–Úµƒ»Îø⁄µ„°£
+Ôªø// dllmain.cpp : ÂÆö‰πâ DLL Â∫îÁî®Á®ãÂ∫èÁöÑÂÖ•Âè£ÁÇπ„ÄÇ
 #include "stdafx.h"
-
 // Nonshared variables
 HINSTANCE g_hInstDll = NULL;
 
@@ -9,8 +8,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call,
   switch (ul_reason_for_call) {
     case DLL_PROCESS_ATTACH:
       g_hInstDll = hModule;
+      break;
     case DLL_THREAD_ATTACH:
+      break;
     case DLL_THREAD_DETACH:
+      break;
     case DLL_PROCESS_DETACH:
       break;
   }
