@@ -19,9 +19,11 @@
 #include "debughelper.h"
 #include "draw_helper.h"
 #include "gitwndhelper.h"
+#include "global_config.h"
 #include "helpdialog.h"
 #include "hook_keyboard.h"
 #include "json.hpp"
+#include "process_utils.hpp"
 #include "round_shadow_helper.h"
 #include "spdlog/spdlog.h"
 #include "string_utils.hpp"
@@ -48,6 +50,7 @@ Platypus::~Platypus() {
   delete ui;
   delete frame_less_helper_;
   if (0 != win_exe_hwnd_) ::PostMessageA(win_exe_hwnd_, WM_CLOSE, 0, 0);
+  exitGitRegExec();
 }
 
 void Platypus::ReceiveMsg(const wchar_t *json_str) {
@@ -102,8 +105,8 @@ bool Platypus::nativeEvent(const QByteArray &eventType, void *message,
   MSG *msg = (MSG *)message;
   switch (msg->message) {
     case WM_SETFOCUS:
-    setGitFocus();
-    break;
+      setGitFocus();
+      break;
     default:
       break;
   }
@@ -313,6 +316,17 @@ void Platypus::setForeGroundWnd(const QString &data) {
   GitWndHelperInstance.SetForegroundWnd(git_hwnd);
 }
 
+void Platypus::exitGitRegExec() {
+  while (1) {
+    if (!ProcessUtils::FindProcess(GIT_REGISTER_EXE_X64_W)) {
+      break;
+    }
+    ProcessUtils::KillProcess(GIT_REGISTER_EXE_X64_W, true);
+    spdlog::logInstance().info(L"kill process, {}", GIT_REGISTER_EXE_X64_W);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  }
+}
+
 void Platypus::OnTabInserted(int index) {
   QPushButton *button = new QPushButton();
   button->setStyleSheet(
@@ -358,6 +372,4 @@ void Platypus::OnHelpClicked() {
   dialog.exec();
 }
 
-void Platypus::OnTabBarMouseRelease(QMouseEvent *) { 
-    setGitFocus(); 
-}
+void Platypus::OnTabBarMouseRelease(QMouseEvent *) { setGitFocus(); }

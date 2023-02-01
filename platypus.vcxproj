@@ -240,6 +240,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\global_config.h" />
     <ClInclude Include="common\hook_keyboard.h" />
     <ClInclude Include="common\pipe_server.h" />
     <ClInclude Include="common\process_utils.hpp" />

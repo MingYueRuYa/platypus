@@ -48,6 +48,7 @@ class Platypus : public QWidget {
   void moveTabWigetIndex(bool forward);
   bool acceptShortcut(int vkcode) const;
   void setForeGroundWnd(const QString &data);
+  void exitGitRegExec();
 
  Q_SIGNALS:
 

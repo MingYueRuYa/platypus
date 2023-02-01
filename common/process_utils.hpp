@@ -1,6 +1,7 @@
-#ifndef process_utils_h
+ï»¿#ifndef process_utils_h
 #define process_utils_h
 
+#include <Tlhelp32.h>
 #include <windows.h>
 
 class ProcessUtils {
@@ -11,7 +12,7 @@ class ProcessUtils {
   ProcessUtils() {}
   ~ProcessUtils() {}
 
-  BOOL GetOSVerIs64Bit() {
+  static BOOL GetOSVerIs64Bit() {
     BOOL bRet = FALSE;
     SYSTEM_INFO si;
     typedef VOID(__stdcall * GETNATIVESYSTEMINFO)(LPSYSTEM_INFO lpSystemInfo);
@@ -30,8 +31,10 @@ class ProcessUtils {
     return bRet;
   }
 
-  // ÅÐ¶Ï½ø³ÌÊÇ32Î»»¹ÊÇ64Î»
-  ProcessType GetProcessIsWOW64(HANDLE hProcess) {
+  /// @brief Determine whether the process is 32-bit or 64-bit
+  /// @param hProcess Process handle
+  /// @return ProcessType:Process_32 or Process_64
+  static ProcessType GetProcessIsWOW64(HANDLE hProcess) {
     int nRet = -1;
     ProcessType process_type = ProcessType::Unknown;
 
@@ -41,7 +44,7 @@ class ProcessUtils {
     BOOL bRet;
     DWORD nError;
     fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(
-        GetModuleHandle(_T("kernel32"), _T("IsWow64Process"));
+        GetModuleHandle(L"kernel32"), "IsWow64Process");
     if (NULL != fnIsWow64Process) {
       bRet = fnIsWow64Process(hProcess, &bIsWow64);
       if (bRet == 0) {
@@ -58,12 +61,59 @@ class ProcessUtils {
           }
         } else {
           // system is 32bit
-            process_type = ProcessType::Process_32;
+          process_type = ProcessType::Process_32;
         }
       }
     }
 
     return process_type;
+  }
+
+  /// @brief Kill process by application name
+  /// @param appName App name like: mspaint.exe
+  /// @param all Whether to kill all process
+  static void KillProcess(const wchar_t *appName, bool all) {
+    HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+    PROCESSENTRY32W pEntry;
+    pEntry.dwSize = sizeof(pEntry);
+    BOOL hRes = Process32FirstW(hSnapShot, &pEntry);
+    while (hRes) {
+      if (wcscmp(pEntry.szExeFile, appName) == 0) {
+        HANDLE hProcess =
+            OpenProcess(PROCESS_TERMINATE, 0, (DWORD)pEntry.th32ProcessID);
+        if (hProcess != NULL) {
+          TerminateProcess(hProcess, 0x09);
+          CloseHandle(hProcess);
+          if (!all) break;
+        }
+      }
+      hRes = Process32NextW(hSnapShot, &pEntry);
+    }
+    CloseHandle(hSnapShot);
+  }
+
+  /// @brief Find process by App name
+  /// @param appName App name like: mspaint.exe
+  /// @return true or false
+  static bool FindProcess(const wchar_t *appName) {
+    HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+    PROCESSENTRY32W pEntry;
+    pEntry.dwSize = sizeof(pEntry);
+    BOOL hRes = Process32FirstW(hSnapShot, &pEntry);
+    bool find = false;
+    while (hRes) {
+      if (wcscmp(pEntry.szExeFile, appName) == 0) {
+        HANDLE hProcess =
+            OpenProcess(PROCESS_TERMINATE, 0, (DWORD)pEntry.th32ProcessID);
+        if (hProcess != NULL) {
+          find = true;
+          break;
+        }
+      }
+      hRes = Process32NextW(hSnapShot, &pEntry);
+    }
+    CloseHandle(hSnapShot);
+    return find;
   }
 };
 
