@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "git_plugin", "git_plugin\gi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "platypus", "platypus.vcxproj", "{736B32AA-EB1D-443D-B09B-EC7E03F931B7}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dolphin", "dolphin.vcxproj", "{79BBAF08-4124-49AD-9421-C83A988434D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -44,12 +46,20 @@ Global
 		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|Win32.Build.0 = Release|Win32
 		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|x64.ActiveCfg = Release|x64
 		{736B32AA-EB1D-443D-B09B-EC7E03F931B7}.Release|x64.Build.0 = Release|x64
+		{79BBAF08-4124-49AD-9421-C83A988434D1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{79BBAF08-4124-49AD-9421-C83A988434D1}.Debug|Win32.Build.0 = Debug|Win32
+		{79BBAF08-4124-49AD-9421-C83A988434D1}.Debug|x64.ActiveCfg = Debug|x64
+		{79BBAF08-4124-49AD-9421-C83A988434D1}.Debug|x64.Build.0 = Debug|x64
+		{79BBAF08-4124-49AD-9421-C83A988434D1}.Release|Win32.ActiveCfg = Release|Win32
+		{79BBAF08-4124-49AD-9421-C83A988434D1}.Release|Win32.Build.0 = Release|Win32
+		{79BBAF08-4124-49AD-9421-C83A988434D1}.Release|x64.ActiveCfg = Release|x64
+		{79BBAF08-4124-49AD-9421-C83A988434D1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D6AC012E-DE50-4C70-A3BE-63DB0EBB108F}
 		Qt5Version = f_5.15.2
+		SolutionGuid = {D6AC012E-DE50-4C70-A3BE-63DB0EBB108F}
 	EndGlobalSection
 EndGlobal
