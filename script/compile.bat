@@ -21,9 +21,9 @@ FOR /F "usebackq delims=" %%i in (`!VsWhereCmdLine!`) DO (
 
 
 :FOUND
-msbuild ../platypus.vcxproj -property:Configuration=Release;Platform=x86
-msbuild ../git_plugin/git_plugin.vcxproj -property:Configuration=Release;Platform=x64
-msbuild ../git_register_exec/git_register_exec.vcxproj -property:Configuration=Release;Platform=x64
+msbuild ../platypus.vcxproj -property:Configuration=Release;Platform=x86 -t:rebuild
+msbuild ../git_plugin/git_plugin.vcxproj -property:Configuration=Release;Platform=x64 -t:rebuild
+msbuild ../git_register_exec/git_register_exec.vcxproj -property:Configuration=Release;Platform=x64 -t:rebuild
 exit /b 0
 
 REM msbuild ./git_register_exec/git_register_exec.vcxproj -property:Configuration=Release;Platform=x64;CustomMacros=QTDESIGNER
