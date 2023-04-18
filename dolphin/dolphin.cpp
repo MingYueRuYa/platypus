@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <string>
-#include <ifstream>
+#include <fstream>
 
 #include "PEVersionInfo.h"
 
@@ -22,11 +22,11 @@ int main(int argc, char *argv[]) {
         path = argv[1];
 
     std::ifstream ifs;
-    ifs.open(path, ios::in);
-    if (!isf.isopen()) {
+    ifs.open(path, std::ios::in);
+    if (!ifs.is_open()) {
         std::cout << "Open file failed." << std::endl;
         return -1;
     }
-    ifs.readAll();
+    // ifs.rad();
     return 0; 
 }
