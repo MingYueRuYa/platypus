@@ -79,7 +79,7 @@ If you are interested in the rest, just look at the code yourself.。😄，hava
 
 - [ ] 1、Need to support extended commands
 
-- [ ] 2、Optimize the keyboard filtering algorithm
+- [x] 2、Optimize the keyboard filtering algorithm
 
 - [x] 3、Sometimes can't get mintty window
 
