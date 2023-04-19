@@ -39,6 +39,7 @@ class Platypus : public QWidget {
  private:
   void setupUI();
   void initSig();
+  void initShortcut();
   bool filterTabBarEvent(QObject *obj, QEvent *event);
   void startGitWnd();
   void setGitFocus();

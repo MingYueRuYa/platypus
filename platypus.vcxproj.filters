@@ -28,6 +28,12 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Header Files\global_short_cut_h">
+      <UniqueIdentifier>{a4cc8367-1d0a-4539-bd07-91706a9f7cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\global_short_cut_cpp">
+      <UniqueIdentifier>{cf7a8dc4-e7ca-4462-99ce-9284dd80f22d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platypus.rc" />
@@ -125,6 +131,15 @@
     <ClInclude Include="common\global_config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="3rdparty\qxtglobalshortcut5\gui\qxtglobalshortcut_p.h">
+      <Filter>Header Files\global_short_cut_h</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\qxtglobalshortcut5\gui\qxtwindowsystem.h">
+      <Filter>Header Files\global_short_cut_h</Filter>
+    </ClInclude>
+    <ClInclude Include="3rdparty\qxtglobalshortcut5\core\qxtglobal.h">
+      <Filter>Header Files\global_short_cut_h</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platypus\button_widget.cpp">
@@ -205,6 +220,21 @@
     <ClCompile Include="common\spdhelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="3rdparty\qxtglobalshortcut5\gui\qxtglobalshortcut.cpp">
+      <Filter>Source Files\global_short_cut_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdparty\qxtglobalshortcut5\gui\qxtglobalshortcut_win.cpp">
+      <Filter>Source Files\global_short_cut_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdparty\qxtglobalshortcut5\gui\qxtwindowsystem.cpp">
+      <Filter>Source Files\global_short_cut_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdparty\qxtglobalshortcut5\gui\qxtwindowsystem_win.cpp">
+      <Filter>Source Files\global_short_cut_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="3rdparty\qxtglobalshortcut5\core\qxtglobal.cpp">
+      <Filter>Source Files\global_short_cut_cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="platypus\button_widget.h">
@@ -242,6 +272,9 @@
     </QtMoc>
     <QtMoc Include="platypus\helpdialog.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="3rdparty\qxtglobalshortcut5\gui\qxtglobalshortcut.h">
+      <Filter>Header Files\global_short_cut_h</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

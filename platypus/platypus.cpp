@@ -30,6 +30,7 @@
 #include "tab_bar_draw_helper.h"
 #include "ui_platypus.h"
 #include "weak_call_back.hpp"
+#include "qxtglobalshortcut.h"
 
 const int kLAYOUT_ITEM_WIDTH = 30;
 
@@ -125,7 +126,7 @@ void Platypus::customEvent(QEvent *event) {
       setGitFocus();
       break;
     case (int)CusEventType::ShortCut:
-      getShortcut(custom->GetData());
+      // getShortcut(custom->GetData());
       break;
     case (int)CusEventType::SetForeground:
       setForeGroundWnd(custom->GetData());
@@ -147,6 +148,7 @@ void Platypus::setupUI() {
   frame_less_helper_->activeOnWithChildWidget(this,
                                               ui->tabWidgetProxy->tabBar());
   initSig();
+  initShortcut();
   ui->tabWidgetProxy->updateDrawHelp(new TabBarDrawHelper());
   QTimer::singleShot(100, [this]() { this->startGitWnd(); });
 }
@@ -175,6 +177,33 @@ void Platypus::initSig() {
   connect(&(ui->tabWidgetProxy->getSignal()),
           SIGNAL(tabBarMouseRelease(QMouseEvent *)), this,
           SLOT(OnTabBarMouseRelease(QMouseEvent *)));
+}
+
+void Platypus::initShortcut() {
+  QxtGlobalShortcut *shortcut = new QxtGlobalShortcut(this);
+  shortcut->setShortcut(QKeySequence("CTRL+TAB"));
+  connect(shortcut, &QxtGlobalShortcut::activated,
+          [=]() { moveTabWigetIndex(false); });
+
+  shortcut = new QxtGlobalShortcut(this);
+  shortcut->setShortcut(QKeySequence("CTRL+SHIFT+TAB"));
+  connect(shortcut, &QxtGlobalShortcut::activated,
+          [=]() { moveTabWigetIndex(true); });
+
+  shortcut = new QxtGlobalShortcut(this);
+  shortcut->setShortcut(QKeySequence("SHIFT+CTRL+A"));
+  connect(shortcut, &QxtGlobalShortcut::activated,
+          [=]() { startGitWnd(); });
+
+  shortcut = new QxtGlobalShortcut(this);
+  shortcut->setShortcut(QKeySequence("SHIFT+CTRL+W"));
+  connect(shortcut, &QxtGlobalShortcut::activated,
+          [=]() { OnCloseTab(ui->tabWidgetProxy->tabWidget()->currentIndex()); });
+
+  shortcut = new QxtGlobalShortcut(this);
+  shortcut->setShortcut(QKeySequence("ALT+F11"));
+  connect(shortcut, &QxtGlobalShortcut::activated,
+          [=]() {ui->tabWidgetProxy->maxOrRestore();});
 }
 
 void Platypus::OnAddWnd(HWND git_wnd) {
