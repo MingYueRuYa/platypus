@@ -8,7 +8,6 @@
 #include "common.h"
 #include "debughelper.h"
 #include "gitwndhelper.h"
-#include "hook_keyboard.h"
 #include "include/const.h"
 #include "pipe_server.h"
 #include "platypus.h"
@@ -59,17 +58,10 @@ int main(int argc, char *argv[]) {
                   loc_tm.tm_hour, loc_tm.tm_min, loc_tm.tm_sec);
   spdlog::InitLog(log_file_name, LOG_NAME);
 
-  // It needs to be place here, otherwise the registration will fail
-  // errro code: 0x5
-  MyHook::Instance().start(true);
-
   Platypus mainwindow;
   mainwindow.show();
   std::thread g_ServerThread = std::thread(StartServer, &mainwindow);
   StartGitRegisterExec();
-
-  MyHook::Instance().setNotifyCallBack(std::bind(
-      &Platypus::ReceiveShortcut, &mainwindow, std::placeholders::_1));
 
   GitWndHelperInstance;
   GitWndHelperInstance.ConnectNotify(&mainwindow, SLOT(OnAddWnd(HWND)));

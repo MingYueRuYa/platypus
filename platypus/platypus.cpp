@@ -181,29 +181,29 @@ void Platypus::initSig() {
 
 void Platypus::initShortcut() {
   QxtGlobalShortcut *shortcut = new QxtGlobalShortcut(this);
-  shortcut->setShortcut(QKeySequence("CTRL+TAB"));
+  shortcut->setShortcut(QKeySequence("ALT+1"));
   connect(shortcut, &QxtGlobalShortcut::activated,
           [=]() { moveTabWigetIndex(false); });
 
   shortcut = new QxtGlobalShortcut(this);
-  shortcut->setShortcut(QKeySequence("CTRL+SHIFT+TAB"));
+  shortcut->setShortcut(QKeySequence("ALT+2"));
   connect(shortcut, &QxtGlobalShortcut::activated,
           [=]() { moveTabWigetIndex(true); });
 
   shortcut = new QxtGlobalShortcut(this);
   shortcut->setShortcut(QKeySequence("SHIFT+CTRL+A"));
-  connect(shortcut, &QxtGlobalShortcut::activated,
-          [=]() { startGitWnd(); });
+  connect(shortcut, &QxtGlobalShortcut::activated, [=]() { startGitWnd(); });
 
   shortcut = new QxtGlobalShortcut(this);
   shortcut->setShortcut(QKeySequence("SHIFT+CTRL+W"));
-  connect(shortcut, &QxtGlobalShortcut::activated,
-          [=]() { OnCloseTab(ui->tabWidgetProxy->tabWidget()->currentIndex()); });
+  connect(shortcut, &QxtGlobalShortcut::activated, [=]() {
+    OnCloseTab(ui->tabWidgetProxy->tabWidget()->currentIndex());
+  });
 
   shortcut = new QxtGlobalShortcut(this);
   shortcut->setShortcut(QKeySequence("ALT+F11"));
   connect(shortcut, &QxtGlobalShortcut::activated,
-          [=]() {ui->tabWidgetProxy->maxOrRestore();});
+          [=]() { ui->tabWidgetProxy->maxOrRestore(); });
 }
 
 void Platypus::OnAddWnd(HWND git_wnd) {

@@ -254,7 +254,6 @@
     <ClInclude Include="3rdparty\qxtglobalshortcut5\gui\qxtglobalshortcut_p.h" />
     <ClInclude Include="3rdparty\qxtglobalshortcut5\gui\qxtwindowsystem.h" />
     <ClInclude Include="common\global_config.h" />
-    <ClInclude Include="common\hook_keyboard.h" />
     <ClInclude Include="common\pipe_server.h" />
     <ClInclude Include="common\process_utils.hpp" />
     <ClInclude Include="common\Server.h" />
@@ -300,7 +299,6 @@
     <ClCompile Include="3rdparty\qxtglobalshortcut5\gui\qxtglobalshortcut_win.cpp" />
     <ClCompile Include="3rdparty\qxtglobalshortcut5\gui\qxtwindowsystem.cpp" />
     <ClCompile Include="3rdparty\qxtglobalshortcut5\gui\qxtwindowsystem_win.cpp" />
-    <ClCompile Include="common\hook_keyboard.cpp" />
     <ClCompile Include="common\pipe_server.cpp" />
     <ClCompile Include="common\Server.cpp" />
     <ClCompile Include="common\single_process.cpp" />

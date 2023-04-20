@@ -113,9 +113,6 @@
     <ClInclude Include="common\pipe_server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="common\hook_keyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="common\spdhelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -212,9 +209,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="platypus\helpdialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="common\hook_keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common\spdhelper.cpp">
