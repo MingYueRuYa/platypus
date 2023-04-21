@@ -264,6 +264,7 @@
     <ClInclude Include="platypus\base_tab_bar_draw_helper.h" />
     <ClInclude Include="platypus\common.h" />
     <ClInclude Include="platypus\common_ui_define.h" />
+    <ClInclude Include="platypus\config_manager.h" />
     <ClInclude Include="platypus\custom_event.h" />
     <ClInclude Include="platypus\debughelper.h" />
     <ClInclude Include="platypus\draw_helper.h" />
@@ -305,6 +306,7 @@
     <ClCompile Include="common\spdhelper.cpp" />
     <ClCompile Include="platypus\button_widget.cpp" />
     <ClCompile Include="platypus\common.cpp" />
+    <ClCompile Include="platypus\config_manager.cpp" />
     <ClCompile Include="platypus\custom_event.cpp" />
     <ClCompile Include="platypus\debughelper.cpp" />
     <ClCompile Include="platypus\draw_helper.cpp" />

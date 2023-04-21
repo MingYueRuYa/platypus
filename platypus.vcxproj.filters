@@ -137,6 +137,9 @@
     <ClInclude Include="3rdparty\qxtglobalshortcut5\core\qxtglobal.h">
       <Filter>Header Files\global_short_cut_h</Filter>
     </ClInclude>
+    <ClInclude Include="platypus\config_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platypus\button_widget.cpp">
@@ -228,6 +231,9 @@
     </ClCompile>
     <ClCompile Include="3rdparty\qxtglobalshortcut5\core\qxtglobal.cpp">
       <Filter>Source Files\global_short_cut_cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="platypus\config_manager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

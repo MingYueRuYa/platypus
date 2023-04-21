@@ -16,6 +16,8 @@ class HelpDialog : public QDialog {
   ~HelpDialog();
 
  private:
+ void updateUI();
+ private:
   Ui::HelpDialog *ui;
 };
 

@@ -6,6 +6,7 @@
 
 #include "singleton_spdlog.hpp"
 #include "qt_ext_tab_bar_define.h"
+#include "config_manager.h"
 
 #define LOG_NAME "platypus"
 
@@ -26,7 +27,6 @@ class Platypus : public QWidget {
   Platypus(QWidget *parent = Q_NULLPTR);
   ~Platypus();
   void ReceiveMsg(const wchar_t *msg);
-  void ReceiveShortcut(int vkcode);
 
  protected:
   virtual void mouseReleaseEvent(QMouseEvent *event);
@@ -45,7 +45,6 @@ class Platypus : public QWidget {
   void setGitFocus();
   void exitWnd(const QString &data);
   void updateTitle(const QString &data);
-  void getShortcut(const QString &data);
   void moveTabWigetIndex(bool forward);
   bool acceptShortcut(int vkcode) const;
   void setForeGroundWnd(const QString &data);

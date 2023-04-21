@@ -1,4 +1,7 @@
-﻿#include <string>
+﻿#ifndef spdhelper_h
+#define spdhelper_h
+
+#include <string>
 
 #include "spdlog/common.h"
 #include "spdlog/spdlog.h"
@@ -105,3 +108,5 @@ class SpdHelper {
 };
 
 }  // namespace spdlog
+
+#endif  // !spdhelper_h

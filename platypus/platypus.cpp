@@ -30,14 +30,14 @@
 #include "ui_platypus.h"
 #include "weak_call_back.hpp"
 #include "qxtglobalshortcut.h"
+#include "config_manager.h"
 
 const int kLAYOUT_ITEM_WIDTH = 30;
 
 using nlohmann::json;
 using std::vector;
 using XIBAO::DebugHelper;
-
-using Shortcut = HookShortCut::Shortcut;
+using ShortcutType = ConfigManager::ConfigType;
 
 Platypus::Platypus(QWidget *parent)
     : QWidget(parent), ui(new Ui::platypusClass) {
@@ -81,13 +81,6 @@ void Platypus::ReceiveMsg(const wchar_t *json_str) {
   spdlog::logInstance().info(L"receive message:{}", to_wide_string(json_msg));
 }
 
-void Platypus::ReceiveShortcut(int vkcode) {
-  json init_json = {{"shortcut", vkcode}};
-  qApp->postEvent(this,
-                  new CustomEvent((QEvent::Type)CusEventType::ShortCut,
-                                  QString::fromStdString(init_json.dump())));
-}
-
 void Platypus::mouseReleaseEvent(QMouseEvent *e) {
   if (e->button() == Qt::LeftButton) {
     setGitFocus();
@@ -123,9 +116,6 @@ void Platypus::customEvent(QEvent *event) {
     case (int)CusEventType::GitWndUpdateTitle:
       updateTitle(custom->GetData());
       setGitFocus();
-      break;
-    case (int)CusEventType::ShortCut:
-      // getShortcut(custom->GetData());
       break;
     case (int)CusEventType::SetForeground:
       setForeGroundWnd(custom->GetData());
@@ -179,28 +169,37 @@ void Platypus::initSig() {
 }
 
 void Platypus::initShortcut() {
+  if (!ConfigManagerInstance.LoadSuccesful()) {
+    return;
+  }
+
   QxtGlobalShortcut *shortcut = new QxtGlobalShortcut(this);
-  shortcut->setShortcut(QKeySequence("ALT+1"));
+  shortcut->setShortcut(QKeySequence(QString::fromStdString(
+      ConfigManagerInstance.GetConfig(ShortcutType::Switch_Forward_Tab))));
   connect(shortcut, &QxtGlobalShortcut::activated,
           [=]() { moveTabWigetIndex(false); });
 
   shortcut = new QxtGlobalShortcut(this);
-  shortcut->setShortcut(QKeySequence("ALT+2"));
+  shortcut->setShortcut(QKeySequence(QString::fromStdString(
+      ConfigManagerInstance.GetConfig(ShortcutType::Switch_Back_Tab))));
   connect(shortcut, &QxtGlobalShortcut::activated,
           [=]() { moveTabWigetIndex(true); });
 
   shortcut = new QxtGlobalShortcut(this);
-  shortcut->setShortcut(QKeySequence("SHIFT+CTRL+A"));
+  shortcut->setShortcut(QKeySequence(QString::fromStdString(
+      ConfigManagerInstance.GetConfig(ShortcutType::Create_New_Tab))));
   connect(shortcut, &QxtGlobalShortcut::activated, [=]() { startGitWnd(); });
 
   shortcut = new QxtGlobalShortcut(this);
-  shortcut->setShortcut(QKeySequence("SHIFT+CTRL+W"));
+  shortcut->setShortcut(QKeySequence(QString::fromStdString(
+      ConfigManagerInstance.GetConfig(ShortcutType::Delete_Tab))));
   connect(shortcut, &QxtGlobalShortcut::activated, [=]() {
     OnCloseTab(ui->tabWidgetProxy->tabWidget()->currentIndex());
   });
 
   shortcut = new QxtGlobalShortcut(this);
-  shortcut->setShortcut(QKeySequence("ALT+F11"));
+  shortcut->setShortcut(QKeySequence(QString::fromStdString(
+      ConfigManagerInstance.GetConfig(ShortcutType::Max_Min_Window))));
   connect(shortcut, &QxtGlobalShortcut::activated,
           [=]() { ui->tabWidgetProxy->maxOrRestore(); });
 }
@@ -287,32 +286,6 @@ void Platypus::updateTitle(const QString &data) {
   ui->tabWidgetProxy->tabWidget()->setTabToolTip(index,
                                                  QString::fromStdString(title));
   spdlog::logInstance().info(str_json_data);
-}
-
-void Platypus::getShortcut(const QString &data) {
-  string str_json_data = data.toStdString();
-  auto json_obj = json::parse(str_json_data);
-  Shortcut vkcode = (Shortcut)json_obj.value("shortcut", 0);
-  if (Shortcut::Unknow == vkcode || !acceptShortcut((int)vkcode)) return;
-  switch (vkcode) {
-    case Shortcut::TAB_CTRL:
-      moveTabWigetIndex(false);
-      break;
-    case Shortcut::TAB_CTRL_SHIFT:
-      moveTabWigetIndex(true);
-      break;
-    case Shortcut::CTRL_SHIFT_A:
-      startGitWnd();
-      break;
-    case Shortcut::CTRL_SHIFT_W:
-      OnCloseTab(ui->tabWidgetProxy->tabWidget()->currentIndex());
-      break;
-    case Shortcut::ALT_F11:
-      ui->tabWidgetProxy->maxOrRestore();
-      break;
-    default:
-      break;
-  }
 }
 
 void Platypus::moveTabWigetIndex(bool forward) {
