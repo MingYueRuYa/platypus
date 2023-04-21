@@ -162,12 +162,12 @@ bool CGitPlugin::Register(HWND targetWnd, DWORD dwThreadId) {
 }
 
 bool CGitPlugin::Unregister() {
-// TODO: if uninstalling here will cause the second mintty
-// (in order) to not receive the exit message when exiting
-//   if (NULL == g_hHook) return true;
-//   bool ok = UnhookWindowsHookEx(g_hHook);
-//   g_hHook = NULL;
-//   OutputDebugStringA("unregister hook.");
-//   return ok;
-    return true;
+  // TODO: if uninstalling here will cause the second mintty
+  // (in order) to not receive the exit message when exiting
+  //   if (NULL == g_hHook) return true;
+  //   bool ok = UnhookWindowsHookEx(g_hHook);
+  //   g_hHook = NULL;
+  //   OutputDebugStringA("unregister hook.");
+  //   return ok;
+  return true;
 }
