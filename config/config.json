@@ -1,0 +1,9 @@
+{
+  "short_cut":{
+    "create_new_tab":"CTRL+SHIFT+A",
+    "delete_tab":"CTRL+SHIFT+W",
+    "switch_forward_tab":"ALT+2",
+    "switch_back_tab":"ALT+2",
+    "max_min_window":"ALT+F11"
+  }
+}

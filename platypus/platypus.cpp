@@ -21,7 +21,6 @@
 #include "gitwndhelper.h"
 #include "global_config.h"
 #include "helpdialog.h"
-#include "hook_keyboard.h"
 #include "json.hpp"
 #include "process_utils.hpp"
 #include "round_shadow_helper.h"
