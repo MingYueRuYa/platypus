@@ -19,7 +19,6 @@ class WINASSISTANT_API CGitPlugin {
   ~CGitPlugin(void);
   bool Register(HWND targetWnd, DWORD dwThreadId);
   bool Unregister();
-  void ReceiveShortcut(int vkcode);
 
  private:
   HWND gitHwnd_;
