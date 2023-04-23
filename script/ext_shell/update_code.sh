@@ -33,6 +33,7 @@ fi
 remote_svr="origin"
 remote_branch="master"
 
+# 1 读取配置文件
 if [ -f $config_file ]; then
 	while IFS='=' read -r key value; do
 		if [ $key = "remote" ]; then
@@ -60,7 +61,7 @@ echo ""
 #   echo "The remote server name is: $name"
 # done
 
-# 查看是否有文件，子模块修改
+# 2 查看是否有文件，子模块修改
 echo_red "git status start"
 status=$(git status --porcelain -uno)
 
@@ -95,6 +96,7 @@ echo ""
 
 # 远程服务器的名称，可能存在多个，
 # 所以约定成俗，上游的服务器统称为up(upstream)
+# 3 拉取指定服务器、分支代码
 echo_red "git fetch $remote_svr start"
 git fetch $remote_svr
 echo_red "git fetch $remote_svr end"
@@ -110,6 +112,7 @@ echo_red "git rebase start"
 # version=$(basename "$branch_name")
 git rebase "$remote_svr/$remote_branch"
 
+# 4 检查rebase过程中是否出现错误
 if [ $? -ne 0 ]; then
 	echo_green "git rebase occur error.Please rebase manual."
 	echo_red "git rebase end"
@@ -123,6 +126,7 @@ echo_red "git rebase end"
 
 echo ""
 
+# 5 判断是否需要stash pop
 if [ $stashed -eq 1 ]; then
 	echo_red "git stash pop start"
 	git stash pop
