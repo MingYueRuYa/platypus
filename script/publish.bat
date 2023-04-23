@@ -1,5 +1,7 @@
 @echo off
 
+REM publish.bat package_name
+
 cd /d %~dp0
 set cur_dir=%~dp0
 set PUBLISH_DIR=%~dp0Publish\
