@@ -22,6 +22,13 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+cp ./push.sh /usr/bin/git_push
+
+if [ $? -ne 0 ]; then
+	echo "cp ./push.sh /usr/bin/git_push"
+	exit 1
+fi
+
 echo_green "install shell succussful"
 
 echo "you can input git_update_code or git_st command"
