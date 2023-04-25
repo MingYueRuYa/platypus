@@ -22,6 +22,18 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+# 检查~/.bashrc是否存在
+if [[ -e ~/.bashrc ]]; then
+	# 检查字符串是否存在
+  if grep -q "alias git_st=source git_st" ~/.bashrc; then
+	  echo_green "find git_st command in ~/.bashrc"
+  else
+	echo "alias git_st='source git_st'" >> ~/.bashrc
+  fi
+else
+	echo "alias git_st=\'source git_st\'" >> ~/.bashrc
+fi
+
 cp ./push.sh /usr/bin/git_push
 
 if [ $? -ne 0 ]; then
