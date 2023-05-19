@@ -81,11 +81,13 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>.\bin_win32\$(Configuration)\</OutDir>
     <IntDir>.\bin_win32\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);./3rdparty/json;./common</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>.\bin_win32\$(Configuration)\</OutDir>
     <IntDir>.\bin_win32\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);./3rdparty/json;./common</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
