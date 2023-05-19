@@ -39,7 +39,6 @@ release
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
 
