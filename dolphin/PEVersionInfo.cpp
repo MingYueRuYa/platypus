@@ -50,9 +50,9 @@ static DWORD GetDWordFromVersion(unsigned short major, unsigned short minor)
 	char buf[16] = {};
 	char* ptr;
 	sprintf_s(buf, "%d", major);
-	major = strtol(buf, &ptr, 16);
+	major = strtol(buf, &ptr, 10);
 	sprintf_s(buf, "%d", minor);
-	minor = strtol(buf, &ptr, 16);
+	minor = strtol(buf, &ptr, 10);
 	return MAKELPARAM(minor, major);
 }
 static PEVersion GetPEVersion(DWORD dwMS, DWORD dwLS)
