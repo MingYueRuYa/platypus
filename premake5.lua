@@ -40,10 +40,10 @@ workspace 'TestWorkSpace'
     filter 'configurations:Debug'
         defines { '_DEBUG' }
         qtsuffix 'd'
-        targetdir 'bin/Debug'
+        targetdir 'Build/bin/Debug'
     filter 'configurations:Release'
         defines { 'NDEBUG', 'QT_NO_DEBUG' }
-        targetdir 'bin/Release'
+        targetdir 'Build/bin/Release'
         optimize 'On'
         disablewarnings {
             4127, -- warning C4127: 条件表达式是常量
@@ -54,10 +54,10 @@ workspace 'TestWorkSpace'
     -- include 'HearthstoneBox/HearthstoneBox'
 
 
-    group 'Exes'
+    group 'App'
         include 'platypus'
-        -- include 'dolphin'
-        -- include 'git_register_exec'
+        include 'dolphin'
+        include 'git_register_exec'
 
-    -- group 'Dlls'
-    --     include 'git_plugin'
+    group 'dlls'
+        include 'git_plugin'
