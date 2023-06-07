@@ -31,8 +31,21 @@ project 'Platypus'
             'stdafx.*',
             'main.*',
         },
-        ['Wnd/*'] = {
-            'Wnd/**.*',
+        ['qxtglobalshortcut5/shortcut_h/*'] = {
+            '../3rdparty/qxtglobalshortcut5/core/**.h',
+            '../3rdparty/qxtglobalshortcut5/gui/*.h',
+            '../3rdparty/qxtglobalshortcut5/gui/win/**.h',
+        },
+        ['qxtglobalshortcut5/shortcut_cpp/*'] = {
+            '../3rdparty/qxtglobalshortcut5/core/**.cpp',
+            '../3rdparty/qxtglobalshortcut5/gui/*.cpp',
+            '../3rdparty/qxtglobalshortcut5/gui/win/**.cpp',
+        },
+        ['Common/common_h/*'] = {
+            '../common/**.h',
+        },
+        ['Common/common_cpp/*'] = {
+            '../common/**.cpp',
         },
 
         -- 移除默认筛选器
