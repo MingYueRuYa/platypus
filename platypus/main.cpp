@@ -8,7 +8,7 @@
 #include "common.h"
 #include "debughelper.h"
 #include "gitwndhelper.h"
-#include "include/const.h"
+#include "const.h"
 #include "pipe_server.h"
 #include "platypus.h"
 #include "single_process.h"
