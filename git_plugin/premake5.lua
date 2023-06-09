@@ -2,7 +2,6 @@
 project 'git_plugin'
     kind 'SharedLib'
     language 'C++'
-    targetname 'git_plugin'
     -- largeaddressaware 'on'
 
     warnings 'Default'
@@ -89,9 +88,9 @@ project 'git_plugin'
     }
 
 
-    -- filter 'configurations:Debug'
-    --     links { 'qtmaind.lib' }
+    filter 'configurations:*32'
+        targetname 'git_plugin'
 
-    -- filter 'configurations:Release'
-    --     defines { 'QT_NO_DEBUG' }
-    --     links { 'qtmain.lib' }
+
+    filter 'configurations:*64'
+        targetname 'git_plugin_x64'
