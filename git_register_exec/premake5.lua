@@ -87,7 +87,7 @@ project 'git_register_exec'
         }
 
     filter 'configurations:Debug64'
-        links { 'git_plugin.lib' }
+        links { 'git_plugin_x64.lib' }
         libdirs {
             path.getabsolute('build/bin/Debug64', _MAIN_SCRIPT_DIR),
         }
@@ -100,7 +100,7 @@ project 'git_register_exec'
         }
 
     filter 'configurations:Release64'
-        links { 'git_plugin.lib' }
+        links { 'git_plugin_x64.lib' }
         libdirs {
             path.getabsolute('build/bin/Release64', _MAIN_SCRIPT_DIR),
         }
