@@ -111,10 +111,10 @@ project 'Platypus'
         'widgets',
     }
 
-    filter 'configurations:Debug'
+    filter 'configurations:Debug*'
         links { 'qtmaind.lib' }
 
-    filter 'configurations:Release'
+    filter 'configurations:Release*'
         defines { 'QT_NO_DEBUG' }
         links { 'qtmain.lib' }
 

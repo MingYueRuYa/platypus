@@ -80,14 +80,28 @@ project 'git_register_exec'
 
     dependson { 'git_plugin' }
 
-    filter 'configurations:Debug'
+    filter 'configurations:Debug32'
         links { 'git_plugin.lib' }
         libdirs {
-            path.getabsolute('build/bin/Debug', _MAIN_SCRIPT_DIR),
+            path.getabsolute('build/bin/Debug32', _MAIN_SCRIPT_DIR),
         }
 
-    filter 'configurations:Release'
+    filter 'configurations:Debug64'
         links { 'git_plugin.lib' }
         libdirs {
-            path.getabsolute('build/bin/Release', _MAIN_SCRIPT_DIR),
+            path.getabsolute('build/bin/Debug64', _MAIN_SCRIPT_DIR),
         }
+        defines { 'X64'}
+
+    filter 'configurations:Release32'
+        links { 'git_plugin.lib' }
+        libdirs {
+            path.getabsolute('build/bin/Release32', _MAIN_SCRIPT_DIR),
+        }
+
+    filter 'configurations:Release64'
+        links { 'git_plugin.lib' }
+        libdirs {
+            path.getabsolute('build/bin/Release64', _MAIN_SCRIPT_DIR),
+        }
+        defines { 'X64'}
