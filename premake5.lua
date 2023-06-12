@@ -49,13 +49,13 @@ workspace 'Platypus'
         disablewarnings {
             4127, -- warning C4127: 条件表达式是常量
         }
-        architecture "x32"
+        architecture "x86"
 
     filter 'configurations:Debug64'
         defines { '_DEBUG' }
         qtsuffix 'd'
         targetdir 'Build/bin/Debug64'
-        architecture "x86"
+        architecture "x64"
     filter 'configurations:Release64'
         defines { 'NDEBUG', 'QT_NO_DEBUG' }
         targetdir 'Build/bin/Release64'
