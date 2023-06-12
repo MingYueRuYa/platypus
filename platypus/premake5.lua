@@ -75,6 +75,9 @@ project 'Platypus'
     -- removefiles {
     -- }
 
+    -- 依赖于x64架构下的 git_register_exec
+    dependson { 'git_register_exec' }
+
     defines {
         '_SCL_SECURE_NO_WARNINGS',
         'SPDLOG_WCHAR_TO_UTF8_SUPPORT',

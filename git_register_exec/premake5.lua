@@ -11,7 +11,7 @@ project 'git_register_exec'
     disablewarnings {
     }
 
-    -- warning LNK4099: 未找到 PDB“vc120.pdb”
+    -- warning LNK4099: 未找�? PDB“vc120.pdb�?
     linkoptions { '/ignore:4099' }
 
     vpaths {
@@ -89,7 +89,7 @@ project 'git_register_exec'
     filter 'configurations:Debug64'
         links { 'git_plugin_x64.lib' }
         libdirs {
-            path.getabsolute('build/bin/Debug64', _MAIN_SCRIPT_DIR),
+            path.getabsolute('build/bin/Debug32', _MAIN_SCRIPT_DIR),
         }
         defines { 'X64'}
 
@@ -102,6 +102,6 @@ project 'git_register_exec'
     filter 'configurations:Release64'
         links { 'git_plugin_x64.lib' }
         libdirs {
-            path.getabsolute('build/bin/Release64', _MAIN_SCRIPT_DIR),
+            path.getabsolute('build/bin/Release32', _MAIN_SCRIPT_DIR),
         }
         defines { 'X64'}
