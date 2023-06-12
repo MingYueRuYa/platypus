@@ -21,7 +21,7 @@ FOR /F "usebackq delims=" %%i in (`!VsWhereCmdLine!`) DO (
 
 
 :FOUND
-msbuild ../Build/platypus.vcxproj -property:Configuration=Release;Platform=x86 -t:rebuild
+msbuild ../Build/Platypus.vcxproj -property:Configuration=Release32;Platform=x86 -t:rebuild
 msbuild ../Build/git_plugin.vcxproj -property:Configuration=Release64;Platform=x64 -t:rebuild
 msbuild ../Build/git_register_exec.vcxproj -property:Configuration=Release64;Platform=x64 -t:rebuild
 exit /b 0
