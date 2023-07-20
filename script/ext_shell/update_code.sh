@@ -20,32 +20,43 @@ config_file="update_config.json"
 while getopts ":h" opt; do
   case $opt in
     h)
-	  echo "usage:./update_code.sh [config_file]"
+	  # echo "usage:./update_code.sh [config_file]"
+	  # echo "config_file content like this:"
+	  # echo "remote=your_remote_name"
+	  # echo "branch=your_branch_name"
+	  echo "usage:./update_code.sh remote_name branch_name"
       exit 0
       ;;
   esac
 done
 
-if [ $# -ne 0 ]; then
-	config_file=$1
-fi
+# if [ $# -ne 0 ]; then
+# 	config_file=$1
+# fi
 
 remote_svr="origin"
-remote_branch="master"
+remote_branch=$(git rev-parse --abbrev-ref HEAD)
 
-# 1 读取配置文件
-if [ -f $config_file ]; then
-	while IFS='=' read -r key value; do
-		if [ $key = "remote" ]; then
-			remote_svr=$value
-		fi
-		if [ $key = "branch" ]; then
-			remote_branch=$value
-		fi
-	done < $config_file
-else
-	echo_green "Not find $config_file, use default parameters"
+if [ $# -eq 1 ]; then
+	remote_svr=$1
+elif [ $# -ge 2 ]; then
+	remote_svr=$1
+	remote_branch=$2
 fi
+
+# 1 读取配置文件 废弃
+# if [ -f $config_file ]; then
+# 	while IFS='=' read -r key value; do
+# 		if [ $key = "remote" ]; then
+# 			remote_svr=$value
+# 		fi
+# 		if [ $key = "branch" ]; then
+# 			remote_branch=$value
+# 		fi
+# 	done < $config_file
+# else
+# 	echo_green "Not find $config_file, use default parameters"
+# fi
 
 echo_green "remote server:"$remote_svr
 echo_green "remote branch name:"$remote_branch
