@@ -93,5 +93,85 @@ premake.extensions.qt.modules.qt6 = {
 		name = "Xml",
 		include = "QtXml",
 		defines = { "QT_XML_LIB" }
-	}
+	},
+    quickwidgets = {
+        name = "QuickWidgets",
+        include = "QtQuickWidgets",
+        defines = {"QT_QUICKWIDGETS_LIB"}
+    },
+    qmldebug = {
+        name = "QmlDebug",
+        include = "QtQmlDebug",
+        defines = {"QT_QML_DEBUG"}
+    },
+    webkit = {
+        name = "WebKit",
+        include = "QtWebKit",
+        defines = {"QT_WEBKIT_LIB"}
+    },
+    webkitwidgets = {
+        name = "WebkitWidgets",
+        include = "QtWebKitWidgets",
+        defines = {"QT_WEBKITWIDGETS_LIB"}
+    },
+    designer = {
+        name = "Designer",
+        include = "QtDesigner",
+        defines = {"QT_DESIGNER_LIB"}
+    },
+    concurrent = {
+        name = "Concurrent",
+        include = "QtConcurrent",
+        defines = {"QT_CONCURRENT_LIB"}
+    },
+    angle = {
+        name = "Angle",
+        include = "QtANGLE",
+        nolink = true
+    },
+    webengine = {
+        name = "WebEngine",
+        include = "QtWebEngine",
+        defines = {"QT_WEBENGINE_LIB"}
+    },
+    webenginequick = {
+        name = "WebEngineQuick",
+        include = "QtWebEngineQuick",
+        defines = {"QT_WEBENGINEQUICK_LIB"}
+    },
+    webenginecore = {
+        name = "WebEngineCore",
+        include = "QtWebEngineCore",
+        defines = {"QT_WEBENGINECORE_LIB"}
+    },
+    webenginewidgets = {
+        name = "WebEngineWidgets",
+        include = "QtWebKitWidgets",
+        defines = {"QT_WEBENGINEWIDGETS_LIB"}
+    },
+    webchannel = {
+        name = "WebChannel",
+        include = "QtWebChannel",
+        defines = {"QT_WEBCHANNEL_LIB"}
+    },
+    winextras = {
+        name = "WinExtras",
+        include = "QtWinExtras",
+        defines = {"QT_WINEXTRAS_LIB"}
+    },
+    charts = {
+        name = "Charts",
+        include = "QtCharts",
+        defines = {"QT_CHARTS_LIB"}
+    },
+    quicktemplates2 = {
+        name = 'QuickTemplates2',
+        include = 'QtQuickTemplates2',
+        defines = {"QT_QUICKTEMPLATES2_LIB"}
+    },
+    core5compat = {
+        name = 'Core5Compat',
+        include = 'QtCore5Compat',
+        defines = {"QT_CORE5COMPAT_LIB"}
+    },
 }
