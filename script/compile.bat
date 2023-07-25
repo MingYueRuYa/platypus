@@ -7,6 +7,7 @@ cd /d %~dp0
 
 set VsWherePath="C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
 
+::SET VsWhereCmdLine="!VsWherePath! -nologo -latest -property installationPath"
 SET VsWhereCmdLine="!VsWherePath! -nologo -version 16.0.0 -property installationPath"
 
 FOR /F "usebackq delims=" %%i in (`!VsWhereCmdLine!`) DO (
@@ -21,6 +22,7 @@ FOR /F "usebackq delims=" %%i in (`!VsWhereCmdLine!`) DO (
 
 
 :FOUND
+msbuild ../Build/Dolphin.vcxproj -property:Configuration=Release32;Platform=x86 -t:rebuild
 msbuild ../Build/Platypus.vcxproj -property:Configuration=Release32;Platform=x86 -t:rebuild
 msbuild ../Build/git_plugin.vcxproj -property:Configuration=Release64;Platform=x64 -t:rebuild
 msbuild ../Build/git_register_exec.vcxproj -property:Configuration=Release64;Platform=x64 -t:rebuild
