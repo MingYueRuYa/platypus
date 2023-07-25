@@ -3,16 +3,14 @@ setlocal EnableDelayedExpansion
 
 pushd %~dp0
 
-set title====== Generate plug-in [project file] and [solution] =====
-set tool=.\.premake-qt\premake5.exe
-set script=.\premake5.lua
-set outdir=.\Build
-set vsver=vs2019
+set title====== Compiling solution ======
+set script=.\script
 
 echo %title%
 echo.
 
-call %tool% --file=%script% --to=%outdir% %vsver%
+:: call compile
+call %script%\compile.bat
 echo.
 
 if !errorlevel! == 0 (
