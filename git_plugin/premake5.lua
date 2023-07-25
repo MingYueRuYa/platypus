@@ -95,8 +95,8 @@ project 'git_plugin'
     filter 'configurations:*64'
         targetname 'git_plugin_x64'
         
-    filter 'configurations:Debug64'
-        targetdir '../Build/bin/Debug32'
+    filter 'configurations:Debug*'
+        targetdir ('../'..top_debug_target_dir)
 
-    filter 'configurations:Release64'
-        targetdir '../Build/bin/Release32'
+    filter 'configurations:Release*'
+        targetdir ('../'..top_release_target_dir)

@@ -11,7 +11,7 @@ project 'git_register_exec'
     disablewarnings {
     }
 
-    -- warning LNK4099: 未找�? PDB“vc120.pdb�?
+    -- warning LNK4099: 未找PDB vc120.pdb 
     linkoptions { '/ignore:4099' }
 
     vpaths {
@@ -80,28 +80,23 @@ project 'git_register_exec'
 
     dependson { 'git_plugin' }
 
-    filter 'configurations:Debug32'
+    filter 'configurations:Debug*'
+        libdirs {
+            path.getabsolute(top_debug_target_dir, _MAIN_SCRIPT_DIR),
+        }
+        targetdir ('../'..top_debug_target_dir)
+
+    filter 'configurations:Release*'
+        libdirs {
+            path.getabsolute(top_release_target_dir, _MAIN_SCRIPT_DIR),
+        }
+        targetdir ('../'..top_release_target_dir)
+
+    filter 'configurations:*32'
         links { 'git_plugin.lib' }
-        libdirs {
-            path.getabsolute('build/bin/Debug32', _MAIN_SCRIPT_DIR),
-        }
+        targetname 'git_register_exec'
 
-    filter 'configurations:Debug64'
+    filter 'configurations:*64'
         links { 'git_plugin_x64.lib' }
-        libdirs {
-            path.getabsolute('build/bin/Debug32', _MAIN_SCRIPT_DIR),
-        }
-        defines { 'X64'}
-
-    filter 'configurations:Release32'
-        links { 'git_plugin.lib' }
-        libdirs {
-            path.getabsolute('build/bin/Release32', _MAIN_SCRIPT_DIR),
-        }
-
-    filter 'configurations:Release64'
-        links { 'git_plugin_x64.lib' }
-        libdirs {
-            path.getabsolute('build/bin/Release32', _MAIN_SCRIPT_DIR),
-        }
+        targetname 'git_register_exec_x64'
         defines { 'X64'}

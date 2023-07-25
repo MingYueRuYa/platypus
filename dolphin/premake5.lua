@@ -62,6 +62,12 @@ project 'Dolphin'
     linkoptions {
     }
 
+    filter 'configurations:Debug*'
+        targetdir ('../'..top_debug_target_dir)
+
+    filter 'configurations:Release*'
+        targetdir ('../'..top_release_target_dir)
+
 
     -- filter 'configurations:Debug'
     --     links { 'qtmaind.lib' }

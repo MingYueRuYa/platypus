@@ -7,7 +7,7 @@ cd /d %~dp0
 
 set VsWherePath="C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe"
 
-SET VsWhereCmdLine="!VsWherePath! -nologo -latest -property installationPath"
+SET VsWhereCmdLine="!VsWherePath! -nologo -version 16.0.0 -property installationPath"
 
 FOR /F "usebackq delims=" %%i in (`!VsWhereCmdLine!`) DO (
     IF EXIST "%%i\VC\Auxiliary\Build\vcvars32.bat" (

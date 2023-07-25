@@ -4,6 +4,7 @@ project 'Platypus'
     language 'C++'
     targetname 'Platypus'
     -- largeaddressaware 'on'
+    icon './res/64.ico'
 
     warnings 'Default'
     removeflags 'FatalWarnings'
@@ -26,6 +27,8 @@ project 'Platypus'
         },
         ['Resources/*'] = {
             'Resources/*.*',
+            'Platypus.rc',
+            'resource.h'
         },
         ['Source Files/*'] = {
             'stdafx.*',
@@ -116,8 +119,11 @@ project 'Platypus'
 
     filter 'configurations:Debug*'
         links { 'qtmaind.lib' }
+        targetdir ('../'..top_debug_target_dir)
+
 
     filter 'configurations:Release*'
         defines { 'QT_NO_DEBUG' }
         links { 'qtmain.lib' }
+        targetdir ('../'..top_release_target_dir)
 
