@@ -1,5 +1,9 @@
 #!/bin/sh
 
+
+cp ./echo_color_func.sh /usr/bin/echo_color_func.sh
+cp ./git_commit_id.sh /usr/bin/git_commit_id.sh
+
 source /usr/bin/echo_color_func.sh
 source ./alias_git_command.sh
 
