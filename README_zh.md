@@ -15,13 +15,32 @@ platypus 是一个对git bash窗口的管理，效果就是类似chrome浏览器
 
 ![](./images/01_rounder.png)
 
-​      快捷键支持：
+**用法：**
 
-​	![](./images/shortcut_rounder.png)
+1、开箱即用，双击platypus.exe即可运行。前提是你需要手动安装git bash。
+
+2、快捷键支持，支持配置文件。配置文件名称：config.json，和platypus.exe在同级目录下。
+
+<div align=center>
+<img src="./images/config_rounder.png"/>
+</div>
+<div align=center>
+<img src="./images/shortcut_rounder.png"/>
+</div>
 
 **为了避免和git bash的功能有冲突，建议你关闭git bash 的快捷键处理。**
 
-​	![](./images/config_dialog_rounder.png)
+
+<div align=center>
+<img src="./images/config_dialog_rounder.png"/>
+</div>
+3、一些方便的脚本：
+
+所有的脚本都是sh脚本，放在platypus.exe 同级目录下的ext_shell里面。
+
+打开platypus.exe后，cd到ext_shell，执行source ./install.sh 就会自动安装脚本
+
+![](./images/shell_install_rounder.png)
 
 
  ### 2、为什么写这个软件？

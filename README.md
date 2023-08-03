@@ -18,15 +18,33 @@ Software screenshot:
 
 ![](./images/01_rounder.png)
 
-​      shortcut key support：
+**usage：**
 
-​	![](./images/shortcut_rounder.png)
+1.Out of the box, double-click platypus.exe to run it. The premise is that you need to manually install git bash.
 
+2.Shortcut key support, support for configuration files.Configuration file name: config.json, in the same directory as platypus.exe.
 
+<div align=center>
+<img src="./images/config_rounder.png"/>
+</div>
+<div align=center>
+<img src="./images/shortcut_rounder.png"/>
+</div>
 **In order to avoid conflicts with the functions of git bash, it is recommended that you turn off the shortcut key processing of git bash.**
 
-​	![](./images/config_dialog_rounder.png)
 
+<div align=center>
+<img src="./images/config_dialog_rounder.png"/>
+</div>
+3、Some handy scripts:
+
+All scripts are sh scripts, placed in ext_shell in the same directory as platypus.exe.
+
+After opening platypus.exe, cd to ext_shell, execute source ./install.sh and the script will be installed automatically.
+
+<div align=center>
+<img src="./images/shell_install_rounder.png"/>
+</div>
 
  ### 2. Why write this software?
 
