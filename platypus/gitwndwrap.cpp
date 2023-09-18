@@ -62,10 +62,10 @@ const QString &GitWndWrap::GetTitle() const { return title_; }
 void GitWndWrap::setStyle() {
   LONG styleValue = ::GetWindowLong(git_wnd_, GWL_STYLE);
   styleValue &= ~WS_CAPTION;
-//   styleValue &= ~WS_VSCROLL;
-  styleValue &= ~WS_THICKFRAME;
-  styleValue &= ~WS_POPUP;
-  styleValue &= WS_CHILD;
+   //styleValue &= WS_VSCROLL;
+//  styleValue &= ~WS_THICKFRAME;
+//  styleValue &= ~WS_POPUP;
+  // styleValue &= WS_CHILD;
   ::SetWindowLong(git_wnd_, GWL_STYLE, styleValue);
   ::SetWindowLong(git_wnd_, GWL_EXSTYLE,
                   ::GetWindowLong(git_wnd_, GWL_STYLE) | ~WS_EX_TOOLWINDOW);
