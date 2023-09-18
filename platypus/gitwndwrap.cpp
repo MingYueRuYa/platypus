@@ -62,7 +62,7 @@ const QString &GitWndWrap::GetTitle() const { return title_; }
 void GitWndWrap::setStyle() {
   LONG styleValue = ::GetWindowLong(git_wnd_, GWL_STYLE);
   styleValue &= ~WS_CAPTION;
-  styleValue &= ~WS_VSCROLL;
+//   styleValue &= ~WS_VSCROLL;
   styleValue &= ~WS_THICKFRAME;
   styleValue &= ~WS_POPUP;
   styleValue &= WS_CHILD;
