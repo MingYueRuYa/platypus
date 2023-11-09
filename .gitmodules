@@ -1,0 +1,6 @@
+[submodule "3rdparty/gyp"]
+	path = 3rdparty/gyp
+	url = https://github.com/MingYueRuYa/gyp.git
+[submodule "3rdparty/breakpad"]
+	path = 3rdparty/breakpad
+	url = https://github.com/MingYueRuYa/breakpad
