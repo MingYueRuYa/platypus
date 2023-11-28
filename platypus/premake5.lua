@@ -97,10 +97,10 @@ project 'Platypus'
         path.getabsolute('include/', _MAIN_SCRIPT_DIR),
         path.getabsolute('3rdparty/qxtglobalshortcut5/core/', _MAIN_SCRIPT_DIR),
         path.getabsolute('3rdparty/qxtglobalshortcut5/gui/', _MAIN_SCRIPT_DIR),
+        path.getabsolute('3rdparty/breakpad/install_windows/include', _MAIN_SCRIPT_DIR),
     }
 
-    -- libdirs {
-    -- }
+
 
     -- links {
     -- }
@@ -118,12 +118,19 @@ project 'Platypus'
     }
 
     filter 'configurations:Debug*'
-        links { 'qtmaind.lib' }
+        libdirs {
+            path.getabsolute('3rdparty/breakpad/install_windows/lib/Debug/$(Platform)', _MAIN_SCRIPT_DIR),
+        }
+        links { 'qtmaind.lib','exception_handler.lib','common.lib','crash_generation_client.lib'}
         targetdir ('../'..top_debug_target_dir)
 
 
     filter 'configurations:Release*'
         defines { 'QT_NO_DEBUG' }
-        links { 'qtmain.lib' }
+        libdirs {
+            path.getabsolute('3rdparty/breakpad/install_windows/lib/Release/$(Platform)', _MAIN_SCRIPT_DIR),
+        }
+
+        links { 'qtmaind.lib','exception_handler.lib','common.lib','crash_generation_client.lib'}
         targetdir ('../'..top_release_target_dir)
 

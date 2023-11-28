@@ -14,6 +14,7 @@
 #include "single_process.h"
 #include "feature.h"
 #include "global_config.h"
+#include "client/windows/handler/exception_handler.h"
 
 namespace spd = spdlog;
 
@@ -35,7 +36,27 @@ void StartGitRegisterExec() {
   }
 }
 
+static bool crash_callback(const wchar_t* dump_path, const wchar_t* id,
+  void* context, EXCEPTION_POINTERS* exinfo,
+  MDRawAssertionInfo* assertion,
+  bool succeeded) {
+  MessageBoxW(NULL, L"程序已崩溃，需要重启", L"标题", MB_OK);
+  return succeeded;
+}
+
+static void Dead() {
+  int* i = reinterpret_cast<int*>(0xdead);
+  *i = 5;  // crash!
+}
+
+
 int main(int argc, char *argv[]) {
+
+  google_breakpad::ExceptionHandler eh(L".",
+    NULL,
+    crash_callback,
+    NULL,
+    google_breakpad::ExceptionHandler::HANDLER_ALL);
 
   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QApplication::setHighDpiScaleFactorRoundingPolicy(
